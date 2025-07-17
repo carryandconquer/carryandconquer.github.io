@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Navigation } from "@/components/Navigation"
 import { Footer } from "@/components/Footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, Search, TrendingUp, Target, Briefcase, Users, Newspaper, FileText } from 'lucide-react';
 
 interface Article {
   id: string;
@@ -107,11 +108,7 @@ const articles: Article[] = [
       
       <p>We expect this trend to accelerate as younger generations inherit wealth and prioritize sustainable investing approaches.</p>
     `
-  }
-];
-
-// Add key deals articles to the articles array
-articles.push(
+  },
   {
     id: '4',
     category: 'Key Deals',
@@ -179,11 +176,7 @@ articles.push(
       
       <p>We expect continued high valuations for companies with breakthrough clean technology, particularly those addressing solar efficiency, energy storage, and grid modernization challenges.</p>
     `
-  }
-);
-
-// Add news articles
-articles.push(
+  },
   {
     id: '6',
     category: 'News',
@@ -281,11 +274,7 @@ articles.push(
       
       <p>Focus areas include custody solutions, trading infrastructure, and compliance technology—all sectors likely to benefit from increased institutional participation in cryptocurrency markets.</p>
     `
-  }
-);
-
-// Add profile articles
-articles.push(
+  },
   {
     id: '9',
     category: 'Profiles',
@@ -359,11 +348,7 @@ articles.push(
       <h3>Future Strategy</h3>
       <p>The firm is currently raising their third fund, targeting $18 billion to expand their AI-driven approach globally. They plan to hire additional technology talent and open offices in three new emerging markets by 2025.</p>
     `
-  }
-);
-
-// Add investment strategy articles  
-articles.push(
+  },
   {
     id: '11',
     category: 'Investment Strategy',
@@ -439,13 +424,47 @@ articles.push(
       <p>We expect outperformance to accelerate as regulatory changes and consumer preferences increasingly favor ESG-compliant companies.</p>
     `
   }
-);
+];
+
+type FilterCategory = 'All Articles' | 'Market Trends' | 'Key Deals' | 'Investment Strategy' | 'Profiles' | 'News';
+
+const filterOptions: { label: FilterCategory; icon: any; count?: number }[] = [
+  { label: 'All Articles', icon: FileText },
+  { label: 'Market Trends', icon: TrendingUp },
+  { label: 'Key Deals', icon: Target },
+  { label: 'Investment Strategy', icon: Briefcase },
+  { label: 'Profiles', icon: Users },
+  { label: 'News', icon: Newspaper },
+];
 
 export default function Analysis() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [activeFilter, setActiveFilter] = useState<FilterCategory>('All Articles');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const getCategoryArticles = (category: string) => {
-    return articles.filter(article => article.category === category);
+  const filteredArticles = useMemo(() => {
+    let filtered = articles;
+    
+    // Filter by category
+    if (activeFilter !== 'All Articles') {
+      filtered = filtered.filter(article => article.category === activeFilter);
+    }
+    
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter(article => 
+        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        article.author.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  }, [activeFilter, searchQuery]);
+
+  const getCategoryCount = (category: FilterCategory) => {
+    if (category === 'All Articles') return articles.length;
+    return articles.filter(article => article.category === category).length;
   };
 
   const openArticle = (article: Article) => {
@@ -455,266 +474,130 @@ export default function Analysis() {
   const closeArticle = () => {
     setSelectedArticle(null);
   };
+
   return (
-    <div className="min-h-screen font-primary bg-black">
+    <div className="min-h-screen bg-black text-white">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-black">
-        <div className="absolute inset-0 opacity-20">
-          <svg viewBox="0 0 1200 800" className="absolute inset-0 w-full h-full">
-            <path d="M0,500 C400,300 800,700 1200,400 L1200,800 L0,800 Z" fill="url(#analysisWave)" />
-            <defs>
-              <linearGradient id="analysisWave" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(142 76% 36%)" stopOpacity="0.6" />
-                <stop offset="50%" stopColor="hsl(180 84% 40%)" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="hsl(210 98% 55%)" stopOpacity="0.2" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
-              Deep Market
-              <span className="block text-green-400">
-                Analysis
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/70 mb-12 leading-relaxed">
-              Comprehensive insights into private equity market trends, key deals, 
-              and strategic opportunities shaping investment decisions.
-            </p>
+      <section className="pt-20 pb-12 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
+            Market Analysis
+          </h1>
+          <p className="text-xl text-white/70 max-w-3xl mx-auto mb-8">
+            Comprehensive insights, trends, and strategic intelligence for informed investment decisions
+          </p>
+          
+          {/* Search Bar */}
+          <div className="relative max-w-2xl mx-auto mb-8">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 h-5 w-5" />
+            <Input
+              placeholder="Search articles..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 pr-4 py-3 bg-gray-900/50 border-gray-700 text-white placeholder:text-white/60 focus:border-green-500 focus:ring-green-500/20"
+            />
           </div>
         </div>
       </section>
 
-      {/* Market Trends */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Market Trends</h2>
-            <p className="text-white/70">Latest sector performance and investment analysis</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getCategoryArticles('Market Trends').map((article) => (
-              <Card 
-                key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer hover:-translate-y-1 group overflow-hidden"
-                onClick={() => openArticle(article)}
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <Badge variant="secondary" className={`absolute top-4 left-4 ${article.badgeColor}`}>
-                    {article.category}
-                  </Badge>
-                </div>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-white">{article.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/70 mb-4">{article.excerpt}</p>
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2 text-white/60">
-                      <User className="h-4 w-4" />
-                      <span>{article.author}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-white/60">
-                      <Clock className="h-4 w-4" />
-                      <span>{article.readTime}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+      {/* Filter Navigation */}
+      <section className="pb-8 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-wrap gap-2 md:gap-4 justify-center">
+            {filterOptions.map((filter) => {
+              const isActive = activeFilter === filter.label;
+              const count = getCategoryCount(filter.label);
+              const Icon = filter.icon;
+              
+              return (
+                <Button
+                  key={filter.label}
+                  variant={isActive ? "default" : "ghost"}
+                  onClick={() => setActiveFilter(filter.label)}
+                  className={`
+                    flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300
+                    ${isActive 
+                      ? 'bg-green-500 text-black hover:bg-green-400' 
+                      : 'text-white/70 hover:text-white hover:bg-gray-800/50 border border-gray-700'
+                    }
+                  `}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="font-medium">{filter.label}</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${isActive ? 'bg-black/20 text-black' : 'bg-gray-700 text-white/60'}`}>
+                    {count}
+                  </span>
+                </Button>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Key Deals */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Key Deals</h2>
-            <p className="text-white/70">In-depth analysis of major transactions</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            {getCategoryArticles('Key Deals').map((article) => (
-              <Card 
-                key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
-                onClick={() => openArticle(article)}
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <Badge variant="secondary" className={`absolute top-4 left-4 ${article.badgeColor}`}>
-                    {article.category}
-                  </Badge>
-                </div>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-white">{article.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/70 mb-4">{article.excerpt}</p>
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2 text-white/60">
-                      <Calendar className="h-4 w-4" />
-                      <span>{article.publishedAt}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-white/60">
-                      <Clock className="h-4 w-4" />
-                      <span>{article.readTime}</span>
-                    </div>
+      {/* Articles Grid */}
+      <section className="pb-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          {filteredArticles.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredArticles.map((article) => (
+                <Card 
+                  key={article.id}
+                  className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer hover:-translate-y-1 group overflow-hidden"
+                  onClick={() => openArticle(article)}
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <img 
+                      src={article.image} 
+                      alt={article.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <Badge variant="secondary" className={`absolute top-4 left-4 ${article.badgeColor}`}>
+                      {article.category}
+                    </Badge>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Latest News */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Latest News</h2>
-            <p className="text-white/70">Breaking market news and analysis</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {getCategoryArticles('News').map((article) => (
-              <Card 
-                key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
-                onClick={() => openArticle(article)}
-              >
-                <div className="relative h-40 overflow-hidden">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <Badge variant="secondary" className={`absolute top-3 left-3 text-xs ${article.badgeColor}`}>
-                    Breaking
-                  </Badge>
-                </div>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-white text-lg">{article.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/70 text-sm mb-3">{article.excerpt}</p>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-white/60">{article.publishedAt}</span>
-                    <span className="text-white/60">{article.readTime}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* People & Company Profiles */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">People & Company Profiles</h2>
-            <p className="text-white/70">In-depth profiles of industry leaders and firms</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getCategoryArticles('Profiles').map((article) => (
-              <Card 
-                key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
-                onClick={() => openArticle(article)}
-              >
-                <div className="relative h-40 overflow-hidden">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <Badge variant="secondary" className={`absolute top-3 left-3 text-xs ${article.badgeColor}`}>
-                    Profile
-                  </Badge>
-                </div>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-white text-lg">{article.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/70 text-sm mb-3">{article.excerpt}</p>
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2 text-white/60">
-                      <User className="h-4 w-4" />
-                      <span>{article.author}</span>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-white line-clamp-2">{article.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-white/70 mb-4 line-clamp-3">{article.excerpt}</p>
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2 text-white/60">
+                        <User className="h-4 w-4" />
+                        <span>{article.author}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-white/60">
+                        <Clock className="h-4 w-4" />
+                        <span>{article.readTime}</span>
+                      </div>
                     </div>
-                    <span className="text-white/60">{article.readTime}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Investment Strategies */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Investment Strategies</h2>
-            <p className="text-white/70">Strategic analysis and market approaches</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            {getCategoryArticles('Investment Strategy').map((article) => (
-              <Card 
-                key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
-                onClick={() => openArticle(article)}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <div className="text-white/60 text-lg mb-4">No articles found</div>
+              <p className="text-white/40">
+                {searchQuery 
+                  ? `No articles match "${searchQuery}" in the ${activeFilter} category.`
+                  : `No articles available in the ${activeFilter} category.`
+                }
+              </p>
+              <Button 
+                variant="ghost" 
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveFilter('All Articles');
+                }}
+                className="mt-4 text-green-400 hover:text-green-300"
               >
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <Badge variant="secondary" className={`absolute top-4 left-4 ${article.badgeColor}`}>
-                    Strategy
-                  </Badge>
-                </div>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-white">{article.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/70 mb-4">{article.excerpt}</p>
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2 text-white/60">
-                      <User className="h-4 w-4" />
-                      <span>{article.author}</span>
-                    </div>
-                    <span className="text-white/60">{article.readTime}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                Clear filters
+              </Button>
+            </div>
+          )}
         </div>
       </section>
 
