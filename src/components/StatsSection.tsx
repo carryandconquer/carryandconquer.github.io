@@ -43,18 +43,34 @@ function StatItem({ value, label, prefix = "", suffix = "", delay = 0 }: StatIte
   
   return (
     <div className="text-center">
-      <div className="text-4xl md:text-5xl font-bold bg-gradient-text bg-clip-text text-transparent mb-2">
+      <div className="text-4xl md:text-5xl font-bold text-white mb-2">
         {numericValue >= 1000 ? formatValue(currentValue) : `${prefix}${currentValue}${suffix}`}
       </div>
-      <div className="text-muted-foreground font-medium">{label}</div>
+      <div className="text-white/70 font-medium">{label}</div>
     </div>
   )
 }
 
 export function StatsSection() {
   return (
-    <section className="py-20 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section className="py-20 bg-gradient-to-r from-black to-gray-900 relative overflow-hidden">
+      {/* Subtle wave background */}
+      <div className="absolute inset-0 opacity-20">
+        <svg viewBox="0 0 1200 400" className="absolute inset-0 w-full h-full">
+          <path 
+            d="M0,200 C300,100 600,300 1200,150 L1200,400 L0,400 Z" 
+            fill="url(#statsWave)"
+          />
+          <defs>
+            <linearGradient id="statsWave" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="hsl(142 76% 36%)" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="hsl(295 84% 55%)" stopOpacity="0.1" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-16">
           <StatItem 
             value="2500" 

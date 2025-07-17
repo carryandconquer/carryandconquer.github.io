@@ -7,7 +7,7 @@ export function Navigation() {
   const isActive = (path: string) => location.pathname === path
   
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -23,8 +23,8 @@ export function Navigation() {
               to="/" 
               className={`px-4 py-2 rounded-full transition-all duration-300 ${
                 isActive('/') 
-                  ? 'bg-primary text-primary-foreground shadow-glow' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  ? 'bg-gradient-to-r from-primary to-accent text-white shadow-glow' 
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
               Home
@@ -33,8 +33,8 @@ export function Navigation() {
               to="/analysis" 
               className={`px-4 py-2 rounded-full transition-all duration-300 ${
                 isActive('/analysis') 
-                  ? 'bg-primary text-primary-foreground shadow-glow' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  ? 'bg-gradient-to-r from-primary to-accent text-white shadow-glow' 
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
               Analysis
@@ -43,8 +43,8 @@ export function Navigation() {
               to="/events" 
               className={`px-4 py-2 rounded-full transition-all duration-300 ${
                 isActive('/events') 
-                  ? 'bg-primary text-primary-foreground shadow-glow' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  ? 'bg-gradient-to-r from-primary to-accent text-white shadow-glow' 
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
               Events
@@ -53,8 +53,8 @@ export function Navigation() {
               to="/key-deals" 
               className={`px-4 py-2 rounded-full transition-all duration-300 ${
                 isActive('/key-deals') 
-                  ? 'bg-primary text-primary-foreground shadow-glow' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  ? 'bg-gradient-to-r from-primary to-accent text-white shadow-glow' 
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
               Key Deals
@@ -63,10 +63,10 @@ export function Navigation() {
           
           {/* CTA Button */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="hidden md:inline-flex">
+            <Button variant="ghost" className="hidden md:inline-flex text-white/70 hover:text-white hover:bg-white/10">
               Sign In
             </Button>
-            <Button className="bg-gradient-button hover:shadow-glow transition-all duration-300 hover:scale-105 rounded-full">
+            <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-black font-semibold transition-all duration-300 hover:scale-105 rounded-full">
               Get Started
             </Button>
           </div>

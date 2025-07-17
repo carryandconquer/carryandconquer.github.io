@@ -2,12 +2,12 @@ import { Separator } from "@/components/ui/separator"
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-white">
+    <footer className="bg-black border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="md:col-span-2">
-            <div className="text-2xl font-bold bg-gradient-to-r from-accent-gold to-accent-green bg-clip-text text-transparent mb-4">
+            <div className="text-2xl font-bold bg-gradient-to-r from-green-400 to-purple-500 bg-clip-text text-transparent mb-4">
               Carry & Conquer
             </div>
             <p className="text-white/70 mb-6 max-w-md">
@@ -29,7 +29,7 @@ export function Footer() {
           
           {/* Product Links */}
           <div>
-            <h3 className="font-semibold mb-4">Product</h3>
+            <h3 className="font-semibold mb-4 text-white">Product</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">Features</a></li>
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">Pricing</a></li>
@@ -40,7 +40,7 @@ export function Footer() {
           
           {/* Company Links */}
           <div>
-            <h3 className="font-semibold mb-4">Company</h3>
+            <h3 className="font-semibold mb-4 text-white">Company</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">About</a></li>
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">Careers</a></li>
@@ -50,7 +50,7 @@ export function Footer() {
           </div>
         </div>
         
-        <Separator className="my-8 bg-white/20" />
+        <Separator className="my-8 bg-gray-800" />
         
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-white/70 text-sm">
