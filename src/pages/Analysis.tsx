@@ -17,6 +17,8 @@ interface Article {
   readTime: string;
   content: string;
   badgeColor: string;
+  image: string;
+  heroImage?: string;
 }
 
 const articles: Article[] = [
@@ -29,6 +31,8 @@ const articles: Article[] = [
     publishedAt: 'Jan 15, 2024',
     readTime: '5 min read',
     badgeColor: 'bg-green-500/20 text-green-300',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
+    heroImage: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
     content: `
       <p>The artificial intelligence sector has experienced a remarkable transformation over the past quarter, with companies in this space witnessing unprecedented growth rates that are reshaping the entire technology landscape.</p>
       
@@ -55,6 +59,8 @@ const articles: Article[] = [
     publishedAt: 'Jan 14, 2024',
     readTime: '4 min read',
     badgeColor: 'bg-red-500/20 text-red-300',
+    image: 'https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a',
+    heroImage: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625',
     content: `
       <p>The traditional retail sector continues to grapple with structural challenges as consumer behavior shifts permanently toward digital channels. This quarter's 12.8% decline in brick-and-mortar retail valuations reflects deeper underlying trends that investors cannot ignore.</p>
       
@@ -81,6 +87,8 @@ const articles: Article[] = [
     publishedAt: 'Jan 13, 2024',
     readTime: '6 min read',
     badgeColor: 'bg-blue-500/20 text-blue-300',
+    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+    heroImage: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21',
     content: `
       <p>Environmental, social, and governance (ESG) investing has moved from niche strategy to mainstream requirement, with institutional investors allocating record amounts to sustainable investment strategies.</p>
       
@@ -113,6 +121,8 @@ articles.push(
     publishedAt: 'Jan 15, 2024',
     readTime: '6 min read',
     badgeColor: 'bg-blue-500/20 text-blue-300',
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
+    heroImage: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7',
     content: `
       <p>TechCorp's $2.4 billion acquisition of CloudVision represents more than just a large transaction—it signals a fundamental shift in how enterprise software companies are positioning for the next phase of cloud computing evolution.</p>
       
@@ -144,6 +154,8 @@ articles.push(
     publishedAt: 'Jan 12, 2024',
     readTime: '5 min read',
     badgeColor: 'bg-green-500/20 text-green-300',
+    image: 'https://images.unsplash.com/photo-1458668383970-8ddd3927deed',
+    heroImage: 'https://images.unsplash.com/photo-1523712999610-f77fbcfc3843',
     content: `
       <p>GreenTech's record-breaking $850 million Series C funding round marks a watershed moment for renewable energy investment, signaling institutional confidence in next-generation clean technology solutions.</p>
       
@@ -181,6 +193,8 @@ articles.push(
     publishedAt: 'Jan 16, 2024',
     readTime: '4 min read',
     badgeColor: 'bg-red-500/20 text-red-300',
+    image: 'https://images.unsplash.com/photo-1493397212122-2b85dda8106b',
+    heroImage: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
     content: `
       <p>Federal Reserve Chairman Jerome Powell's latest statements have sent ripples through financial markets, suggesting potential changes to monetary policy that could significantly impact investment strategies across asset classes.</p>
       
@@ -212,6 +226,8 @@ articles.push(
     publishedAt: 'Jan 16, 2024',
     readTime: '5 min read',
     badgeColor: 'bg-blue-500/20 text-blue-300',
+    image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81',
+    heroImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c',
     content: `
       <p>As Q4 2023 earnings season approaches, investors are focusing on specific metrics that will provide insights into corporate health and forward-looking guidance for 2024.</p>
       
@@ -245,6 +261,8 @@ articles.push(
     publishedAt: 'Jan 15, 2024',
     readTime: '4 min read',
     badgeColor: 'bg-purple-500/20 text-purple-300',
+    image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5',
+    heroImage: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
     content: `
       <p>After months of consultation and deliberation, regulators have finalized a comprehensive framework for cryptocurrency investments, providing the clarity institutional investors have been seeking.</p>
       
@@ -277,6 +295,8 @@ articles.push(
     publishedAt: 'Jan 13, 2024',
     readTime: '6 min read',
     badgeColor: 'bg-purple-500/20 text-purple-300',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158',
+    heroImage: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7',
     content: `
       <p>Sarah Chen, CEO of InnovateTech, is at the forefront of applying quantum computing to financial services, developing solutions that could revolutionize risk management and portfolio optimization.</p>
       
@@ -313,6 +333,8 @@ articles.push(
     publishedAt: 'Jan 11, 2024',
     readTime: '5 min read',
     badgeColor: 'bg-blue-500/20 text-blue-300',
+    image: 'https://images.unsplash.com/photo-1466442929976-97f336a657be',
+    heroImage: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04',
     content: `
       <p>Nexus Dynamics has emerged as a leading force in private equity, leveraging artificial intelligence and machine learning to identify and evaluate investment opportunities across emerging markets.</p>
       
@@ -351,6 +373,8 @@ articles.push(
     publishedAt: 'Jan 11, 2024',
     readTime: '7 min read',
     badgeColor: 'bg-green-500/20 text-green-300',
+    image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05',
+    heroImage: 'https://images.unsplash.com/photo-1615729947596-a598e5de0ab3',
     content: `
       <p>Sectoral rotation strategies have gained renewed relevance as economic cycles become more pronounced and sector performance diverges significantly based on macroeconomic conditions.</p>
       
@@ -389,6 +413,8 @@ articles.push(
     publishedAt: 'Jan 10, 2024',
     readTime: '6 min read',
     badgeColor: 'bg-blue-500/20 text-blue-300',
+    image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b',
+    heroImage: 'https://images.unsplash.com/photo-1500673922987-e212871fec22',
     content: `
       <p>The intersection of value investing and ESG principles is creating unique opportunities for patient investors willing to look beyond short-term market inefficiencies.</p>
       
@@ -476,13 +502,21 @@ export default function Analysis() {
             {getCategoryArticles('Market Trends').map((article) => (
               <Card 
                 key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer hover:-translate-y-1"
+                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer hover:-translate-y-1 group overflow-hidden"
                 onClick={() => openArticle(article)}
               >
-                <CardHeader className="pb-3">
-                  <Badge variant="secondary" className={`w-fit mb-2 ${article.badgeColor}`}>
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={article.image} 
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <Badge variant="secondary" className={`absolute top-4 left-4 ${article.badgeColor}`}>
                     {article.category}
                   </Badge>
+                </div>
+                <CardHeader className="pb-3">
                   <CardTitle className="text-white">{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -516,13 +550,21 @@ export default function Analysis() {
             {getCategoryArticles('Key Deals').map((article) => (
               <Card 
                 key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer"
+                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
                 onClick={() => openArticle(article)}
               >
-                <CardHeader className="pb-3">
-                  <Badge variant="secondary" className={`w-fit mb-2 ${article.badgeColor}`}>
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={article.image} 
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <Badge variant="secondary" className={`absolute top-4 left-4 ${article.badgeColor}`}>
                     {article.category}
                   </Badge>
+                </div>
+                <CardHeader className="pb-3">
                   <CardTitle className="text-white">{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -556,13 +598,21 @@ export default function Analysis() {
             {getCategoryArticles('News').map((article) => (
               <Card 
                 key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer"
+                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
                 onClick={() => openArticle(article)}
               >
-                <CardHeader className="pb-3">
-                  <Badge variant="secondary" className={`w-fit mb-2 ${article.badgeColor}`}>
+                <div className="relative h-40 overflow-hidden">
+                  <img 
+                    src={article.image} 
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <Badge variant="secondary" className={`absolute top-3 left-3 text-xs ${article.badgeColor}`}>
                     Breaking
                   </Badge>
+                </div>
+                <CardHeader className="pb-2">
                   <CardTitle className="text-white text-lg">{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -590,13 +640,21 @@ export default function Analysis() {
             {getCategoryArticles('Profiles').map((article) => (
               <Card 
                 key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer"
+                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
                 onClick={() => openArticle(article)}
               >
-                <CardHeader className="pb-3">
-                  <Badge variant="secondary" className={`w-fit mb-2 ${article.badgeColor}`}>
+                <div className="relative h-40 overflow-hidden">
+                  <img 
+                    src={article.image} 
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <Badge variant="secondary" className={`absolute top-3 left-3 text-xs ${article.badgeColor}`}>
                     Profile
                   </Badge>
+                </div>
+                <CardHeader className="pb-2">
                   <CardTitle className="text-white text-lg">{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -627,13 +685,21 @@ export default function Analysis() {
             {getCategoryArticles('Investment Strategy').map((article) => (
               <Card 
                 key={article.id}
-                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer"
+                className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer group overflow-hidden"
                 onClick={() => openArticle(article)}
               >
-                <CardHeader className="pb-3">
-                  <Badge variant="secondary" className={`w-fit mb-2 ${article.badgeColor}`}>
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={article.image} 
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <Badge variant="secondary" className={`absolute top-4 left-4 ${article.badgeColor}`}>
                     Strategy
                   </Badge>
+                </div>
+                <CardHeader className="pb-3">
                   <CardTitle className="text-white">{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -654,28 +720,38 @@ export default function Analysis() {
 
       {/* Article Modal */}
       <Dialog open={!!selectedArticle} onOpenChange={closeArticle}>
-        <DialogContent className="max-w-4xl max-h-[90vh] bg-black border-gray-800 text-white overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] bg-black border-gray-800 text-white overflow-y-auto">
           {selectedArticle && (
             <>
-              <DialogHeader>
-                <div className="flex items-center gap-4 mb-4">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={closeArticle}
-                    className="text-green-400 hover:text-green-300"
-                  >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
-                  </Button>
-                  <Badge variant="secondary" className={selectedArticle.badgeColor}>
+              {/* Hero Image */}
+              <div className="relative h-64 md:h-80 -m-6 mb-6 overflow-hidden">
+                <img 
+                  src={selectedArticle.heroImage || selectedArticle.image} 
+                  alt={selectedArticle.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <Badge variant="secondary" className={`mb-4 ${selectedArticle.badgeColor}`}>
                     {selectedArticle.category}
                   </Badge>
+                  <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+                    {selectedArticle.title}
+                  </h1>
                 </div>
-                <DialogTitle className="text-2xl font-bold text-white text-left">
-                  {selectedArticle.title}
-                </DialogTitle>
-                <div className="flex items-center gap-4 text-sm text-white/60 pt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={closeArticle}
+                  className="absolute top-4 right-4 text-white hover:text-green-300 bg-black/20 hover:bg-black/40"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back
+                </Button>
+              </div>
+              
+              <div className="px-6 pb-6">
+                <div className="flex items-center gap-4 text-sm text-white/60 mb-6">
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4" />
                     <span>{selectedArticle.author}</span>
@@ -689,10 +765,8 @@ export default function Analysis() {
                     <span>{selectedArticle.readTime}</span>
                   </div>
                 </div>
-              </DialogHeader>
-              <div className="pt-6">
                 <div 
-                  className="prose prose-invert max-w-none text-white/90"
+                  className="prose prose-invert prose-lg max-w-none text-white/90 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
                 />
               </div>
