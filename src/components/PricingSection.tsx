@@ -51,17 +51,34 @@ const plans = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-32 bg-background">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id="pricing" className="py-32 bg-black relative overflow-hidden">
+      {/* Wave pattern background */}
+      <div className="absolute inset-0 opacity-10">
+        <svg viewBox="0 0 1200 800" className="absolute inset-0 w-full h-full">
+          <path 
+            d="M0,300 C300,500 600,100 1200,400 L1200,800 L0,800 Z" 
+            fill="url(#pricingWave)"
+          />
+          <defs>
+            <linearGradient id="pricingWave" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(210 98% 55%)" stopOpacity="0.4" />
+              <stop offset="50%" stopColor="hsl(180 84% 40%)" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="hsl(142 76% 36%)" stopOpacity="0.2" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Choose Your
-            <span className="block bg-gradient-text bg-clip-text text-transparent">
+            <span className="block text-green-400">
               Intelligence Level
             </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-white/70 max-w-3xl mx-auto">
             Flexible pricing options designed to scale with your private equity intelligence needs.
           </p>
         </div>
@@ -73,14 +90,14 @@ export function PricingSection() {
               key={plan.name}
               className={`relative group hover:shadow-lift transition-all duration-300 hover:-translate-y-1 ${
                 plan.popular 
-                  ? 'ring-2 ring-primary shadow-glow bg-gradient-card' 
-                  : 'bg-background hover:bg-gradient-card/30'
+                  ? 'ring-2 ring-green-400 shadow-glow bg-gray-900/80 backdrop-blur-sm' 
+                  : 'bg-gray-900/50 backdrop-blur-sm hover:bg-gray-900/70 border-gray-800'
               }`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <div className="inline-flex items-center px-4 py-1 rounded-full bg-gradient-button text-white text-sm font-medium">
+                  <div className="inline-flex items-center px-4 py-1 rounded-full bg-gradient-to-r from-green-500 to-teal-500 text-white text-sm font-medium">
                     <Star className="w-4 h-4 mr-1" />
                     Most Popular
                   </div>
@@ -88,18 +105,18 @@ export function PricingSection() {
               )}
               
               <CardHeader className="text-center pb-8">
-                <CardTitle className="text-2xl font-bold text-card-foreground">
+                <CardTitle className="text-2xl font-bold text-white">
                   {plan.name}
                 </CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-foreground">
+                  <span className="text-4xl font-bold text-white">
                     {plan.price}
                   </span>
-                  <span className="text-muted-foreground ml-2">
+                  <span className="text-white/70 ml-2">
                     {plan.period}
                   </span>
                 </div>
-                <CardDescription className="mt-4 text-base">
+                <CardDescription className="mt-4 text-base text-white/70">
                   {plan.description}
                 </CardDescription>
               </CardHeader>
@@ -108,8 +125,8 @@ export function PricingSection() {
                 <ul className="space-y-4">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center">
-                      <Check className="w-5 h-5 text-accent-green mr-3 flex-shrink-0" />
-                      <span className="text-card-foreground">{feature}</span>
+                      <Check className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                      <span className="text-white">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -117,9 +134,9 @@ export function PricingSection() {
                 <Button 
                   className={`w-full ${
                     plan.popular 
-                      ? 'bg-gradient-button hover:shadow-glow' 
-                      : 'variant-outline hover:bg-primary hover:text-primary-foreground'
-                  } transition-all duration-300 hover:scale-105`}
+                      ? 'bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white' 
+                      : 'border border-gray-700 bg-gray-800 hover:bg-gray-700 text-white'
+                  } transition-all duration-300 hover:scale-105 rounded-full`}
                   size="lg"
                 >
                   {plan.name === "Custom" ? "Contact Sales" : "Start Free Trial"}
@@ -131,7 +148,7 @@ export function PricingSection() {
         
         {/* Bottom Note */}
         <div className="text-center mt-16">
-          <p className="text-muted-foreground">
+          <p className="text-white/70">
             All plans include a 14-day free trial. No credit card required.
           </p>
         </div>

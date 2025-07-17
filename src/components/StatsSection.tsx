@@ -53,7 +53,7 @@ function StatItem({ value, label, prefix = "", suffix = "", delay = 0 }: StatIte
 
 export function StatsSection() {
   return (
-    <section className="py-20 bg-gradient-to-r from-black to-gray-900 relative overflow-hidden">
+    <section className="py-20 bg-black relative overflow-hidden">
       {/* Subtle wave background */}
       <div className="absolute inset-0 opacity-20">
         <svg viewBox="0 0 1200 400" className="absolute inset-0 w-full h-full">

@@ -24,16 +24,33 @@ const testimonials = [
 
 export function TestimonialSection() {
   return (
-    <section className="py-32 bg-gradient-card">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section className="py-32 bg-black relative overflow-hidden">
+      {/* Wave pattern background */}
+      <div className="absolute inset-0 opacity-10">
+        <svg viewBox="0 0 1200 800" className="absolute inset-0 w-full h-full">
+          <path 
+            d="M0,600 C400,400 800,800 1200,500 L1200,800 L0,800 Z" 
+            fill="url(#testimonialWave)"
+          />
+          <defs>
+            <linearGradient id="testimonialWave" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(180 84% 40%)" stopOpacity="0.4" />
+              <stop offset="50%" stopColor="hsl(190 95% 45%)" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="hsl(142 76% 36%)" stopOpacity="0.2" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Trusted by
-            <span className="block bg-gradient-text bg-clip-text text-transparent">
+            <span className="block text-green-400">
               Industry Leaders
             </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-white/70 max-w-3xl mx-auto">
             See what top private equity professionals are saying about our intelligence platform.
           </p>
         </div>
@@ -42,18 +59,18 @@ export function TestimonialSection() {
           {testimonials.map((testimonial, index) => (
             <Card 
               key={index}
-              className="group hover:shadow-lift transition-all duration-300 hover:-translate-y-1 bg-background/50 backdrop-blur-sm border-border/50"
+              className="group hover:shadow-lift transition-all duration-300 hover:-translate-y-1 bg-gray-900/50 backdrop-blur-sm border-gray-800"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <CardContent className="p-8">
-                <Quote className="w-8 h-8 text-primary mb-6 opacity-60" />
-                <blockquote className="text-foreground mb-6 leading-relaxed">
+                <Quote className="w-8 h-8 text-green-400 mb-6 opacity-60" />
+                <blockquote className="text-white mb-6 leading-relaxed">
                   "{testimonial.quote}"
                 </blockquote>
-                <div className="border-t border-border pt-6">
-                  <div className="font-semibold text-foreground">{testimonial.author}</div>
-                  <div className="text-sm text-muted-foreground">{testimonial.title}</div>
-                  <div className="text-sm text-primary font-medium">{testimonial.company}</div>
+                <div className="border-t border-gray-800 pt-6">
+                  <div className="font-semibold text-white">{testimonial.author}</div>
+                  <div className="text-sm text-white/70">{testimonial.title}</div>
+                  <div className="text-sm text-green-400 font-medium">{testimonial.company}</div>
                 </div>
               </CardContent>
             </Card>
