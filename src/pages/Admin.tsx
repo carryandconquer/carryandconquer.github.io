@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Switch } from '@/components/ui/switch'
-import { CalendarIcon, Users, TrendingUp, FileText, Calendar, Settings, Plus, Edit, Trash2, Eye } from 'lucide-react'
+import { CalendarIcon, Users, TrendingUp, FileText, Calendar, Settings, Plus, Edit, Trash2, Eye, BarChart3 } from 'lucide-react'
 import { toast } from '@/hooks/use-toast'
 
 interface Article {
@@ -35,6 +35,15 @@ interface Event {
   featured: boolean
 }
 
+interface CarouselMetric {
+  id: number
+  label: string
+  value: string
+  change: string
+  isPositive: boolean
+  isActive: boolean
+}
+
 export default function Admin() {
   const [articles, setArticles] = useState<Article[]>([
     { id: 1, title: "Private Equity Market Outlook 2024", category: "Market Trends", author: "Sarah Chen", status: "published", featured: true, createdAt: "2024-01-15", views: 1250 },
@@ -48,11 +57,24 @@ export default function Admin() {
     { id: 3, title: "ESG Investment Forum", type: "Panel", date: "2024-04-05", location: "London", capacity: 200, registered: 0, status: "draft", featured: false }
   ])
 
+  const [carouselMetrics, setCarouselMetrics] = useState<CarouselMetric[]>([
+    { id: 1, label: "PE DRY POWDER", value: "$3.7T", change: "+8.3%", isPositive: true, isActive: true },
+    { id: 2, label: "AVERAGE DEAL SIZE", value: "$124M", change: "-2.1%", isPositive: false, isActive: true },
+    { id: 3, label: "FUND DEPLOYMENT", value: "67%", change: "+12.4%", isPositive: true, isActive: true },
+    { id: 4, label: "EXIT MULTIPLE", value: "2.8x", change: "+5.7%", isPositive: true, isActive: true },
+    { id: 5, label: "ACTIVE FUNDS", value: "8,947", change: "+15.2%", isPositive: true, isActive: true },
+    { id: 6, label: "PORTFOLIO COMPANIES", value: "11,200+", change: "+9.8%", isPositive: true, isActive: true },
+    { id: 7, label: "MEDIAN IRR", value: "14.2%", change: "-1.3%", isPositive: false, isActive: true },
+    { id: 8, label: "FUNDRAISING YTD", value: "$901B", change: "+22.1%", isPositive: true, isActive: true }
+  ])
+
   const [activeTab, setActiveTab] = useState("overview")
   const [showArticleForm, setShowArticleForm] = useState(false)
   const [showEventForm, setShowEventForm] = useState(false)
+  const [showCarouselForm, setShowCarouselForm] = useState(false)
   const [editingArticle, setEditingArticle] = useState<Article | null>(null)
   const [editingEvent, setEditingEvent] = useState<Event | null>(null)
+  const [editingMetric, setEditingMetric] = useState<CarouselMetric | null>(null)
 
   const handleCreateArticle = (data: any) => {
     const newArticle: Article = {
@@ -109,6 +131,31 @@ export default function Admin() {
     toast({ title: "Event deleted successfully" })
   }
 
+  const handleCreateMetric = (data: any) => {
+    const newMetric: CarouselMetric = {
+      id: carouselMetrics.length + 1,
+      label: data.label.toUpperCase(),
+      value: data.value,
+      change: data.change,
+      isPositive: parseFloat(data.change.replace(/[^-\d.]/g, '')) >= 0,
+      isActive: data.isActive
+    }
+    setCarouselMetrics([...carouselMetrics, newMetric])
+    setShowCarouselForm(false)
+    toast({ title: "Metric created successfully" })
+  }
+
+  const toggleMetricActive = (id: number) => {
+    setCarouselMetrics(carouselMetrics.map(metric => 
+      metric.id === id ? { ...metric, isActive: !metric.isActive } : metric
+    ))
+  }
+
+  const deleteMetric = (id: number) => {
+    setCarouselMetrics(carouselMetrics.filter(metric => metric.id !== id))
+    toast({ title: "Metric deleted successfully" })
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -135,7 +182,7 @@ export default function Admin() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />
               Overview
@@ -147,6 +194,10 @@ export default function Admin() {
             <TabsTrigger value="events" className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               Events
+            </TabsTrigger>
+            <TabsTrigger value="carousel" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Carousel
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="w-4 h-4" />
@@ -402,9 +453,151 @@ export default function Admin() {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Carousel Management Tab */}
+          <TabsContent value="carousel" className="space-y-6">
+            {!showCarouselForm ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Carousel Metrics Management</CardTitle>
+                  <CardDescription>Manage the metrics displayed in the top carousel</CardDescription>
+                  <Button onClick={() => setShowCarouselForm(true)} className="w-fit">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Metric
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Label</TableHead>
+                        <TableHead>Value</TableHead>
+                        <TableHead>Change</TableHead>
+                        <TableHead>Trend</TableHead>
+                        <TableHead>Active</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {carouselMetrics.map(metric => (
+                        <TableRow key={metric.id}>
+                          <TableCell className="font-medium">{metric.label}</TableCell>
+                          <TableCell className="font-bold">{metric.value}</TableCell>
+                          <TableCell>
+                            <span className={metric.isPositive ? 'text-green-600' : 'text-red-600'}>
+                              {metric.change}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant={metric.isPositive ? 'default' : 'destructive'}>
+                              {metric.isPositive ? 'Up' : 'Down'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Switch 
+                              checked={metric.isActive} 
+                              onCheckedChange={() => toggleMetricActive(metric.id)}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button variant="ghost" size="sm">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" onClick={() => deleteMetric(metric.id)}>
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            ) : (
+              <MetricForm onSubmit={handleCreateMetric} onCancel={() => setShowCarouselForm(false)} />
+            )}
+          </TabsContent>
         </Tabs>
       </div>
     </div>
+  )
+}
+
+// Metric Form Component
+function MetricForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCancel: () => void }) {
+  const [formData, setFormData] = useState({
+    label: '',
+    value: '',
+    change: '',
+    isActive: true
+  })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSubmit(formData)
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Add New Metric</CardTitle>
+        <CardDescription>Create a new metric for the carousel display</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="label">Metric Label</Label>
+              <Input
+                id="label"
+                placeholder="e.g., TOTAL AUM"
+                value={formData.label}
+                onChange={(e) => setFormData({...formData, label: e.target.value})}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="value">Current Value</Label>
+              <Input
+                id="value"
+                placeholder="e.g., $2.4T"
+                value={formData.value}
+                onChange={(e) => setFormData({...formData, value: e.target.value})}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="change">Percentage Change</Label>
+              <Input
+                id="change"
+                placeholder="e.g., +5.2% or -3.1%"
+                value={formData.change}
+                onChange={(e) => setFormData({...formData, change: e.target.value})}
+                required
+              />
+            </div>
+            <div className="flex items-center space-x-2 mt-8">
+              <Switch
+                id="isActive"
+                checked={formData.isActive}
+                onCheckedChange={(checked) => setFormData({...formData, isActive: checked})}
+              />
+              <Label htmlFor="isActive">Display in carousel</Label>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Button type="submit">Create Metric</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   )
 }
 
