@@ -9,7 +9,7 @@ import { Footer } from "@/components/Footer"
 
 const Index = () => {
   return (
-    <div className="min-h-screen font-primary">
+    <div className="min-h-screen font-primary pt-24">
       <Navigation />
       <HeroSection />
       
