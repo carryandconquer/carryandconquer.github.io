@@ -1,13 +1,19 @@
 import { Button } from "@/components/ui/button"
-import { ArrowRight, TrendingUp, DollarSign, Users } from "lucide-react"
+import { ArrowRight, TrendingUp, DollarSign, Users, Sparkles } from "lucide-react"
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
+    <section className="relative min-h-screen bg-gradient-hero overflow-hidden flex items-center">
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-30" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='7' cy='7' r='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
       }} />
+      
+      {/* Floating Geometric Elements */}
+      <div className="absolute top-20 right-20 w-40 h-20 bg-accent-green/20 rounded-full rotate-45 animate-float"></div>
+      <div className="absolute top-1/3 left-10 w-24 h-24 bg-accent-gold/20 rounded-3xl -rotate-12 animate-float" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute bottom-32 right-1/4 w-32 h-32 bg-primary/20 rounded-2xl rotate-12 animate-float" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute top-1/2 right-10 w-16 h-40 bg-accent-green/15 rounded-full animate-float" style={{ animationDelay: '0.5s' }}></div>
       
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -20,26 +26,28 @@ export function HeroSection() {
             </div>
             
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 animate-slide-up">
-              Private Equity 
-              <span className="block bg-gradient-to-r from-accent-gold to-accent-green bg-clip-text text-transparent">
-                Intelligence
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 animate-slide-up">
+              Discover the joy of
+              <span className="block bg-gradient-to-r from-accent-gold to-accent-green bg-clip-text text-transparent flex items-center justify-center lg:justify-start">
+                <Sparkles className="w-12 h-12 mr-4 text-accent-green" />
+                effortless
               </span>
-              That Conquers Markets
+              <span className="block">private equity intelligence with Carry & Conquer.</span>
             </h1>
             
             {/* Subheading */}
             <p className="text-xl text-white/80 mb-8 max-w-2xl animate-slide-up" style={{ animationDelay: '0.2s' }}>
-              Deep insights on key transactions, market trends, and firm strategies shaping the private equity landscape.
+              Carry & Conquer's intelligence platform is now available and ready to 
+              revolutionize the way you think about private equity analysis and deal sourcing.
             </p>
             
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up" style={{ animationDelay: '0.4s' }}>
-              <Button size="lg" className="bg-gradient-button hover:shadow-glow transition-all duration-300 hover:scale-105">
-                Access Intelligence
+              <Button size="lg" className="bg-gradient-button hover:shadow-glow transition-all duration-300 hover:scale-105 rounded-full px-8">
+                GET STARTED
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8">
                 View Sample Report
               </Button>
             </div>
