@@ -63,6 +63,9 @@ export function Footer() {
             <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">
               Terms of Service
             </a>
+            <a href="/admin" className="text-white/70 hover:text-white transition-colors text-sm">
+              Admin
+            </a>
           </div>
         </div>
       </div>
