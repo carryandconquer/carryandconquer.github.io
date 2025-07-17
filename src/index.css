@@ -18,12 +18,13 @@ All colors MUST be HSL for proper theming.
     --popover: 20 20 20;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 295 84% 55%; /* Purple */
+    --primary: 142 76% 36%; /* Green as primary */
     --primary-foreground: 0 0% 100%;
     
     --accent-green: 142 76% 36%; /* Main green accent */
-    --accent-gold: 25 100% 71%; 
-    --accent-orange: 25 94% 41%;
+    --accent-teal: 180 84% 40%; /* Complementary teal */
+    --accent-cyan: 190 95% 45%; /* Bright cyan accent */
+    --accent-blue: 210 98% 55%; /* Blue accent */
     
     /* Base Colors */
     --secondary: 240 8% 15%;
@@ -32,7 +33,7 @@ All colors MUST be HSL for proper theming.
     --muted: 240 8% 15%;
     --muted-foreground: 240 5% 65%;
     
-    --accent: 240 100% 76%;
+    --accent: 180 84% 40%; /* Teal as main accent */
     --accent-foreground: 0 0% 100%;
     
     --destructive: 0 62% 50%;
@@ -40,16 +41,17 @@ All colors MUST be HSL for proper theming.
     
     --border: 240 8% 25%;
     --input: 240 8% 25%;
-    --ring: 295 84% 55%;
+    --ring: 142 76% 36%;
     
     --radius: 0.75rem;
     
-    /* Gradients with dark theme */
+    /* Green-focused gradients */
     --gradient-hero: linear-gradient(135deg, hsl(15 15 15) 0%, hsl(20 20 20) 100%);
     --gradient-card: linear-gradient(135deg, hsl(20 20 20) 0%, hsl(25 25 25) 100%);
-    --gradient-button: linear-gradient(135deg, hsl(295 84% 55%) 0%, hsl(240 100% 76%) 100%);
-    --gradient-text: linear-gradient(135deg, hsl(295 84% 55%) 0%, hsl(142 76% 36%) 100%);
+    --gradient-button: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(180 84% 40%) 100%);
+    --gradient-text: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(190 95% 45%) 100%);
     --gradient-green: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 46%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(180 84% 40%) 0%, hsl(210 98% 55%) 100%);
     
     /* Shadows for dark theme */
     --shadow-glow: 0 10px 40px hsl(142 76% 36% / 0.3);

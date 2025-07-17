@@ -63,8 +63,9 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				'accent-green': 'hsl(var(--accent-green))',
-				'accent-gold': 'hsl(var(--accent-gold))',
-				'accent-orange': 'hsl(var(--accent-orange))'
+				'accent-teal': 'hsl(var(--accent-teal))',
+				'accent-cyan': 'hsl(var(--accent-cyan))',
+				'accent-blue': 'hsl(var(--accent-blue))'
 			},
 			backgroundImage: {
 				'gradient-hero': 'var(--gradient-hero)',

@@ -64,7 +64,8 @@ export function StatsSection() {
           <defs>
             <linearGradient id="statsWave" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="hsl(142 76% 36%)" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="hsl(295 84% 55%)" stopOpacity="0.1" />
+              <stop offset="50%" stopColor="hsl(180 84% 40%)" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="hsl(210 98% 55%)" stopOpacity="0.1" />
             </linearGradient>
           </defs>
         </svg>

@@ -52,9 +52,9 @@ export function FeaturesSection() {
           />
           <defs>
             <linearGradient id="featuresWave" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="hsl(295 84% 55%)" stopOpacity="0.6" />
-              <stop offset="50%" stopColor="hsl(142 76% 36%)" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="hsl(240 100% 76%)" stopOpacity="0.2" />
+              <stop offset="0%" stopColor="hsl(142 76% 36%)" stopOpacity="0.6" />
+              <stop offset="50%" stopColor="hsl(180 84% 40%)" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="hsl(210 98% 55%)" stopOpacity="0.2" />
             </linearGradient>
           </defs>
         </svg>
@@ -86,7 +86,7 @@ export function FeaturesSection() {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardHeader>
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-purple-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-teal-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                     <Icon className="w-6 h-6 text-green-400" />
                   </div>
                   <CardTitle className="text-xl font-semibold text-white">

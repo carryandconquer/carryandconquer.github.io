@@ -11,13 +11,13 @@ export function HeroSection() {
           <defs>
             <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="hsl(142 76% 36%)" stopOpacity="0.8" />
-              <stop offset="50%" stopColor="hsl(142 76% 36%)" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="hsl(142 76% 36%)" stopOpacity="0.1" />
+              <stop offset="50%" stopColor="hsl(180 84% 40%)" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="hsl(190 95% 45%)" stopOpacity="0.1" />
             </linearGradient>
             <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="hsl(295 84% 55%)" stopOpacity="0.6" />
-              <stop offset="50%" stopColor="hsl(295 84% 55%)" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="hsl(295 84% 55%)" stopOpacity="0.1" />
+              <stop offset="0%" stopColor="hsl(180 84% 40%)" stopOpacity="0.6" />
+              <stop offset="50%" stopColor="hsl(210 98% 55%)" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="hsl(190 95% 45%)" stopOpacity="0.1" />
             </linearGradient>
           </defs>
           
