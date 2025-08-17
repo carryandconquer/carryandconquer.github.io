@@ -11,149 +11,330 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Switch } from '@/components/ui/switch'
 import { CalendarIcon, Users, TrendingUp, FileText, Calendar, Settings, Plus, Edit, Trash2, Eye, BarChart3 } from 'lucide-react'
 import { toast } from '@/hooks/use-toast'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { supabase } from '@/integrations/supabase/client'
 
+// Database interfaces matching Supabase schema
 interface Article {
-  id: number
+  id: string
   title: string
+  subtitle?: string
+  content?: string
   category: string
-  author: string
-  status: 'published' | 'draft'
+  image_url?: string
+  author_name?: string
+  published: boolean
   featured: boolean
-  createdAt: string
-  views: number
+  created_at: string
+  view_count: number
+  excerpt?: string
 }
 
 interface Event {
-  id: number
+  id: string
   title: string
-  type: string
-  date: string
-  location: string
-  capacity: number
-  registered: number
-  status: 'published' | 'draft'
+  description?: string
+  event_type: string
+  start_date: string
+  end_date?: string
+  location?: string
+  venue?: string
+  capacity?: number
+  price?: number
+  organizer?: string
   featured: boolean
+  published: boolean
+  created_at: string
 }
 
-interface CarouselMetric {
-  id: number
-  label: string
-  value: string
-  change: string
-  isPositive: boolean
-  isActive: boolean
+interface MarketMetric {
+  id: string
+  metric_name: string
+  metric_category: string
+  metric_family: string
+  current_value: string
+  change_percentage?: number
+  change_direction?: string
+  created_at: string
 }
 
 export default function Admin() {
-  const [articles, setArticles] = useState<Article[]>([
-    { id: 1, title: "Private Equity Market Outlook 2024", category: "Market Trends", author: "Sarah Chen", status: "published", featured: true, createdAt: "2024-01-15", views: 1250 },
-    { id: 2, title: "ESG Integration in PE Investments", category: "Key Deals", author: "Michael Rodriguez", status: "published", featured: false, createdAt: "2024-01-12", views: 890 },
-    { id: 3, title: "Tech Sector M&A Analysis", category: "Analysis", author: "David Kim", status: "draft", featured: false, createdAt: "2024-01-10", views: 0 }
-  ])
-
-  const [events, setEvents] = useState<Event[]>([
-    { id: 1, title: "PE Summit 2024", type: "Conference", date: "2024-03-15", location: "New York", capacity: 500, registered: 347, status: "published", featured: true },
-    { id: 2, title: "Deal Sourcing Masterclass", type: "Workshop", date: "2024-02-20", location: "Virtual", capacity: 100, registered: 78, status: "published", featured: false },
-    { id: 3, title: "ESG Investment Forum", type: "Panel", date: "2024-04-05", location: "London", capacity: 200, registered: 0, status: "draft", featured: false }
-  ])
-
-  const [carouselMetrics, setCarouselMetrics] = useState<CarouselMetric[]>([
-    { id: 1, label: "PE DRY POWDER", value: "$3.7T", change: "+8.3%", isPositive: true, isActive: true },
-    { id: 2, label: "AVERAGE DEAL SIZE", value: "$124M", change: "-2.1%", isPositive: false, isActive: true },
-    { id: 3, label: "FUND DEPLOYMENT", value: "67%", change: "+12.4%", isPositive: true, isActive: true },
-    { id: 4, label: "EXIT MULTIPLE", value: "2.8x", change: "+5.7%", isPositive: true, isActive: true },
-    { id: 5, label: "ACTIVE FUNDS", value: "8,947", change: "+15.2%", isPositive: true, isActive: true },
-    { id: 6, label: "PORTFOLIO COMPANIES", value: "11,200+", change: "+9.8%", isPositive: true, isActive: true },
-    { id: 7, label: "MEDIAN IRR", value: "14.2%", change: "-1.3%", isPositive: false, isActive: true },
-    { id: 8, label: "FUNDRAISING YTD", value: "$901B", change: "+22.1%", isPositive: true, isActive: true }
-  ])
-
+  const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState("overview")
   const [showArticleForm, setShowArticleForm] = useState(false)
   const [showEventForm, setShowEventForm] = useState(false)
-  const [showCarouselForm, setShowCarouselForm] = useState(false)
-  const [editingArticle, setEditingArticle] = useState<Article | null>(null)
-  const [editingEvent, setEditingEvent] = useState<Event | null>(null)
-  const [editingMetric, setEditingMetric] = useState<CarouselMetric | null>(null)
+  const [showMetricForm, setShowMetricForm] = useState(false)
+
+  // Fetch articles
+  const { data: articles = [], isLoading: articlesLoading } = useQuery({
+    queryKey: ['articles'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false })
+      
+      if (error) throw error
+      return data as Article[]
+    }
+  })
+
+  // Fetch events
+  const { data: events = [], isLoading: eventsLoading } = useQuery({
+    queryKey: ['events'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('start_date', { ascending: false })
+      
+      if (error) throw error
+      return data as Event[]
+    }
+  })
+
+  // Fetch market metrics
+  const { data: marketMetrics = [], isLoading: metricsLoading } = useQuery({
+    queryKey: ['market-metrics'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('snapshot_market_metrics')
+        .select('*')
+        .order('created_at', { ascending: false })
+      
+      if (error) throw error
+      return data as MarketMetric[]
+    }
+  })
+
+  // Create article mutation
+  const createArticleMutation = useMutation({
+    mutationFn: async (articleData: {
+      title: string;
+      subtitle?: string;
+      content?: string;
+      category: string;
+      author_name?: string;
+      published: boolean;
+      featured: boolean;
+      excerpt?: string;
+    }) => {
+      const { data, error } = await supabase
+        .from('articles')
+        .insert(articleData)
+        .select()
+        .single()
+      
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['articles'] })
+      setShowArticleForm(false)
+      toast({ title: "Article created successfully" })
+    },
+    onError: (error) => {
+      toast({ title: "Error creating article", description: error.message, variant: "destructive" })
+    }
+  })
+
+  // Create event mutation
+  const createEventMutation = useMutation({
+    mutationFn: async (eventData: {
+      title: string;
+      description?: string;
+      event_type: string;
+      start_date: string;
+      location?: string;
+      venue?: string;
+      capacity?: number;
+      price?: number;
+      organizer?: string;
+      published: boolean;
+      featured: boolean;
+    }) => {
+      const { data, error } = await supabase
+        .from('events')
+        .insert(eventData)
+        .select()
+        .single()
+      
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] })
+      setShowEventForm(false)
+      toast({ title: "Event created successfully" })
+    },
+    onError: (error) => {
+      toast({ title: "Error creating event", description: error.message, variant: "destructive" })
+    }
+  })
+
+  // Create metric mutation
+  const createMetricMutation = useMutation({
+    mutationFn: async (metricData: {
+      metric_name: string;
+      metric_category: string;
+      metric_family: string;
+      current_value: string;
+      change_percentage?: number;
+      change_direction?: string;
+    }) => {
+      const { data, error } = await supabase
+        .from('snapshot_market_metrics')
+        .insert(metricData)
+        .select()
+        .single()
+      
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['market-metrics'] })
+      setShowMetricForm(false)
+      toast({ title: "Metric created successfully" })
+    },
+    onError: (error) => {
+      toast({ title: "Error creating metric", description: error.message, variant: "destructive" })
+    }
+  })
+
+  // Toggle featured mutations
+  const toggleArticleFeaturedMutation = useMutation({
+    mutationFn: async ({ id, featured }: { id: string, featured: boolean }) => {
+      const { error } = await supabase
+        .from('articles')
+        .update({ featured })
+        .eq('id', id)
+      
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['articles'] })
+    }
+  })
+
+  const toggleEventFeaturedMutation = useMutation({
+    mutationFn: async ({ id, featured }: { id: string, featured: boolean }) => {
+      const { error } = await supabase
+        .from('events')
+        .update({ featured })
+        .eq('id', id)
+      
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] })
+    }
+  })
+
+  // Delete mutations
+  const deleteArticleMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('articles')
+        .delete()
+        .eq('id', id)
+      
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['articles'] })
+      toast({ title: "Article deleted successfully" })
+    }
+  })
+
+  const deleteEventMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('events')
+        .delete()
+        .eq('id', id)
+      
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] })
+      toast({ title: "Event deleted successfully" })
+    }
+  })
+
+  const deleteMetricMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('snapshot_market_metrics')
+        .delete()
+        .eq('id', id)
+      
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['market-metrics'] })
+      toast({ title: "Metric deleted successfully" })
+    }
+  })
 
   const handleCreateArticle = (data: any) => {
-    const newArticle: Article = {
-      id: articles.length + 1,
+    createArticleMutation.mutate({
       title: data.title,
+      subtitle: data.subtitle,
+      content: data.content,
       category: data.category,
-      author: data.author,
-      status: data.status,
+      author_name: data.author,
+      published: data.status === 'published',
       featured: data.featured,
-      createdAt: new Date().toISOString().split('T')[0],
-      views: 0
-    }
-    setArticles([...articles, newArticle])
-    setShowArticleForm(false)
-    toast({ title: "Article created successfully" })
+      excerpt: data.excerpt
+    })
   }
 
   const handleCreateEvent = (data: any) => {
-    const newEvent: Event = {
-      id: events.length + 1,
+    createEventMutation.mutate({
       title: data.title,
-      type: data.type,
-      date: data.date,
+      description: data.description,
+      event_type: data.type,
+      start_date: data.date,
       location: data.location,
-      capacity: data.capacity,
-      registered: 0,
-      status: data.status,
+      venue: data.venue,
+      capacity: parseInt(data.capacity) || undefined,
+      price: parseFloat(data.price) || undefined,
+      organizer: data.organizer,
+      published: data.status === 'published',
       featured: data.featured
-    }
-    setEvents([...events, newEvent])
-    setShowEventForm(false)
-    toast({ title: "Event created successfully" })
-  }
-
-  const toggleArticleFeatured = (id: number) => {
-    setArticles(articles.map(article => 
-      article.id === id ? { ...article, featured: !article.featured } : article
-    ))
-  }
-
-  const toggleEventFeatured = (id: number) => {
-    setEvents(events.map(event => 
-      event.id === id ? { ...event, featured: !event.featured } : event
-    ))
-  }
-
-  const deleteArticle = (id: number) => {
-    setArticles(articles.filter(article => article.id !== id))
-    toast({ title: "Article deleted successfully" })
-  }
-
-  const deleteEvent = (id: number) => {
-    setEvents(events.filter(event => event.id !== id))
-    toast({ title: "Event deleted successfully" })
+    })
   }
 
   const handleCreateMetric = (data: any) => {
-    const newMetric: CarouselMetric = {
-      id: carouselMetrics.length + 1,
-      label: data.label.toUpperCase(),
-      value: data.value,
-      change: data.change,
-      isPositive: parseFloat(data.change.replace(/[^-\d.]/g, '')) >= 0,
-      isActive: data.isActive
-    }
-    setCarouselMetrics([...carouselMetrics, newMetric])
-    setShowCarouselForm(false)
-    toast({ title: "Metric created successfully" })
+    const changeValue = parseFloat(data.change.replace(/[^-\d.]/g, ''))
+    createMetricMutation.mutate({
+      metric_name: data.label.toUpperCase(),
+      metric_category: 'PE_METRICS',
+      metric_family: 'MARKET_DATA',
+      current_value: data.value,
+      change_percentage: changeValue,
+      change_direction: changeValue >= 0 ? 'up' : 'down'
+    })
   }
 
-  const toggleMetricActive = (id: number) => {
-    setCarouselMetrics(carouselMetrics.map(metric => 
-      metric.id === id ? { ...metric, isActive: !metric.isActive } : metric
-    ))
+  const toggleArticleFeatured = (id: string, currentFeatured: boolean) => {
+    toggleArticleFeaturedMutation.mutate({ id, featured: !currentFeatured })
   }
 
-  const deleteMetric = (id: number) => {
-    setCarouselMetrics(carouselMetrics.filter(metric => metric.id !== id))
-    toast({ title: "Metric deleted successfully" })
+  const toggleEventFeatured = (id: string, currentFeatured: boolean) => {
+    toggleEventFeaturedMutation.mutate({ id, featured: !currentFeatured })
+  }
+
+  const deleteArticle = (id: string) => {
+    deleteArticleMutation.mutate(id)
+  }
+
+  const deleteEvent = (id: string) => {
+    deleteEventMutation.mutate(id)
+  }
+
+  const deleteMetric = (id: string) => {
+    deleteMetricMutation.mutate(id)
   }
 
   return (
@@ -195,9 +376,9 @@ export default function Admin() {
               <Calendar className="w-4 h-4" />
               Events
             </TabsTrigger>
-            <TabsTrigger value="carousel" className="flex items-center gap-2">
+            <TabsTrigger value="metrics" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
-              Carousel
+              Metrics
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="w-4 h-4" />
@@ -216,7 +397,7 @@ export default function Admin() {
                 <CardContent>
                   <div className="text-2xl font-bold">{articles.length}</div>
                   <p className="text-xs text-muted-foreground">
-                    {articles.filter(a => a.status === 'published').length} published
+                    {articles.filter(a => a.published).length} published
                   </p>
                 </CardContent>
               </Card>
@@ -229,7 +410,7 @@ export default function Admin() {
                 <CardContent>
                   <div className="text-2xl font-bold">{events.length}</div>
                   <p className="text-xs text-muted-foreground">
-                    {events.filter(e => e.status === 'published').length} published
+                    {events.filter(e => e.published).length} published
                   </p>
                 </CardContent>
               </Card>
@@ -241,7 +422,7 @@ export default function Admin() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {articles.reduce((sum, article) => sum + article.views, 0).toLocaleString()}
+                    {articles.reduce((sum, article) => sum + (article.view_count || 0), 0).toLocaleString()}
                   </div>
                   <p className="text-xs text-muted-foreground">This month</p>
                 </CardContent>
@@ -249,14 +430,12 @@ export default function Admin() {
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Event Registrations</CardTitle>
-                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium">Market Metrics</CardTitle>
+                  <BarChart3 className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
-                    {events.reduce((sum, event) => sum + event.registered, 0)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">Total registered</p>
+                  <div className="text-2xl font-bold">{marketMetrics.length}</div>
+                  <p className="text-xs text-muted-foreground">Active metrics</p>
                 </CardContent>
               </Card>
             </div>
@@ -272,10 +451,10 @@ export default function Admin() {
                       <div key={article.id} className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">{article.title}</p>
-                          <p className="text-sm text-muted-foreground">{article.author} • {article.views} views</p>
+                          <p className="text-sm text-muted-foreground">{article.author_name} • {article.view_count || 0} views</p>
                         </div>
-                        <Badge variant={article.status === 'published' ? 'default' : 'secondary'}>
-                          {article.status}
+                        <Badge variant={article.published ? 'default' : 'secondary'}>
+                          {article.published ? 'published' : 'draft'}
                         </Badge>
                       </div>
                     ))}
@@ -293,10 +472,10 @@ export default function Admin() {
                       <div key={event.id} className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">{event.title}</p>
-                          <p className="text-sm text-muted-foreground">{event.date} • {event.location}</p>
+                          <p className="text-sm text-muted-foreground">{new Date(event.start_date).toLocaleDateString()} • {event.location}</p>
                         </div>
-                        <Badge variant={event.status === 'published' ? 'default' : 'secondary'}>
-                          {event.registered}/{event.capacity}
+                        <Badge variant={event.published ? 'default' : 'secondary'}>
+                          {event.event_type}
                         </Badge>
                       </div>
                     ))}
@@ -315,50 +494,54 @@ export default function Admin() {
                   <CardDescription>Manage articles and publications</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Author</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Featured</TableHead>
-                        <TableHead>Views</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {articles.map(article => (
-                        <TableRow key={article.id}>
-                          <TableCell className="font-medium">{article.title}</TableCell>
-                          <TableCell>{article.category}</TableCell>
-                          <TableCell>{article.author}</TableCell>
-                          <TableCell>
-                            <Badge variant={article.status === 'published' ? 'default' : 'secondary'}>
-                              {article.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Switch 
-                              checked={article.featured} 
-                              onCheckedChange={() => toggleArticleFeatured(article.id)}
-                            />
-                          </TableCell>
-                          <TableCell>{article.views}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm" onClick={() => deleteArticle(article.id)}>
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
+                  {articlesLoading ? (
+                    <p>Loading articles...</p>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Title</TableHead>
+                          <TableHead>Category</TableHead>
+                          <TableHead>Author</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Featured</TableHead>
+                          <TableHead>Views</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {articles.map(article => (
+                          <TableRow key={article.id}>
+                            <TableCell className="font-medium">{article.title}</TableCell>
+                            <TableCell>{article.category}</TableCell>
+                            <TableCell>{article.author_name || 'Unknown'}</TableCell>
+                            <TableCell>
+                              <Badge variant={article.published ? 'default' : 'secondary'}>
+                                {article.published ? 'published' : 'draft'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Switch 
+                                checked={article.featured} 
+                                onCheckedChange={() => toggleArticleFeatured(article.id, article.featured)}
+                              />
+                            </TableCell>
+                            <TableCell>{article.view_count || 0}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button variant="ghost" size="sm">
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteArticle(article.id)}>
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
                 </CardContent>
               </Card>
             ) : (
@@ -375,46 +558,50 @@ export default function Admin() {
                   <CardDescription>Manage events and registrations</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Capacity</TableHead>
-                        <TableHead>Featured</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {events.map(event => (
-                        <TableRow key={event.id}>
-                          <TableCell className="font-medium">{event.title}</TableCell>
-                          <TableCell>{event.type}</TableCell>
-                          <TableCell>{event.date}</TableCell>
-                          <TableCell>{event.location}</TableCell>
-                          <TableCell>{event.registered}/{event.capacity}</TableCell>
-                          <TableCell>
-                            <Switch 
-                              checked={event.featured} 
-                              onCheckedChange={() => toggleEventFeatured(event.id)}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm" onClick={() => deleteEvent(event.id)}>
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
+                  {eventsLoading ? (
+                    <p>Loading events...</p>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Title</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Location</TableHead>
+                          <TableHead>Capacity</TableHead>
+                          <TableHead>Featured</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {events.map(event => (
+                          <TableRow key={event.id}>
+                            <TableCell className="font-medium">{event.title}</TableCell>
+                            <TableCell>{event.event_type}</TableCell>
+                            <TableCell>{new Date(event.start_date).toLocaleDateString()}</TableCell>
+                            <TableCell>{event.location || 'TBD'}</TableCell>
+                            <TableCell>{event.capacity || 'Unlimited'}</TableCell>
+                            <TableCell>
+                              <Switch 
+                                checked={event.featured} 
+                                onCheckedChange={() => toggleEventFeatured(event.id, event.featured)}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button variant="ghost" size="sm">
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteEvent(event.id)}>
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
                 </CardContent>
               </Card>
             ) : (
@@ -422,102 +609,81 @@ export default function Admin() {
             )}
           </TabsContent>
 
+          {/* Metrics Management Tab */}
+          <TabsContent value="metrics" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-medium">Market Metrics</h3>
+                <p className="text-sm text-muted-foreground">Manage carousel metrics displayed on the homepage</p>
+              </div>
+              <Button onClick={() => setShowMetricForm(true)}>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Metric
+              </Button>
+            </div>
+
+            {!showMetricForm ? (
+              <Card>
+                <CardContent className="p-6">
+                  {metricsLoading ? (
+                    <p>Loading metrics...</p>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Metric Name</TableHead>
+                          <TableHead>Current Value</TableHead>
+                          <TableHead>Change</TableHead>
+                          <TableHead>Category</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {marketMetrics.map(metric => (
+                          <TableRow key={metric.id}>
+                            <TableCell className="font-medium">{metric.metric_name}</TableCell>
+                            <TableCell>{metric.current_value}</TableCell>
+                            <TableCell>
+                              <span className={`inline-flex items-center ${
+                                metric.change_direction === 'up' ? 'text-green-600' : 'text-red-600'
+                              }`}>
+                                {metric.change_percentage ? `${metric.change_percentage > 0 ? '+' : ''}${metric.change_percentage}%` : 'N/A'}
+                              </span>
+                            </TableCell>
+                            <TableCell>{metric.metric_category}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button variant="ghost" size="sm">
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteMetric(metric.id)}>
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <MetricForm onSubmit={handleCreateMetric} onCancel={() => setShowMetricForm(false)} />
+            )}
+          </TabsContent>
+
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Platform Settings</CardTitle>
-                <CardDescription>Configure your platform preferences</CardDescription>
+                <CardTitle>Settings</CardTitle>
+                <CardDescription>Configure platform settings</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="siteName">Site Name</Label>
-                    <Input id="siteName" defaultValue="Carry & Conquer" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="adminEmail">Admin Email</Label>
-                    <Input id="adminEmail" type="email" defaultValue="admin@carryconquer.com" />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="siteDescription">Site Description</Label>
-                  <Textarea 
-                    id="siteDescription" 
-                    defaultValue="The premier private equity intelligence platform providing deep insights on transactions, market trends, and firm strategies."
-                  />
-                </div>
-
-                <Button>Save Settings</Button>
+              <CardContent>
+                <p className="text-muted-foreground">Settings panel - Configure your platform preferences here.</p>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          {/* Carousel Management Tab */}
-          <TabsContent value="carousel" className="space-y-6">
-            {!showCarouselForm ? (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Carousel Metrics Management</CardTitle>
-                  <CardDescription>Manage the metrics displayed in the top carousel</CardDescription>
-                  <Button onClick={() => setShowCarouselForm(true)} className="w-fit">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Metric
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Label</TableHead>
-                        <TableHead>Value</TableHead>
-                        <TableHead>Change</TableHead>
-                        <TableHead>Trend</TableHead>
-                        <TableHead>Active</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {carouselMetrics.map(metric => (
-                        <TableRow key={metric.id}>
-                          <TableCell className="font-medium">{metric.label}</TableCell>
-                          <TableCell className="font-bold">{metric.value}</TableCell>
-                          <TableCell>
-                            <span className={metric.isPositive ? 'text-green-600' : 'text-red-600'}>
-                              {metric.change}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={metric.isPositive ? 'default' : 'destructive'}>
-                              {metric.isPositive ? 'Up' : 'Down'}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Switch 
-                              checked={metric.isActive} 
-                              onCheckedChange={() => toggleMetricActive(metric.id)}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm" onClick={() => deleteMetric(metric.id)}>
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            ) : (
-              <MetricForm onSubmit={handleCreateMetric} onCancel={() => setShowCarouselForm(false)} />
-            )}
           </TabsContent>
         </Tabs>
       </div>
@@ -525,89 +691,13 @@ export default function Admin() {
   )
 }
 
-// Metric Form Component
-function MetricForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCancel: () => void }) {
-  const [formData, setFormData] = useState({
-    label: '',
-    value: '',
-    change: '',
-    isActive: true
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(formData)
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Add New Metric</CardTitle>
-        <CardDescription>Create a new metric for the carousel display</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="label">Metric Label</Label>
-              <Input
-                id="label"
-                placeholder="e.g., TOTAL AUM"
-                value={formData.label}
-                onChange={(e) => setFormData({...formData, label: e.target.value})}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="value">Current Value</Label>
-              <Input
-                id="value"
-                placeholder="e.g., $2.4T"
-                value={formData.value}
-                onChange={(e) => setFormData({...formData, value: e.target.value})}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="change">Percentage Change</Label>
-              <Input
-                id="change"
-                placeholder="e.g., +5.2% or -3.1%"
-                value={formData.change}
-                onChange={(e) => setFormData({...formData, change: e.target.value})}
-                required
-              />
-            </div>
-            <div className="flex items-center space-x-2 mt-8">
-              <Switch
-                id="isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({...formData, isActive: checked})}
-              />
-              <Label htmlFor="isActive">Display in carousel</Label>
-            </div>
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <Button type="submit">Create Metric</Button>
-            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
-  )
-}
-
 // Article Form Component
 function ArticleForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCancel: () => void }) {
   const [formData, setFormData] = useState({
     title: '',
+    subtitle: '',
     category: '',
     author: '',
-    subtitle: '',
     excerpt: '',
     content: '',
     status: 'draft',
@@ -623,23 +713,23 @@ function ArticleForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, on
     <Card>
       <CardHeader>
         <CardTitle>Create New Article</CardTitle>
-        <CardDescription>Fill in the article details below</CardDescription>
+        <CardDescription>Add a new article to your platform</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="title">Title *</Label>
-              <Input 
-                id="title" 
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({...formData, title: e.target.value})}
-                required 
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
-              <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+            <div>
+              <Label htmlFor="category">Category</Label>
+              <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
@@ -647,65 +737,26 @@ function ArticleForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, on
                   <SelectItem value="Market Trends">Market Trends</SelectItem>
                   <SelectItem value="Key Deals">Key Deals</SelectItem>
                   <SelectItem value="Analysis">Analysis</SelectItem>
-                  <SelectItem value="Industry Insights">Industry Insights</SelectItem>
+                  <SelectItem value="News">News</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
               <Label htmlFor="author">Author</Label>
-              <Input 
-                id="author" 
+              <Input
+                id="author"
                 value={formData.author}
-                onChange={(e) => setFormData({...formData, author: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                required
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="subtitle">Subtitle</Label>
-              <Input 
-                id="subtitle" 
-                value={formData.subtitle}
-                onChange={(e) => setFormData({...formData, subtitle: e.target.value})}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="excerpt">Excerpt</Label>
-            <Textarea 
-              id="excerpt" 
-              value={formData.excerpt}
-              onChange={(e) => setFormData({...formData, excerpt: e.target.value})}
-              placeholder="Brief summary of the article..."
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="content">Content</Label>
-            <Textarea 
-              id="content" 
-              value={formData.content}
-              onChange={(e) => setFormData({...formData, content: e.target.value})}
-              placeholder="Write your article content here..."
-              className="min-h-[200px]"
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Switch 
-                  id="featured"
-                  checked={formData.featured}
-                  onCheckedChange={(checked) => setFormData({...formData, featured: checked})}
-                />
-                <Label htmlFor="featured">Featured Article</Label>
-              </div>
-              
-              <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
-                <SelectTrigger className="w-32">
+            <div>
+              <Label htmlFor="status">Status</Label>
+              <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+                <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -714,15 +765,49 @@ function ArticleForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, on
                 </SelectContent>
               </Select>
             </div>
+          </div>
 
-            <div className="flex gap-3">
-              <Button type="button" variant="outline" onClick={onCancel}>
-                Cancel
-              </Button>
-              <Button type="submit">
-                Create Article
-              </Button>
-            </div>
+          <div>
+            <Label htmlFor="subtitle">Subtitle</Label>
+            <Input
+              id="subtitle"
+              value={formData.subtitle}
+              onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="excerpt">Excerpt</Label>
+            <Textarea
+              id="excerpt"
+              value={formData.excerpt}
+              onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+              rows={3}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="content">Content</Label>
+            <Textarea
+              id="content"
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              rows={8}
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="featured"
+              checked={formData.featured}
+              onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
+            />
+            <Label htmlFor="featured">Featured Article</Label>
+          </div>
+
+          <div className="flex gap-4">
+            <Button type="submit">Create Article</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
           </div>
         </form>
       </CardContent>
@@ -734,13 +819,14 @@ function ArticleForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, on
 function EventForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCancel: () => void }) {
   const [formData, setFormData] = useState({
     title: '',
+    description: '',
     type: '',
     date: '',
     location: '',
-    capacity: 100,
-    pricing: '',
-    registration: '',
-    description: '',
+    venue: '',
+    capacity: '',
+    price: '',
+    organizer: '',
     status: 'draft',
     featured: false
   })
@@ -754,23 +840,23 @@ function EventForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCa
     <Card>
       <CardHeader>
         <CardTitle>Create New Event</CardTitle>
-        <CardDescription>Configure event details and logistics</CardDescription>
+        <CardDescription>Add a new event to your platform</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="title">Event Title *</Label>
-              <Input 
-                id="title" 
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({...formData, title: e.target.value})}
-                required 
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="type">Event Type *</Label>
-              <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value})}>
+            <div>
+              <Label htmlFor="type">Type</Label>
+              <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
@@ -785,82 +871,79 @@ function EventForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCa
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="date">Event Date *</Label>
-              <Input 
-                id="date" 
-                type="date"
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="date">Date</Label>
+              <Input
+                id="date"
+                type="datetime-local"
                 value={formData.date}
-                onChange={(e) => setFormData({...formData, date: e.target.value})}
-                required 
+                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                required
               />
             </div>
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="location">Location</Label>
-              <Input 
-                id="location" 
+              <Input
+                id="location"
                 value={formData.location}
-                onChange={(e) => setFormData({...formData, location: e.target.value})}
-                placeholder="City or Virtual"
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               />
             </div>
-            <div className="space-y-2">
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
               <Label htmlFor="capacity">Capacity</Label>
-              <Input 
-                id="capacity" 
+              <Input
+                id="capacity"
                 type="number"
                 value={formData.capacity}
-                onChange={(e) => setFormData({...formData, capacity: parseInt(e.target.value)})}
+                onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="price">Price</Label>
+              <Input
+                id="price"
+                type="number"
+                step="0.01"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="organizer">Organizer</Label>
+              <Input
+                id="organizer"
+                value={formData.organizer}
+                onChange={(e) => setFormData({ ...formData, organizer: e.target.value })}
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="pricing">Pricing</Label>
-              <Input 
-                id="pricing" 
-                value={formData.pricing}
-                onChange={(e) => setFormData({...formData, pricing: e.target.value})}
-                placeholder="Free, $99, etc."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="registration">Registration Link</Label>
-              <Input 
-                id="registration" 
-                type="url"
-                value={formData.registration}
-                onChange={(e) => setFormData({...formData, registration: e.target.value})}
-                placeholder="https://..."
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Event Description</Label>
-            <Textarea 
-              id="description" 
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
               value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-              placeholder="Describe the event, agenda, speakers..."
-              className="min-h-[120px]"
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={4}
             />
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Switch 
-                  id="featured"
-                  checked={formData.featured}
-                  onCheckedChange={(checked) => setFormData({...formData, featured: checked})}
-                />
-                <Label htmlFor="featured">Featured Event</Label>
-              </div>
-              
-              <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="featured"
+                checked={formData.featured}
+                onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
+              />
+              <Label htmlFor="featured">Featured Event</Label>
+            </div>
+            <div>
+              <Label htmlFor="status">Status</Label>
+              <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -870,15 +953,76 @@ function EventForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCa
                 </SelectContent>
               </Select>
             </div>
+          </div>
 
-            <div className="flex gap-3">
-              <Button type="button" variant="outline" onClick={onCancel}>
-                Cancel
-              </Button>
-              <Button type="submit">
-                Create Event
-              </Button>
+          <div className="flex gap-4">
+            <Button type="submit">Create Event</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  )
+}
+
+// Metric Form Component
+function MetricForm({ onSubmit, onCancel }: { onSubmit: (data: any) => void, onCancel: () => void }) {
+  const [formData, setFormData] = useState({
+    label: '',
+    value: '',
+    change: ''
+  })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSubmit(formData)
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Create New Metric</CardTitle>
+        <CardDescription>Add a new market metric to display</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="label">Metric Label</Label>
+            <Input
+              id="label"
+              value={formData.label}
+              onChange={(e) => setFormData({ ...formData, label: e.target.value })}
+              placeholder="e.g., PE DRY POWDER"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="value">Current Value</Label>
+              <Input
+                id="value"
+                value={formData.value}
+                onChange={(e) => setFormData({ ...formData, value: e.target.value })}
+                placeholder="e.g., $3.7T"
+                required
+              />
             </div>
+            <div>
+              <Label htmlFor="change">Change Percentage</Label>
+              <Input
+                id="change"
+                value={formData.change}
+                onChange={(e) => setFormData({ ...formData, change: e.target.value })}
+                placeholder="e.g., +8.3%"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <Button type="submit">Create Metric</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
           </div>
         </form>
       </CardContent>
