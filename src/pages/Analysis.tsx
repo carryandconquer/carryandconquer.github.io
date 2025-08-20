@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArrowLeft, Calendar, Clock, User, Search, TrendingUp, Target, Briefcase, Users, Newspaper, FileText } from 'lucide-react';
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client"
+import ReactMarkdown from 'react-markdown';
 
 interface Article {
   id: string;
@@ -359,18 +360,19 @@ export default function Analysis() {
                     <span>{formatReadTime(selectedArticle.read_time)}</span>
                   </div>
                 </div>
-                <div 
-                  className="prose prose-invert prose-lg max-w-none text-white/90 leading-relaxed
+                <div className="prose prose-invert prose-lg max-w-none text-white/90 leading-relaxed
                     prose-headings:text-white prose-headings:font-bold
                     prose-h1:text-3xl prose-h1:mb-6 prose-h1:mt-8
-                    prose-h2:text-2xl prose-h2:mb-4 prose-h2:mt-6
+                    prose-h2:text-2xl prose-h2:mb-4 prose-h2:mt-6 prose-h2:text-green-400
                     prose-h3:text-xl prose-h3:mb-3 prose-h3:mt-5 prose-h3:text-green-400
                     prose-h4:text-lg prose-h4:mb-2 prose-h4:mt-4
                     prose-p:mb-4 prose-p:leading-relaxed
                     prose-ul:mb-4 prose-li:mb-1
-                    prose-strong:text-white prose-strong:font-semibold"
-                  dangerouslySetInnerHTML={{ __html: selectedArticle.content || '<p>No content available</p>' }}
-                />
+                    prose-strong:text-white prose-strong:font-semibold">
+                  <ReactMarkdown>
+                    {selectedArticle.content || 'No content available'}
+                  </ReactMarkdown>
+                </div>
               </div>
             </>
           )}
