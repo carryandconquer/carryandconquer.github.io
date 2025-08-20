@@ -7,6 +7,9 @@ import { useState, useEffect } from "react"
 const Snapshot = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all-regions")
   const [selectedCountry, setSelectedCountry] = useState<string>("all-countries")
+  const [selectedSector, setSelectedSector] = useState<string>("all-sectors")
+  const [selectedSubSector, setSelectedSubSector] = useState<string>("all-sub-sectors")
+  const [selectedTertiary, setSelectedTertiary] = useState<string>("all-tertiary")
 
   // Region to countries mapping based on Private Equity Regional Taxonomy
   const regionCountries = {
@@ -74,6 +77,147 @@ const Snapshot = () => {
     ]
   }
 
+  // Sector mapping based on provided taxonomy
+  const sectorMapping = {
+    "ai-data-emerging-tech": {
+      label: "AI, Data & Emerging Tech",
+      subsectors: {
+        "artificial-intelligence": {
+          label: "Artificial Intelligence",
+          tertiary: ["Machine Learning", "NLP", "Computer Vision", "General AI"]
+        },
+        "data-analytics": {
+          label: "Data & Analytics",
+          tertiary: ["Data Platforms", "BI", "Predictive Analytics"]
+        },
+        "developer-tools": {
+          label: "Developer Tools & Infrastructure",
+          tertiary: ["APIs", "DevOps", "Cloud Infra", "Databases"]
+        },
+        "ar-vr": {
+          label: "AR/VR & Spatial Computing",
+          tertiary: ["Gaming", "Enterprise Applications", "Social"]
+        },
+        "quantum-computing": {
+          label: "Quantum Computing",
+          tertiary: ["Hardware", "Algorithms", "Quantum-as-a-Service"]
+        },
+        "emerging-tech-rd": {
+          label: "Emerging Tech R&D",
+          tertiary: ["Frontier Labs", "Early Research Commercialization"]
+        }
+      }
+    },
+    "agtech-food-systems": {
+      label: "AgTech & Food Systems",
+      subsectors: {
+        "agtech": {
+          label: "AgTech",
+          tertiary: ["Precision Farming", "Smart Irrigation", "Crop Genomics"]
+        },
+        "food-technology": {
+          label: "Food Technology",
+          tertiary: ["Alternative Proteins", "Cellular Agriculture", "Novel Ingredients"]
+        },
+        "food-beverage": {
+          label: "Food & Beverage",
+          tertiary: ["Functional Foods", "Alcohol Innovation", "Consumer Packaged Goods"]
+        },
+        "supply-chain-cold": {
+          label: "Supply Chain & Cold Chain Logistics",
+          tertiary: []
+        }
+      }
+    },
+    "biotech-pharma": {
+      label: "Biotech, Pharma & Life Sciences",
+      subsectors: {
+        "biotechnology": {
+          label: "Biotechnology",
+          tertiary: ["Drug Discovery", "Biologics", "Gene Therapy"]
+        },
+        "pharmaceuticals": {
+          label: "Pharmaceuticals",
+          tertiary: ["Generic", "Specialty", "Manufacturing"]
+        },
+        "medtech-tools": {
+          label: "MedTech & Tools",
+          tertiary: ["Medical Devices", "Diagnostics", "Surgical", "Monitoring"]
+        },
+        "synthetic-biology": {
+          label: "Synthetic Biology",
+          tertiary: ["Industrial Biotech", "Biomanufacturing"]
+        }
+      }
+    },
+    "blockchain-web3": {
+      label: "Blockchain, Web3 & Digital Assets",
+      subsectors: {
+        "blockchain-infrastructure": { label: "Blockchain Infrastructure", tertiary: [] },
+        "defi": { label: "DeFi", tertiary: [] },
+        "nfts": { label: "NFTs & Digital Collectibles", tertiary: [] },
+        "web3-applications": { label: "Web3 Applications", tertiary: [] },
+        "crypto-exchanges": { label: "Crypto Exchanges & Custody", tertiary: [] }
+      }
+    },
+    "cleantech-climate": {
+      label: "CleanTech, Climate & Sustainability",
+      subsectors: {
+        "clean-energy": {
+          label: "Clean Energy",
+          tertiary: ["Solar", "Wind", "Hydro", "Energy Storage"]
+        },
+        "climate-tech": {
+          label: "Climate Tech",
+          tertiary: ["Carbon Capture", "Removal", "Trading"]
+        },
+        "energy-efficiency": {
+          label: "Energy Efficiency",
+          tertiary: ["Smart Grid", "Building Efficiency", "Industrial Retrofits"]
+        },
+        "sustainable-materials": {
+          label: "Sustainable Materials",
+          tertiary: ["Recycling", "Circular Economy", "Packaging Innovation"]
+        },
+        "climate-adaptation": {
+          label: "Climate Adaptation",
+          tertiary: ["Water Tech", "Agriculture Resilience", "Disaster Management"]
+        },
+        "environmental-services": {
+          label: "Environmental Services",
+          tertiary: ["Waste Management", "Pollution Control"]
+        }
+      }
+    },
+    "financial-services-fintech": {
+      label: "Financial Services & FinTech",
+      subsectors: {
+        "payments": { label: "Payments", tertiary: [] },
+        "lending": { label: "Lending", tertiary: [] },
+        "wealth-management": { label: "Wealth Management / Investment Platforms", tertiary: [] },
+        "neobanking": { label: "Neobanking & Digital Banking", tertiary: [] },
+        "insurtech": { label: "InsurTech", tertiary: [] },
+        "regtech": { label: "RegTech", tertiary: [] },
+        "capital-markets": { label: "Capital Markets Infrastructure", tertiary: [] }
+      }
+    },
+    "enterprise-software": {
+      label: "Enterprise Software",
+      subsectors: {
+        "enterprise-saas": { label: "Enterprise SaaS", tertiary: [] },
+        "enterprise-software": {
+          label: "Enterprise Software",
+          tertiary: ["ERP", "CRM", "HR Tech", "Sales Tech"]
+        },
+        "productivity-collaboration": { label: "Productivity & Collaboration Tools", tertiary: [] },
+        "vertical-saas": {
+          label: "Vertical SaaS",
+          tertiary: ["LegalTech", "PropTech", "AgriTech SaaS", "GovTech"]
+        }
+      }
+    }
+  }
+
   // Get filtered countries based on selected region
   const getFilteredCountries = () => {
     if (selectedRegion === "all-regions") {
@@ -82,10 +226,49 @@ const Snapshot = () => {
     return regionCountries[selectedRegion as keyof typeof regionCountries] || []
   }
 
-  // Reset country selection when region changes
+  // Get filtered subsectors based on selected sector
+  const getFilteredSubSectors = () => {
+    if (selectedSector === "all-sectors") {
+      return Object.values(sectorMapping).flatMap(sector => 
+        Object.entries(sector.subsectors).map(([key, value]) => ({ value: key, label: value.label }))
+      )
+    }
+    const sector = sectorMapping[selectedSector as keyof typeof sectorMapping]
+    if (!sector) return []
+    return Object.entries(sector.subsectors).map(([key, value]) => ({ value: key, label: value.label }))
+  }
+
+  // Get filtered tertiary sectors based on selected subsector
+  const getFilteredTertiary = () => {
+    if (selectedSubSector === "all-sub-sectors") return []
+    
+    // Find the subsector in the mapping
+    for (const [sectorKey, sectorData] of Object.entries(sectorMapping)) {
+      for (const [subsectorKey, subsectorData] of Object.entries(sectorData.subsectors)) {
+        if (subsectorKey === selectedSubSector) {
+          return subsectorData.tertiary.map(t => ({ 
+            value: t.toLowerCase().replace(/\s+/g, '-'), 
+            label: t 
+          }))
+        }
+      }
+    }
+    return []
+  }
+
+  // Reset dependent selections when parent selections change
   useEffect(() => {
     setSelectedCountry("all-countries")
   }, [selectedRegion])
+
+  useEffect(() => {
+    setSelectedSubSector("all-sub-sectors")
+    setSelectedTertiary("all-tertiary")
+  }, [selectedSector])
+
+  useEffect(() => {
+    setSelectedTertiary("all-tertiary")
+  }, [selectedSubSector])
 
   const handleRegionChange = (value: string) => {
     setSelectedRegion(value)
@@ -93,6 +276,18 @@ const Snapshot = () => {
 
   const handleCountryChange = (value: string) => {
     setSelectedCountry(value)
+  }
+
+  const handleSectorChange = (value: string) => {
+    setSelectedSector(value)
+  }
+
+  const handleSubSectorChange = (value: string) => {
+    setSelectedSubSector(value)
+  }
+
+  const handleTertiaryChange = (value: string) => {
+    setSelectedTertiary(value)
   }
   const marketMetrics = [
     {
@@ -260,49 +455,51 @@ const Snapshot = () => {
             
             <div>
               <label className="block text-sm font-medium text-white/70 mb-2">SECTOR</label>
-              <Select defaultValue="all-sectors">
+              <Select value={selectedSector} onValueChange={handleSectorChange}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
                   <SelectItem value="all-sectors">All Sectors</SelectItem>
-                  <SelectItem value="technology">Technology</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
-                  <SelectItem value="financial">Financial Services</SelectItem>
-                  <SelectItem value="real-estate">Real Estate</SelectItem>
+                  {Object.entries(sectorMapping).map(([key, value]) => (
+                    <SelectItem key={key} value={key}>
+                      {value.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-white/70 mb-2">SUB-SECTOR</label>
-              <Select defaultValue="all-sub-sectors">
+              <Select value={selectedSubSector} onValueChange={handleSubSectorChange}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
                   <SelectItem value="all-sub-sectors">All Sub-Sectors</SelectItem>
-                  <SelectItem value="fintech">FinTech</SelectItem>
-                  <SelectItem value="biotech">Biotech</SelectItem>
-                  <SelectItem value="saas">SaaS</SelectItem>
-                  <SelectItem value="commercial">Commercial RE</SelectItem>
+                  {getFilteredSubSectors().map((subsector) => (
+                    <SelectItem key={subsector.value} value={subsector.value}>
+                      {subsector.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-white/70 mb-2">TERTIARY SECTOR</label>
-              <Select defaultValue="all-tertiary">
+              <Select value={selectedTertiary} onValueChange={handleTertiaryChange}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
                   <SelectItem value="all-tertiary">All Tertiary</SelectItem>
-                  <SelectItem value="retail">Retail</SelectItem>
-                  <SelectItem value="hospitality">Hospitality</SelectItem>
-                  <SelectItem value="logistics">Logistics</SelectItem>
-                  <SelectItem value="consulting">Consulting</SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
+                  {getFilteredTertiary().map((tertiary) => (
+                    <SelectItem key={tertiary.value} value={tertiary.value}>
+                      {tertiary.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
