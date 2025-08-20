@@ -2,8 +2,98 @@ import { Navigation } from "@/components/Navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe } from "lucide-react"
+import { useState, useEffect } from "react"
 
 const Snapshot = () => {
+  const [selectedRegion, setSelectedRegion] = useState<string>("all-regions")
+  const [selectedCountry, setSelectedCountry] = useState<string>("all-countries")
+
+  // Region to countries mapping based on Private Equity Regional Taxonomy
+  const regionCountries = {
+    "north-america": [
+      { value: "canada", label: "Canada" },
+      { value: "mexico", label: "Mexico" },
+      { value: "usa", label: "United States" }
+    ],
+    "europe": [
+      { value: "austria", label: "Austria" },
+      { value: "belgium", label: "Belgium" },
+      { value: "denmark", label: "Denmark" },
+      { value: "finland", label: "Finland" },
+      { value: "france", label: "France" },
+      { value: "germany", label: "Germany" },
+      { value: "ireland", label: "Ireland" },
+      { value: "italy", label: "Italy" },
+      { value: "netherlands", label: "Netherlands" },
+      { value: "norway", label: "Norway" },
+      { value: "poland", label: "Poland" },
+      { value: "portugal", label: "Portugal" },
+      { value: "spain", label: "Spain" },
+      { value: "sweden", label: "Sweden" },
+      { value: "switzerland", label: "Switzerland" },
+      { value: "uk", label: "United Kingdom" }
+    ],
+    "asia-pacific": [
+      { value: "australia", label: "Australia" },
+      { value: "hong-kong", label: "Hong Kong" },
+      { value: "japan", label: "Japan" },
+      { value: "new-zealand", label: "New Zealand" },
+      { value: "singapore", label: "Singapore" },
+      { value: "south-korea", label: "South Korea" },
+      { value: "taiwan", label: "Taiwan" }
+    ],
+    "emerging-asia": [
+      { value: "china", label: "China" },
+      { value: "india", label: "India" },
+      { value: "indonesia", label: "Indonesia" },
+      { value: "malaysia", label: "Malaysia" },
+      { value: "philippines", label: "Philippines" },
+      { value: "thailand", label: "Thailand" },
+      { value: "vietnam", label: "Vietnam" }
+    ],
+    "latin-america": [
+      { value: "argentina", label: "Argentina" },
+      { value: "brazil", label: "Brazil" },
+      { value: "chile", label: "Chile" },
+      { value: "colombia", label: "Colombia" },
+      { value: "costa-rica", label: "Costa Rica" },
+      { value: "panama", label: "Panama" },
+      { value: "peru", label: "Peru" },
+      { value: "uruguay", label: "Uruguay" }
+    ],
+    "middle-east-africa": [
+      { value: "egypt", label: "Egypt" },
+      { value: "israel", label: "Israel" },
+      { value: "kenya", label: "Kenya" },
+      { value: "morocco", label: "Morocco" },
+      { value: "nigeria", label: "Nigeria" },
+      { value: "qatar", label: "Qatar" },
+      { value: "saudi-arabia", label: "Saudi Arabia" },
+      { value: "south-africa", label: "South Africa" },
+      { value: "uae", label: "UAE" }
+    ]
+  }
+
+  // Get filtered countries based on selected region
+  const getFilteredCountries = () => {
+    if (selectedRegion === "all-regions") {
+      return Object.values(regionCountries).flat()
+    }
+    return regionCountries[selectedRegion as keyof typeof regionCountries] || []
+  }
+
+  // Reset country selection when region changes
+  useEffect(() => {
+    setSelectedCountry("all-countries")
+  }, [selectedRegion])
+
+  const handleRegionChange = (value: string) => {
+    setSelectedRegion(value)
+  }
+
+  const handleCountryChange = (value: string) => {
+    setSelectedCountry(value)
+  }
   const marketMetrics = [
     {
       icon: DollarSign,
@@ -135,98 +225,35 @@ const Snapshot = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             <div>
               <label className="block text-sm font-medium text-white/70 mb-2">REGION</label>
-              <Select defaultValue="all-regions">
+              <Select value={selectedRegion} onValueChange={handleRegionChange}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
                   <SelectItem value="all-regions">All Regions</SelectItem>
-                  <SelectItem value="north-america">North America</SelectItem>
-                  <SelectItem value="europe">Europe</SelectItem>
-                  <SelectItem value="asia-pacific">Asia Pacific</SelectItem>
-                  <SelectItem value="emerging-asia">Emerging Asia</SelectItem>
-                  <SelectItem value="latin-america">Latin America</SelectItem>
-                  <SelectItem value="middle-east-africa">Middle East & Africa</SelectItem>
+                  <SelectItem value="north-america">🍁 North America</SelectItem>
+                  <SelectItem value="europe">🇪🇺 Europe</SelectItem>
+                  <SelectItem value="asia-pacific">🌏 Asia Pacific</SelectItem>
+                  <SelectItem value="emerging-asia">🌅 Emerging Asia</SelectItem>
+                  <SelectItem value="latin-america">🌎 Latin America</SelectItem>
+                  <SelectItem value="middle-east-africa">🌍 Middle East & Africa</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-white/70 mb-2">COUNTRY</label>
-              <Select defaultValue="all-countries">
+              <Select value={selectedCountry} onValueChange={handleCountryChange}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
                   <SelectItem value="all-countries">All Countries</SelectItem>
-                  
-                  {/* North America */}
-                  <SelectItem value="united-states" className="text-green-400 font-medium">🍁 North America</SelectItem>
-                  <SelectItem value="canada" className="pl-6">Canada</SelectItem>
-                  <SelectItem value="mexico" className="pl-6">Mexico</SelectItem>
-                  <SelectItem value="usa" className="pl-6">United States</SelectItem>
-                  
-                  {/* Europe */}
-                  <SelectItem value="europe-header" className="text-blue-400 font-medium">🇪🇺 Europe</SelectItem>
-                  <SelectItem value="austria" className="pl-6">Austria</SelectItem>
-                  <SelectItem value="belgium" className="pl-6">Belgium</SelectItem>
-                  <SelectItem value="denmark" className="pl-6">Denmark</SelectItem>
-                  <SelectItem value="finland" className="pl-6">Finland</SelectItem>
-                  <SelectItem value="france" className="pl-6">France</SelectItem>
-                  <SelectItem value="germany" className="pl-6">Germany</SelectItem>
-                  <SelectItem value="ireland" className="pl-6">Ireland</SelectItem>
-                  <SelectItem value="italy" className="pl-6">Italy</SelectItem>
-                  <SelectItem value="netherlands" className="pl-6">Netherlands</SelectItem>
-                  <SelectItem value="norway" className="pl-6">Norway</SelectItem>
-                  <SelectItem value="poland" className="pl-6">Poland</SelectItem>
-                  <SelectItem value="portugal" className="pl-6">Portugal</SelectItem>
-                  <SelectItem value="spain" className="pl-6">Spain</SelectItem>
-                  <SelectItem value="sweden" className="pl-6">Sweden</SelectItem>
-                  <SelectItem value="switzerland" className="pl-6">Switzerland</SelectItem>
-                  <SelectItem value="uk" className="pl-6">United Kingdom</SelectItem>
-                  
-                  {/* Asia Pacific */}
-                  <SelectItem value="asia-pacific-header" className="text-purple-400 font-medium">🌏 Asia Pacific</SelectItem>
-                  <SelectItem value="australia" className="pl-6">Australia</SelectItem>
-                  <SelectItem value="hong-kong" className="pl-6">Hong Kong</SelectItem>
-                  <SelectItem value="japan" className="pl-6">Japan</SelectItem>
-                  <SelectItem value="new-zealand" className="pl-6">New Zealand</SelectItem>
-                  <SelectItem value="singapore" className="pl-6">Singapore</SelectItem>
-                  <SelectItem value="south-korea" className="pl-6">South Korea</SelectItem>
-                  <SelectItem value="taiwan" className="pl-6">Taiwan</SelectItem>
-                  
-                  {/* Emerging Asia */}
-                  <SelectItem value="emerging-asia-header" className="text-yellow-400 font-medium">🌅 Emerging Asia</SelectItem>
-                  <SelectItem value="china" className="pl-6">China</SelectItem>
-                  <SelectItem value="india" className="pl-6">India</SelectItem>
-                  <SelectItem value="indonesia" className="pl-6">Indonesia</SelectItem>
-                  <SelectItem value="malaysia" className="pl-6">Malaysia</SelectItem>
-                  <SelectItem value="philippines" className="pl-6">Philippines</SelectItem>
-                  <SelectItem value="thailand" className="pl-6">Thailand</SelectItem>
-                  <SelectItem value="vietnam" className="pl-6">Vietnam</SelectItem>
-                  
-                  {/* Latin America */}
-                  <SelectItem value="latin-america-header" className="text-orange-400 font-medium">🌎 Latin America</SelectItem>
-                  <SelectItem value="argentina" className="pl-6">Argentina</SelectItem>
-                  <SelectItem value="brazil" className="pl-6">Brazil</SelectItem>
-                  <SelectItem value="chile" className="pl-6">Chile</SelectItem>
-                  <SelectItem value="colombia" className="pl-6">Colombia</SelectItem>
-                  <SelectItem value="costa-rica" className="pl-6">Costa Rica</SelectItem>
-                  <SelectItem value="panama" className="pl-6">Panama</SelectItem>
-                  <SelectItem value="peru" className="pl-6">Peru</SelectItem>
-                  <SelectItem value="uruguay" className="pl-6">Uruguay</SelectItem>
-                  
-                  {/* Middle East & Africa */}
-                  <SelectItem value="mea-header" className="text-red-400 font-medium">🌍 Middle East & Africa</SelectItem>
-                  <SelectItem value="egypt" className="pl-6">Egypt</SelectItem>
-                  <SelectItem value="israel" className="pl-6">Israel</SelectItem>
-                  <SelectItem value="kenya" className="pl-6">Kenya</SelectItem>
-                  <SelectItem value="morocco" className="pl-6">Morocco</SelectItem>
-                  <SelectItem value="nigeria" className="pl-6">Nigeria</SelectItem>
-                  <SelectItem value="qatar" className="pl-6">Qatar</SelectItem>
-                  <SelectItem value="saudi-arabia" className="pl-6">Saudi Arabia</SelectItem>
-                  <SelectItem value="south-africa" className="pl-6">South Africa</SelectItem>
-                  <SelectItem value="uae" className="pl-6">UAE</SelectItem>
+                  {getFilteredCountries().map((country) => (
+                    <SelectItem key={country.value} value={country.value}>
+                      {country.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
