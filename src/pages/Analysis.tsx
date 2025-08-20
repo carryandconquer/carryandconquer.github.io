@@ -13,6 +13,7 @@ interface Article {
   id: string;
   category: string;
   title: string;
+  subtitle: string | null;
   excerpt: string | null;
   author_name: string | null;
   published_date: string | null;
@@ -128,6 +129,23 @@ export default function Analysis() {
   const formatReadTime = (minutes: number | null) => {
     if (!minutes) return '5 min read';
     return `${minutes} min read`;
+  };
+
+  const generateExcerpt = (content: string | null, maxLength: number = 150) => {
+    if (!content) return 'No excerpt available';
+    
+    // Strip HTML tags and get plain text
+    const textContent = content.replace(/<[^>]*>/g, '').trim();
+    
+    if (textContent.length <= maxLength) return textContent;
+    
+    // Find the last complete word within the limit
+    const truncated = textContent.substring(0, maxLength);
+    const lastSpaceIndex = truncated.lastIndexOf(' ');
+    
+    return lastSpaceIndex > 0 
+      ? truncated.substring(0, lastSpaceIndex) + '...'
+      : truncated + '...';
   };
 
   if (loading) {
@@ -248,9 +266,14 @@ export default function Analysis() {
                   </div>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-white line-clamp-2">{article.title}</CardTitle>
+                    {article.subtitle && (
+                      <CardDescription className="text-white/60 line-clamp-1 mt-2">
+                        {article.subtitle}
+                      </CardDescription>
+                    )}
                   </CardHeader>
                   <CardContent>
-                    <p className="text-white/70 mb-4 line-clamp-3">{article.excerpt || 'No excerpt available'}</p>
+                    <p className="text-white/70 mb-4 line-clamp-3">{generateExcerpt(article.content)}</p>
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2 text-white/60">
                         <User className="h-4 w-4" />
@@ -337,7 +360,15 @@ export default function Analysis() {
                   </div>
                 </div>
                 <div 
-                  className="prose prose-invert prose-lg max-w-none text-white/90 leading-relaxed"
+                  className="prose prose-invert prose-lg max-w-none text-white/90 leading-relaxed
+                    prose-headings:text-white prose-headings:font-bold
+                    prose-h1:text-3xl prose-h1:mb-6 prose-h1:mt-8
+                    prose-h2:text-2xl prose-h2:mb-4 prose-h2:mt-6
+                    prose-h3:text-xl prose-h3:mb-3 prose-h3:mt-5 prose-h3:text-green-400
+                    prose-h4:text-lg prose-h4:mb-2 prose-h4:mt-4
+                    prose-p:mb-4 prose-p:leading-relaxed
+                    prose-ul:mb-4 prose-li:mb-1
+                    prose-strong:text-white prose-strong:font-semibold"
                   dangerouslySetInnerHTML={{ __html: selectedArticle.content || '<p>No content available</p>' }}
                 />
               </div>
