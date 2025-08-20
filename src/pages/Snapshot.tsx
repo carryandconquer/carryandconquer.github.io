@@ -132,8 +132,8 @@ const Snapshot = () => {
           <h1 className="text-4xl font-bold mb-4">Market Snapshot</h1>
           
           {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-8">
-            <div className="min-w-[200px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div>
               <label className="block text-sm font-medium text-white/70 mb-2">REGION</label>
               <Select defaultValue="all-regions">
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
@@ -148,22 +148,40 @@ const Snapshot = () => {
               </Select>
             </div>
             
-            <div className="min-w-[200px]">
-              <label className="block text-sm font-medium text-white/70 mb-2">FUND TYPE</label>
-              <Select defaultValue="all-funds">
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">COUNTRY</label>
+              <Select defaultValue="all-countries">
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all-funds">All Fund Types</SelectItem>
-                  <SelectItem value="buyout">Buyout</SelectItem>
-                  <SelectItem value="growth">Growth</SelectItem>
-                  <SelectItem value="venture">Venture Capital</SelectItem>
+                  <SelectItem value="all-countries">All Countries</SelectItem>
+                  <SelectItem value="usa">United States</SelectItem>
+                  <SelectItem value="canada">Canada</SelectItem>
+                  <SelectItem value="uk">United Kingdom</SelectItem>
+                  <SelectItem value="germany">Germany</SelectItem>
+                  <SelectItem value="france">France</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
-            <div className="min-w-[200px]">
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">CITY</label>
+              <Select defaultValue="all-cities">
+                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all-cities">All Cities</SelectItem>
+                  <SelectItem value="new-york">New York</SelectItem>
+                  <SelectItem value="london">London</SelectItem>
+                  <SelectItem value="san-francisco">San Francisco</SelectItem>
+                  <SelectItem value="toronto">Toronto</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
               <label className="block text-sm font-medium text-white/70 mb-2">SECTOR</label>
               <Select defaultValue="all-sectors">
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
@@ -174,21 +192,23 @@ const Snapshot = () => {
                   <SelectItem value="technology">Technology</SelectItem>
                   <SelectItem value="healthcare">Healthcare</SelectItem>
                   <SelectItem value="financial">Financial Services</SelectItem>
+                  <SelectItem value="real-estate">Real Estate</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
-            <div className="min-w-[200px]">
-              <label className="block text-sm font-medium text-white/70 mb-2">DEAL SIZE</label>
-              <Select defaultValue="all-sizes">
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">SUB-SECTOR</label>
+              <Select defaultValue="all-sub-sectors">
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all-sizes">All Deal Sizes</SelectItem>
-                  <SelectItem value="small">$10M - $100M</SelectItem>
-                  <SelectItem value="mid">$100M - $1B</SelectItem>
-                  <SelectItem value="large">$1B+</SelectItem>
+                  <SelectItem value="all-sub-sectors">All Sub-Sectors</SelectItem>
+                  <SelectItem value="fintech">FinTech</SelectItem>
+                  <SelectItem value="biotech">Biotech</SelectItem>
+                  <SelectItem value="saas">SaaS</SelectItem>
+                  <SelectItem value="commercial">Commercial RE</SelectItem>
                 </SelectContent>
               </Select>
             </div>
