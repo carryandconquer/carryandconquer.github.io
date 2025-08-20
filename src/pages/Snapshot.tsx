@@ -139,11 +139,14 @@ const Snapshot = () => {
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
                   <SelectItem value="all-regions">All Regions</SelectItem>
                   <SelectItem value="north-america">North America</SelectItem>
                   <SelectItem value="europe">Europe</SelectItem>
                   <SelectItem value="asia-pacific">Asia Pacific</SelectItem>
+                  <SelectItem value="emerging-asia">Emerging Asia</SelectItem>
+                  <SelectItem value="latin-america">Latin America</SelectItem>
+                  <SelectItem value="middle-east-africa">Middle East & Africa</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -154,13 +157,76 @@ const Snapshot = () => {
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
                   <SelectItem value="all-countries">All Countries</SelectItem>
-                  <SelectItem value="usa">United States</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
-                  <SelectItem value="uk">United Kingdom</SelectItem>
-                  <SelectItem value="germany">Germany</SelectItem>
-                  <SelectItem value="france">France</SelectItem>
+                  
+                  {/* North America */}
+                  <SelectItem value="united-states" className="text-green-400 font-medium">🍁 North America</SelectItem>
+                  <SelectItem value="canada" className="pl-6">Canada</SelectItem>
+                  <SelectItem value="mexico" className="pl-6">Mexico</SelectItem>
+                  <SelectItem value="usa" className="pl-6">United States</SelectItem>
+                  
+                  {/* Europe */}
+                  <SelectItem value="europe-header" className="text-blue-400 font-medium">🇪🇺 Europe</SelectItem>
+                  <SelectItem value="austria" className="pl-6">Austria</SelectItem>
+                  <SelectItem value="belgium" className="pl-6">Belgium</SelectItem>
+                  <SelectItem value="denmark" className="pl-6">Denmark</SelectItem>
+                  <SelectItem value="finland" className="pl-6">Finland</SelectItem>
+                  <SelectItem value="france" className="pl-6">France</SelectItem>
+                  <SelectItem value="germany" className="pl-6">Germany</SelectItem>
+                  <SelectItem value="ireland" className="pl-6">Ireland</SelectItem>
+                  <SelectItem value="italy" className="pl-6">Italy</SelectItem>
+                  <SelectItem value="netherlands" className="pl-6">Netherlands</SelectItem>
+                  <SelectItem value="norway" className="pl-6">Norway</SelectItem>
+                  <SelectItem value="poland" className="pl-6">Poland</SelectItem>
+                  <SelectItem value="portugal" className="pl-6">Portugal</SelectItem>
+                  <SelectItem value="spain" className="pl-6">Spain</SelectItem>
+                  <SelectItem value="sweden" className="pl-6">Sweden</SelectItem>
+                  <SelectItem value="switzerland" className="pl-6">Switzerland</SelectItem>
+                  <SelectItem value="uk" className="pl-6">United Kingdom</SelectItem>
+                  
+                  {/* Asia Pacific */}
+                  <SelectItem value="asia-pacific-header" className="text-purple-400 font-medium">🌏 Asia Pacific</SelectItem>
+                  <SelectItem value="australia" className="pl-6">Australia</SelectItem>
+                  <SelectItem value="hong-kong" className="pl-6">Hong Kong</SelectItem>
+                  <SelectItem value="japan" className="pl-6">Japan</SelectItem>
+                  <SelectItem value="new-zealand" className="pl-6">New Zealand</SelectItem>
+                  <SelectItem value="singapore" className="pl-6">Singapore</SelectItem>
+                  <SelectItem value="south-korea" className="pl-6">South Korea</SelectItem>
+                  <SelectItem value="taiwan" className="pl-6">Taiwan</SelectItem>
+                  
+                  {/* Emerging Asia */}
+                  <SelectItem value="emerging-asia-header" className="text-yellow-400 font-medium">🌅 Emerging Asia</SelectItem>
+                  <SelectItem value="china" className="pl-6">China</SelectItem>
+                  <SelectItem value="india" className="pl-6">India</SelectItem>
+                  <SelectItem value="indonesia" className="pl-6">Indonesia</SelectItem>
+                  <SelectItem value="malaysia" className="pl-6">Malaysia</SelectItem>
+                  <SelectItem value="philippines" className="pl-6">Philippines</SelectItem>
+                  <SelectItem value="thailand" className="pl-6">Thailand</SelectItem>
+                  <SelectItem value="vietnam" className="pl-6">Vietnam</SelectItem>
+                  
+                  {/* Latin America */}
+                  <SelectItem value="latin-america-header" className="text-orange-400 font-medium">🌎 Latin America</SelectItem>
+                  <SelectItem value="argentina" className="pl-6">Argentina</SelectItem>
+                  <SelectItem value="brazil" className="pl-6">Brazil</SelectItem>
+                  <SelectItem value="chile" className="pl-6">Chile</SelectItem>
+                  <SelectItem value="colombia" className="pl-6">Colombia</SelectItem>
+                  <SelectItem value="costa-rica" className="pl-6">Costa Rica</SelectItem>
+                  <SelectItem value="panama" className="pl-6">Panama</SelectItem>
+                  <SelectItem value="peru" className="pl-6">Peru</SelectItem>
+                  <SelectItem value="uruguay" className="pl-6">Uruguay</SelectItem>
+                  
+                  {/* Middle East & Africa */}
+                  <SelectItem value="mea-header" className="text-red-400 font-medium">🌍 Middle East & Africa</SelectItem>
+                  <SelectItem value="egypt" className="pl-6">Egypt</SelectItem>
+                  <SelectItem value="israel" className="pl-6">Israel</SelectItem>
+                  <SelectItem value="kenya" className="pl-6">Kenya</SelectItem>
+                  <SelectItem value="morocco" className="pl-6">Morocco</SelectItem>
+                  <SelectItem value="nigeria" className="pl-6">Nigeria</SelectItem>
+                  <SelectItem value="qatar" className="pl-6">Qatar</SelectItem>
+                  <SelectItem value="saudi-arabia" className="pl-6">Saudi Arabia</SelectItem>
+                  <SelectItem value="south-africa" className="pl-6">South Africa</SelectItem>
+                  <SelectItem value="uae" className="pl-6">UAE</SelectItem>
                 </SelectContent>
               </Select>
             </div>
