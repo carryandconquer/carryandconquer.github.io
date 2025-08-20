@@ -166,22 +166,6 @@ const Snapshot = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-white/70 mb-2">CITY</label>
-              <Select defaultValue="all-cities">
-                <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all-cities">All Cities</SelectItem>
-                  <SelectItem value="new-york">New York</SelectItem>
-                  <SelectItem value="london">London</SelectItem>
-                  <SelectItem value="san-francisco">San Francisco</SelectItem>
-                  <SelectItem value="toronto">Toronto</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
               <label className="block text-sm font-medium text-white/70 mb-2">SECTOR</label>
               <Select defaultValue="all-sectors">
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
@@ -209,6 +193,23 @@ const Snapshot = () => {
                   <SelectItem value="biotech">Biotech</SelectItem>
                   <SelectItem value="saas">SaaS</SelectItem>
                   <SelectItem value="commercial">Commercial RE</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">TERTIARY SECTOR</label>
+              <Select defaultValue="all-tertiary">
+                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all-tertiary">All Tertiary</SelectItem>
+                  <SelectItem value="retail">Retail</SelectItem>
+                  <SelectItem value="hospitality">Hospitality</SelectItem>
+                  <SelectItem value="logistics">Logistics</SelectItem>
+                  <SelectItem value="consulting">Consulting</SelectItem>
+                  <SelectItem value="education">Education</SelectItem>
                 </SelectContent>
               </Select>
             </div>
