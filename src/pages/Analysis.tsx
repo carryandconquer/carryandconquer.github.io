@@ -369,7 +369,18 @@ export default function Analysis() {
                     prose-p:mb-4 prose-p:leading-relaxed
                     prose-ul:mb-4 prose-li:mb-1
                     prose-strong:text-white prose-strong:font-semibold">
-                  <ReactMarkdown>
+                  <ReactMarkdown
+                    components={{
+                      h1: ({children}) => <h1 className="text-3xl font-bold text-white mb-6 mt-8">{children}</h1>,
+                      h2: ({children}) => <h2 className="text-2xl font-bold text-green-400 mb-4 mt-6">{children}</h2>,
+                      h3: ({children}) => <h3 className="text-xl font-bold text-green-400 mb-3 mt-5">{children}</h3>,
+                      h4: ({children}) => <h4 className="text-lg font-bold text-white mb-2 mt-4">{children}</h4>,
+                      p: ({children}) => <p className="mb-4 leading-relaxed text-white/90">{children}</p>,
+                      ul: ({children}) => <ul className="mb-4 text-white/90">{children}</ul>,
+                      li: ({children}) => <li className="mb-1 text-white/90">{children}</li>,
+                      strong: ({children}) => <strong className="text-white font-semibold">{children}</strong>,
+                    }}
+                  >
                     {selectedArticle.content || 'No content available'}
                   </ReactMarkdown>
                 </div>
