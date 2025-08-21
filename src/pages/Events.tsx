@@ -102,6 +102,11 @@ export default function Events() {
                         </span>
                       </div>
                     )}
+                    <div className="absolute bottom-4 right-4">
+                      <span className="px-3 py-1 bg-black/80 text-white rounded-full text-sm font-semibold backdrop-blur-sm">
+                        {event.price && event.price > 0 ? `$${event.price}` : 'Free'}
+                      </span>
+                    </div>
                   </div>
 
                   <CardHeader className="pb-3">
