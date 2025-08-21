@@ -329,6 +329,45 @@ export type Database = {
         }
         Relationships: []
       }
+      header_carousel_metrics: {
+        Row: {
+          change_percentage: number | null
+          created_at: string
+          id: string
+          is_positive: boolean
+          label: string
+          metric_key: string | null
+          order_index: number
+          published: boolean
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          change_percentage?: number | null
+          created_at?: string
+          id?: string
+          is_positive?: boolean
+          label: string
+          metric_key?: string | null
+          order_index?: number
+          published?: boolean
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          change_percentage?: number | null
+          created_at?: string
+          id?: string
+          is_positive?: boolean
+          label?: string
+          metric_key?: string | null
+          order_index?: number
+          published?: boolean
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       snapshot_cities: {
         Row: {
           country_id: string
