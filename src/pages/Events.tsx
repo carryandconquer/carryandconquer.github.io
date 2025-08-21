@@ -167,38 +167,6 @@ export default function Events() {
         </div>
       </section>
 
-      {/* Event Categories */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Event Categories
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { name: "Conferences", count: "12", color: "green-400" },
-              { name: "Networking", count: "8", color: "teal-400" },
-              { name: "Workshops", count: "6", color: "cyan-400" },
-              { name: "Webinars", count: "15", color: "blue-400" }
-            ].map((category, index) => (
-              <div 
-                key={category.name}
-                className="text-center p-8 bg-gray-900/50 backdrop-blur-sm rounded-3xl shadow-lift border border-gray-800 hover:shadow-lift transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className={`text-4xl font-bold text-${category.color} mb-2`}>
-                  {category.count}
-                </div>
-                <div className="text-white/70 font-medium">
-                  {category.name}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <Footer />
     </div>
   )
