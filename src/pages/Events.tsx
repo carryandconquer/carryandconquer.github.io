@@ -51,7 +51,7 @@ export default function Events() {
         <div className="absolute top-20 right-20 w-16 h-16 bg-green-500/15 rounded-2xl -rotate-12 animate-float" style={{ animationDelay: '1.5s' }}></div>
         <div className="absolute bottom-8 left-1/3 w-18 h-18 bg-cyan-500/15 rounded-full animate-float" style={{ animationDelay: '0.5s' }}></div>
         
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-8">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight animate-fade-in">
               Industry
@@ -69,14 +69,6 @@ export default function Events() {
       {/* Upcoming Events */}
       <section className="py-12 bg-black">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-fade-in">
-              Upcoming Events
-            </h2>
-            <p className="text-lg text-white/70 animate-fade-in">
-              Don't miss these important industry gatherings
-            </p>
-          </div>
 
           {isLoading ? (
             <div className="text-center text-white/70">Loading events...</div>
