@@ -332,37 +332,61 @@ export type Database = {
       header_carousel_metrics: {
         Row: {
           change_percentage: number | null
+          color_scheme: string | null
           created_at: string
+          description: string | null
+          expires_at: string | null
+          icon_name: string | null
           id: string
           is_positive: boolean
+          item_type: string
           label: string
+          link_url: string | null
           metric_key: string | null
           order_index: number
+          priority: number | null
           published: boolean
+          title: string | null
           updated_at: string
           value: string
         }
         Insert: {
           change_percentage?: number | null
+          color_scheme?: string | null
           created_at?: string
+          description?: string | null
+          expires_at?: string | null
+          icon_name?: string | null
           id?: string
           is_positive?: boolean
+          item_type?: string
           label: string
+          link_url?: string | null
           metric_key?: string | null
           order_index?: number
+          priority?: number | null
           published?: boolean
+          title?: string | null
           updated_at?: string
           value: string
         }
         Update: {
           change_percentage?: number | null
+          color_scheme?: string | null
           created_at?: string
+          description?: string | null
+          expires_at?: string | null
+          icon_name?: string | null
           id?: string
           is_positive?: boolean
+          item_type?: string
           label?: string
+          link_url?: string | null
           metric_key?: string | null
           order_index?: number
+          priority?: number | null
           published?: boolean
+          title?: string | null
           updated_at?: string
           value?: string
         }

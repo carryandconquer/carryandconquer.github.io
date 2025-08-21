@@ -10,6 +10,14 @@ export interface HeaderMetric {
   change_percentage: number | null
   order_index: number
   metric_key: string | null
+  item_type: 'metric' | 'news' | 'deal' | 'fundraising' | 'exit' | 'breaking' | 'intelligence'
+  title: string | null
+  description: string | null
+  icon_name: string | null
+  link_url: string | null
+  color_scheme: 'default' | 'success' | 'warning' | 'danger' | 'info' | 'purple'
+  expires_at: string | null
+  priority: number
 }
 
 export const useHeaderMetrics = () => {
