@@ -31,15 +31,15 @@ export default function Events() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-black">
+      <section className="relative pt-24 pb-12 overflow-hidden bg-black">
         {/* Wave Pattern Background */}
-        <div className="absolute inset-0 opacity-20">
-          <svg viewBox="0 0 1200 800" className="absolute inset-0 w-full h-full">
-            <path d="M0,300 C300,500 600,100 1200,400 L1200,800 L0,800 Z" fill="url(#eventsWave)" />
+        <div className="absolute inset-0 opacity-15">
+          <svg viewBox="0 0 1200 400" className="absolute inset-0 w-full h-full">
+            <path d="M0,150 C300,250 600,50 1200,200 L1200,400 L0,400 Z" fill="url(#eventsWave)" />
             <defs>
               <linearGradient id="eventsWave" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(180 84% 40%)" stopOpacity="0.6" />
-                <stop offset="50%" stopColor="hsl(190 95% 45%)" stopOpacity="0.4" />
+                <stop offset="0%" stopColor="hsl(180 84% 40%)" stopOpacity="0.4" />
+                <stop offset="50%" stopColor="hsl(190 95% 45%)" stopOpacity="0.3" />
                 <stop offset="100%" stopColor="hsl(142 76% 36%)" stopOpacity="0.2" />
               </linearGradient>
             </defs>
@@ -47,34 +47,33 @@ export default function Events() {
         </div>
 
         {/* Floating Elements */}
-        <div className="absolute top-20 left-10 w-32 h-16 bg-teal-500/20 rounded-full rotate-45 animate-float"></div>
-        <div className="absolute top-32 right-20 w-20 h-20 bg-green-500/20 rounded-2xl -rotate-12 animate-float" style={{ animationDelay: '1.5s' }}></div>
-        <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-cyan-500/20 rounded-full animate-float" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute top-16 left-10 w-20 h-10 bg-teal-500/15 rounded-full rotate-45 animate-float"></div>
+        <div className="absolute top-20 right-20 w-16 h-16 bg-green-500/15 rounded-2xl -rotate-12 animate-float" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute bottom-8 left-1/3 w-18 h-18 bg-cyan-500/15 rounded-full animate-float" style={{ animationDelay: '0.5s' }}></div>
         
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight animate-fade-in">
               Industry
               <span className="block text-green-400">
                 Events
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/70 mb-12 leading-relaxed">
-              Stay connected with the private equity ecosystem through exclusive events, 
-              conferences, and networking opportunities.
+            <p className="text-lg md:text-xl text-white/70 mb-8 leading-relaxed animate-fade-in">
+              Stay connected with exclusive events, conferences, and networking opportunities.
             </p>
           </div>
         </div>
       </section>
 
       {/* Upcoming Events */}
-      <section className="py-20 bg-black">
+      <section className="py-12 bg-black">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-fade-in">
               Upcoming Events
             </h2>
-            <p className="text-xl text-white/70">
+            <p className="text-lg text-white/70 animate-fade-in">
               Don't miss these important industry gatherings
             </p>
           </div>
