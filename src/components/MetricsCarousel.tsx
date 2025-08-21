@@ -27,9 +27,8 @@ export function MetricsCarousel() {
     )
   }
 
-  // Duplicate metrics for seamless loop and sort by priority
-  const sortedMetrics = [...metrics].sort((a, b) => (b.priority || 1) - (a.priority || 1))
-  const duplicatedMetrics = [...sortedMetrics, ...sortedMetrics]
+  // Duplicate metrics for seamless loop (already sorted by order_index from DB)
+  const duplicatedMetrics = [...metrics, ...metrics]
 
   return (
     <div className="bg-slate-900 border-b border-slate-700 overflow-hidden">
