@@ -1,59 +1,41 @@
 import { TrendingUp, TrendingDown } from "lucide-react"
-
-const metricsData = [
-  {
-    label: "PE DRY POWDER",
-    value: "$3.7T",
-    change: "+8.3%",
-    isPositive: true
-  },
-  {
-    label: "AVERAGE DEAL SIZE",
-    value: "$124M",
-    change: "-2.1%",
-    isPositive: false
-  },
-  {
-    label: "FUND DEPLOYMENT",
-    value: "67%",
-    change: "+12.4%",
-    isPositive: true
-  },
-  {
-    label: "EXIT MULTIPLE",
-    value: "2.8x",
-    change: "+5.7%",
-    isPositive: true
-  },
-  {
-    label: "ACTIVE FUNDS",
-    value: "8,947",
-    change: "+15.2%",
-    isPositive: true
-  },
-  {
-    label: "PORTFOLIO COMPANIES",
-    value: "11,200+",
-    change: "+9.8%",
-    isPositive: true
-  },
-  {
-    label: "MEDIAN IRR",
-    value: "14.2%",
-    change: "-1.3%",
-    isPositive: false
-  },
-  {
-    label: "FUNDRAISING YTD",
-    value: "$901B",
-    change: "+22.1%",
-    isPositive: true
-  }
-]
+import { useHeaderMetrics } from "@/hooks/useHeaderMetrics"
 
 export function MetricsCarousel() {
-  // Duplicate the data to create seamless loop
-  const duplicatedMetrics = [...metricsData, ...metricsData]
+  const { metrics, isLoading } = useHeaderMetrics()
+
+  // If loading or no data, show skeleton or return early
+  if (isLoading || metrics.length === 0) {
+    return (
+      <div className="bg-slate-900 border-b border-slate-700 overflow-hidden">
+        <div className="relative">
+          <div className="flex animate-scroll items-center whitespace-nowrap">
+            {/* Skeleton loading state */}
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className="flex items-center px-6 py-3 min-w-fit">
+                <div className="flex items-center space-x-2">
+                  <div className="h-4 w-20 bg-slate-600 animate-pulse rounded" />
+                  <div className="h-4 w-16 bg-slate-700 animate-pulse rounded" />
+                  <div className="h-4 w-12 bg-slate-600 animate-pulse rounded" />
+                </div>
+                <div className="w-px h-4 bg-slate-600 ml-6" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Transform metrics to match the old format and duplicate for seamless loop
+  const transformedMetrics = metrics.map(metric => ({
+    label: metric.label,
+    value: metric.value,
+    change: `${metric.is_positive ? '+' : ''}${metric.change_percentage}%`,
+    isPositive: metric.is_positive
+  }))
+
+  const duplicatedMetrics = [...transformedMetrics, ...transformedMetrics]
 
   return (
     <div className="bg-slate-900 border-b border-slate-700 overflow-hidden">
