@@ -95,32 +95,17 @@ export function HeroSection() {
             
             {/* Main Headline */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8">
-              <span className="block text-white mb-2">Your smartest PE</span>
+              <span className="block text-white mb-2">The Edge in</span>
               <span className="block bg-gradient-to-r from-green-400 via-teal-400 to-blue-400 bg-clip-text text-transparent">
-                intelligence platform
+                Private Equity Intelligence
               </span>
             </h1>
             
             {/* Subheading */}
             <p className="text-lg md:text-xl text-white/70 mb-12 max-w-2xl leading-relaxed">
-              Series A funded platform delivering real-time market intelligence, 
-              deal analytics, and AI-powered insights for smarter investment decisions.
+              Built for investors who can't afford to guess. Our platform combines 
+              real-time deal data, advanced analytics, and AI insights to sharpen every decision.
             </p>
-            
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-start gap-6 mb-12">
-              <Button 
-                size="lg"
-                className="bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-black font-semibold rounded-xl px-8 py-4 text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/20"
-              >
-                <Zap className="w-5 h-5 mr-2" />
-                GET STARTED
-              </Button>
-              
-              <button className="text-white/70 hover:text-green-400 font-medium text-lg underline underline-offset-4 transition-colors">
-                EXPLORE DEMO
-              </button>
-            </div>
 
           </div>
 
