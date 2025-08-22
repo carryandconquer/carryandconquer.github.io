@@ -1,9 +1,8 @@
 import { Navigation } from "@/components/Navigation"
 import { HeroSection } from "@/components/HeroSection"
-import { FeaturedArticles } from "@/components/FeaturedArticles"
 import { PrivateEquityAIChat } from "@/components/ui/v0-ai-chat"
+import { FeaturedArticles } from "@/components/FeaturedArticles"
 import { FeaturesSection } from "@/components/FeaturesSection"
-import { TestimonialSection } from "@/components/TestimonialSection"
 import { Footer } from "@/components/Footer"
 
 const Index = () => {
@@ -11,15 +10,14 @@ const Index = () => {
     <div className="min-h-screen font-primary pt-24">
       <Navigation />
       <HeroSection />
-      <FeaturedArticles />
       
       {/* AI Chat Assistant */}
       <section className="py-20 bg-black">
         <PrivateEquityAIChat />
       </section>
       
+      <FeaturedArticles />
       <FeaturesSection />
-      <TestimonialSection />
       <Footer />
     </div>
   );
