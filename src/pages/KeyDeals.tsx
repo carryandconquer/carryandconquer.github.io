@@ -2,7 +2,9 @@ import { Navigation } from "@/components/Navigation"
 import { Footer } from "@/components/Footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TrendingUp, Building2, DollarSign, ArrowRight, ExternalLink } from "lucide-react"
+import { useState, useEffect } from "react"
 
 const keyDeals = [
   {
@@ -48,87 +50,291 @@ const keyDeals = [
 ]
 
 export default function KeyDeals() {
+  const [selectedRegion, setSelectedRegion] = useState<string>("all-regions")
+  const [selectedCountry, setSelectedCountry] = useState<string>("all-countries")
+  const [selectedSector, setSelectedSector] = useState<string>("all-sectors")
+  const [selectedSubSector, setSelectedSubSector] = useState<string>("all-sub-sectors")
+  const [selectedTertiary, setSelectedTertiary] = useState<string>("all-tertiary")
+
+  // Region to countries mapping based on Private Equity Regional Taxonomy
+  const regionCountries = {
+    "asia-pacific": [
+      { value: "australia", label: "Australia" },
+      { value: "hong-kong", label: "Hong Kong" },
+      { value: "japan", label: "Japan" },
+      { value: "new-zealand", label: "New Zealand" },
+      { value: "singapore", label: "Singapore" },
+      { value: "south-korea", label: "South Korea" }
+    ],
+    "emerging-asia": [
+      { value: "china", label: "China" },
+      { value: "india", label: "India" },
+      { value: "indonesia", label: "Indonesia" },
+      { value: "malaysia", label: "Malaysia" },
+      { value: "philippines", label: "Philippines" },
+      { value: "thailand", label: "Thailand" },
+      { value: "vietnam", label: "Vietnam" }
+    ],
+    "europe": [
+      { value: "france", label: "France" },
+      { value: "germany", label: "Germany" },
+      { value: "italy", label: "Italy" },
+      { value: "netherlands", label: "Netherlands" },
+      { value: "spain", label: "Spain" },
+      { value: "united-kingdom", label: "United Kingdom" }
+    ],
+    "latin-america": [
+      { value: "argentina", label: "Argentina" },
+      { value: "brazil", label: "Brazil" },
+      { value: "chile", label: "Chile" },
+      { value: "colombia", label: "Colombia" },
+      { value: "mexico", label: "Mexico" }
+    ],
+    "middle-east-africa": [
+      { value: "egypt", label: "Egypt" },
+      { value: "israel", label: "Israel" },
+      { value: "saudi-arabia", label: "Saudi Arabia" },
+      { value: "south-africa", label: "South Africa" },
+      { value: "uae-united-arab-emirates", label: "UAE (United Arab Emirates)" }
+    ],
+    "north-america": [
+      { value: "canada", label: "Canada" },
+      { value: "united-states", label: "United States" }
+    ]
+  }
+
+  // Sector mapping
+  const sectorMapping: Record<string, string[]> = {
+    "Business Services": ["Business Services", "Financial Services", "Insurance", "Outsourcing"],
+    "Clean Tech.": ["Clean Technology", "Environmental Services", "Renewable Energy"],
+    "Consumer Disc.": ["Beverages", "Consumer Products", "Consumer Services", "Education / Training", "Leisure", "Retail"],
+    "Diversified": ["Diversified"],
+    "Energy and Util.": ["Energy", "Oil & Gas", "Power", "Utilities"],
+    "Food and Ag.": ["Agriculture", "Food"],
+    "Healthcare": ["Biomedical", "Biotechnology", "Healthcare", "Healthcare IT", "Medical Devices", "Medical Instruments", "Medical Technologies", "Pharmaceuticals"],
+    "Industrials": ["Aerospace", "Construction", "Defence", "Industrial", "Logistics", "Manufacturing", "Transportation"],
+    "Internet": ["Internet"],
+    "Materials": ["Chemicals", "Materials", "Mining", "Timber"],
+    "Other IT": ["Information Services", "IT", "IT Infrastructure", "IT Security"],
+    "Real Estate": ["Hotels and Offices", "Property"],
+    "Semic. & Electronics": ["Electronics", "Hardware", "Semiconductors"],
+    "Software & Related": ["Software", "Technology"],
+    "Telecoms": ["Advertising", "Media", "Network", "Telecom Media", "Telecoms"]
+  }
+
+  const subsectorMapping: Record<string, string[]> = {
+    "Business Services": ["Accounting Services", "Business Services", "Consulting Services", "Legal Services"],
+    "Financial Services": ["Banks", "Consumer Finance", "Investment Banking", "Securities Brokers"],
+    "Insurance": ["Insurance Agencies", "Healthcare Insurance"],
+    "Outsourcing": ["BPO Services", "IT Outsourcing"],
+    "Clean Technology": ["Clean Technology", "Solar Power", "Wind Power"],
+    "Environmental Services": ["Waste Management", "Water Treatment"],
+    "Renewable Energy": ["Solar Power", "Wind Power", "Hydro Power"],
+    "Healthcare": ["Biotechnology", "Medical Devices", "Pharmaceuticals", "Healthcare Services"],
+    "Technology": ["Software", "Hardware", "Internet", "AI/ML"],
+    "Manufacturing": ["Automotive", "Industrial Equipment", "Aerospace"]
+  }
+
+  // Reset dependent filters when parent changes
+  useEffect(() => {
+    setSelectedCountry("all-countries")
+  }, [selectedRegion])
+
+  useEffect(() => {
+    setSelectedSubSector("all-sub-sectors")
+    setSelectedTertiary("all-tertiary")
+  }, [selectedSector])
+
+  useEffect(() => {
+    setSelectedTertiary("all-tertiary")
+  }, [selectedSubSector])
+
+  const handleRegionChange = (value: string) => {
+    setSelectedRegion(value)
+  }
+
+  const handleCountryChange = (value: string) => {
+    setSelectedCountry(value)
+  }
+
+  const handleSectorChange = (value: string) => {
+    setSelectedSector(value)
+  }
+
+  const handleSubSectorChange = (value: string) => {
+    setSelectedSubSector(value)
+  }
+
+  const handleTertiaryChange = (value: string) => {
+    setSelectedTertiary(value)
+  }
+
+  // Get filtered countries based on selected region
+  const getFilteredCountries = () => {
+    if (selectedRegion === "all-regions") {
+      return Object.values(regionCountries).flat()
+    }
+    return regionCountries[selectedRegion as keyof typeof regionCountries] || []
+  }
+
+  // Get filtered subsectors based on selected sector
+  const getFilteredSubSectors = () => {
+    if (selectedSector === "all-sectors") {
+      return Object.values(sectorMapping).flatMap(subsectors => 
+        subsectors.map(subsector => ({ value: subsector, label: subsector }))
+      )
+    }
+    const subsectors = sectorMapping[selectedSector]
+    if (!subsectors) return []
+    return subsectors.map(subsector => ({ value: subsector, label: subsector }))
+  }
+
+  // Get filtered tertiary sectors based on selected subsector
+  const getFilteredTertiary = () => {
+    if (selectedSubSector === "all-sub-sectors") return []
+    
+    const tertiarySectors = subsectorMapping[selectedSubSector] || []
+    return tertiarySectors.map(tertiary => ({ 
+      value: tertiary.toLowerCase().replace(/\s+/g, '-').replace(/[&/()]/g, ''), 
+      label: tertiary 
+    }))
+  }
+
   return (
     <div className="min-h-screen font-primary bg-black">
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-black">
-        {/* Wave Pattern Background */}
-        <div className="absolute inset-0 opacity-20">
-          <svg viewBox="0 0 1200 800" className="absolute inset-0 w-full h-full">
-            <path d="M0,600 C300,400 700,800 1200,500 L1200,800 L0,800 Z" fill="url(#keyDealsWave)" />
-            <defs>
-              <linearGradient id="keyDealsWave" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(210 98% 55%)" stopOpacity="0.6" />
-                <stop offset="50%" stopColor="hsl(180 84% 40%)" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="hsl(142 76% 36%)" stopOpacity="0.2" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        {/* Floating Elements */}
-        <div className="absolute top-16 right-16 w-28 h-28 bg-blue-500/20 rounded-3xl rotate-12 animate-float"></div>
-        <div className="absolute top-40 left-20 w-20 h-40 bg-green-500/20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-10 right-1/3 w-24 h-24 bg-teal-500/20 rounded-2xl -rotate-45 animate-float" style={{ animationDelay: '1s' }}></div>
-        
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
-              Key
-              <span className="block text-green-400">
-                Deals
-              </span>
+      {/* Streamlined Header Section */}
+      <section className="pt-32 pb-12 bg-black">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Key Deals
             </h1>
-            <p className="text-xl md:text-2xl text-white/70 mb-12 leading-relaxed">
-              Track the most significant private equity transactions, from mega-deals 
-              to strategic acquisitions shaping the market landscape.
+            <p className="text-lg text-white/70">
+              Track significant private equity transactions and market activity
             </p>
           </div>
-        </div>
-      </section>
+          
+          {/* Quick Stats */}
+          <div className="grid md:grid-cols-4 gap-4 mb-8">
+            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
+              <div className="text-2xl font-bold text-white">$847B</div>
+              <div className="text-sm text-white/70">Total Deal Value</div>
+            </div>
+            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
+              <div className="text-2xl font-bold text-green-400">2,543</div>
+              <div className="text-sm text-white/70">Transactions</div>
+            </div>
+            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
+              <div className="text-2xl font-bold text-teal-400">11.2x</div>
+              <div className="text-sm text-white/70">Avg Multiple</div>
+            </div>
+            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
+              <div className="text-2xl font-bold text-cyan-400">+23%</div>
+              <div className="text-sm text-white/70">YoY Growth</div>
+            </div>
+          </div>
 
-      {/* Deal Analytics Overview */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-6 mb-16">
-            <div className="text-center p-8 bg-gray-900/50 backdrop-blur-sm rounded-3xl shadow-lift border border-gray-800">
-              <div className="text-4xl font-bold text-white mb-2">
-                $847B
-              </div>
-              <div className="text-white/70 font-medium">Total Deal Value</div>
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">REGION</label>
+              <Select value={selectedRegion} onValueChange={handleRegionChange}>
+                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
+                  <SelectItem value="all-regions">All Regions</SelectItem>
+                  <SelectItem value="north-america">🍁 North America</SelectItem>
+                  <SelectItem value="europe">🇪🇺 Europe</SelectItem>
+                  <SelectItem value="asia-pacific">🌏 Asia Pacific</SelectItem>
+                  <SelectItem value="emerging-asia">🌅 Emerging Asia</SelectItem>
+                  <SelectItem value="latin-america">🌎 Latin America</SelectItem>
+                  <SelectItem value="middle-east-africa">🌍 Middle East & Africa</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div className="text-center p-8 bg-gray-900/50 backdrop-blur-sm rounded-3xl shadow-lift border border-gray-800">
-              <div className="text-4xl font-bold text-green-400 mb-2">
-                2,543
-              </div>
-              <div className="text-white/70 font-medium">Transactions</div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">COUNTRY</label>
+              <Select value={selectedCountry} onValueChange={handleCountryChange}>
+                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
+                  <SelectItem value="all-countries">All Countries</SelectItem>
+                  {getFilteredCountries().map((country) => (
+                    <SelectItem key={country.value} value={country.value}>
+                      {country.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div className="text-center p-8 bg-gray-900/50 backdrop-blur-sm rounded-3xl shadow-lift border border-gray-800">
-              <div className="text-4xl font-bold text-teal-400 mb-2">
-                11.2x
-              </div>
-              <div className="text-white/70 font-medium">Avg Multiple</div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">SECTOR</label>
+              <Select value={selectedSector} onValueChange={handleSectorChange}>
+                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
+                  <SelectItem value="all-sectors">All Sectors</SelectItem>
+                  {Object.keys(sectorMapping).map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div className="text-center p-8 bg-gray-900/50 backdrop-blur-sm rounded-3xl shadow-lift border border-gray-800">
-              <div className="text-4xl font-bold text-cyan-400 mb-2">
-                +23%
-              </div>
-              <div className="text-white/70 font-medium">YoY Growth</div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">SUB-SECTOR</label>
+              <Select value={selectedSubSector} onValueChange={handleSubSectorChange}>
+                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
+                  <SelectItem value="all-sub-sectors">All Sub-Sectors</SelectItem>
+                  {getFilteredSubSectors().map((subsector) => (
+                    <SelectItem key={subsector.value} value={subsector.value}>
+                      {subsector.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white/70 mb-2">TERTIARY SECTOR</label>
+              <Select value={selectedTertiary} onValueChange={handleTertiaryChange}>
+                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
+                  <SelectItem value="all-tertiary">All Tertiary</SelectItem>
+                  {getFilteredTertiary().map((tertiary) => (
+                    <SelectItem key={tertiary.value} value={tertiary.value}>
+                      {tertiary.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Recent Key Deals */}
-      <section className="py-20 bg-black">
+      {/* Key Deals */}
+      <section className="pb-20 bg-black">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-white mb-4">
               Recent Transactions
             </h2>
-            <p className="text-xl text-white/70">
+            <p className="text-white/70">
               Latest high-impact deals in the private equity market
             </p>
           </div>
