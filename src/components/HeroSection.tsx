@@ -1,12 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { TrendingUp, ArrowRight, Activity, Zap, Database } from "lucide-react"
-import { useHeaderMetrics } from "@/hooks/useHeaderMetrics"
+import { Activity, Zap, Sparkles, Hexagon, Triangle, Circle } from "lucide-react"
 
 export function HeroSection() {
-  const { metrics } = useHeaderMetrics()
-  const topMetrics = metrics.slice(0, 3)
 
   return (
     <section className="relative min-h-screen bg-black overflow-hidden">
@@ -126,94 +122,121 @@ export function HeroSection() {
               </button>
             </div>
 
-            {/* Live Metrics Row */}
-            {topMetrics.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {topMetrics.map((metric, index) => (
-                  <Card 
-                    key={metric.id}
-                    className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 hover:border-green-500/30 transition-all duration-300"
-                    style={{ animationDelay: `${index * 0.2}s` }}
-                  >
-                    <CardContent className="p-4">
-                      <div className="text-xs text-white/60 uppercase tracking-wider mb-1">
-                        {metric.label}
-                      </div>
-                      <div className="text-lg font-bold text-white">
-                        {metric.value}
-                      </div>
-                      {metric.change_percentage && (
-                        <div className={`text-xs flex items-center mt-1 ${
-                          metric.is_positive ? 'text-green-400' : 'text-red-400'
-                        }`}>
-                          {metric.is_positive ? (
-                            <TrendingUp className="w-3 h-3 mr-1" />
-                          ) : (
-                            <TrendingUp className="w-3 h-3 mr-1 rotate-180" />
-                          )}
-                          {Math.abs(metric.change_percentage)}%
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Right Column - Data Visualization */}
+          {/* Right Column - Animated Design Elements */}
           <div className="lg:col-span-1 flex items-center justify-center">
-            <div className="relative w-full max-w-sm">
-              {/* Central Data Hub */}
-              <div className="relative">
-                <Card className="bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm border-green-500/30">
-                  <CardContent className="p-6 text-center">
-                    <Database className="w-12 h-12 mx-auto mb-4 text-green-400" />
-                    <div className="text-2xl font-bold text-white mb-2">
-                      $47.3B
-                    </div>
-                    <div className="text-sm text-white/60">
-                      Monthly Deal Volume
-                    </div>
-                    <div className="flex items-center justify-center mt-3 text-green-400">
-                      <TrendingUp className="w-4 h-4 mr-1" />
-                      <span className="text-sm">+12.8%</span>
-                    </div>
-                  </CardContent>
-                </Card>
+            <div className="relative w-full max-w-lg h-96">
+              {/* Central Core */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400/20 to-teal-400/20 backdrop-blur-sm border border-green-400/30 flex items-center justify-center">
+                  <Sparkles className="w-12 h-12 text-green-400 animate-pulse" />
+                </div>
+                
+                {/* Pulsing Rings */}
+                <div className="absolute inset-0 rounded-full border-2 border-green-400/20 animate-ping" style={{ animationDuration: '3s' }}></div>
+                <div className="absolute inset-[-20px] rounded-full border border-teal-400/10 animate-ping" style={{ animationDuration: '4s' }}></div>
+              </div>
 
-                {/* Orbiting Elements */}
-                {[
-                  { label: "IRR", value: "12.8%", angle: 0 },
-                  { label: "Exits", value: "247", angle: 120 },
-                  { label: "Deals", value: "1.2K", angle: 240 }
-                ].map((item, i) => (
+              {/* Orbiting Design Elements */}
+              {[
+                { icon: Hexagon, size: 'w-8 h-8', orbit: 100, duration: '15s', delay: '0s', color: 'text-green-400' },
+                { icon: Triangle, size: 'w-6 h-6', orbit: 130, duration: '20s', delay: '3s', color: 'text-teal-400' },
+                { icon: Circle, size: 'w-4 h-4', orbit: 160, duration: '25s', delay: '6s', color: 'text-blue-400' },
+                { icon: Hexagon, size: 'w-5 h-5', orbit: 80, duration: '12s', delay: '9s', color: 'text-green-300' },
+                { icon: Triangle, size: 'w-7 h-7', orbit: 140, duration: '18s', delay: '12s', color: 'text-teal-300' },
+                { icon: Circle, size: 'w-3 h-3', orbit: 180, duration: '30s', delay: '15s', color: 'text-blue-300' }
+              ].map((element, i) => {
+                const IconComponent = element.icon
+                return (
                   <div
                     key={i}
-                     className="absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 animate-spin"
-                     style={{
-                       top: '50%',
-                       left: '50%',
-                       transform: `translate(-50%, -50%) rotate(${item.angle}deg) translateY(-120px)`,
-                       animationDuration: '20s',
-                       animationDelay: `${i * 6.67}s`
-                     }}
+                    className="absolute top-1/2 left-1/2"
+                    style={{
+                      transform: 'translate(-50%, -50%)',
+                      animation: `orbit-${element.orbit} ${element.duration} linear infinite`,
+                      animationDelay: element.delay
+                    }}
                   >
-                    <Card className="bg-black/80 backdrop-blur-sm border-green-500/20 p-2">
-                      <CardContent className="p-0 text-center">
-                        <div className="text-xs text-white/60">{item.label}</div>
-                        <div className="text-sm font-bold text-green-400">{item.value}</div>
-                      </CardContent>
-                    </Card>
+                    <div className={`${element.size} ${element.color} opacity-70 animate-pulse backdrop-blur-sm`}>
+                      <IconComponent className="w-full h-full" />
+                    </div>
                   </div>
+                )
+              })}
+
+              {/* Floating Particles */}
+              {Array.from({ length: 8 }, (_, i) => (
+                <div
+                  key={`particle-${i}`}
+                  className="absolute w-2 h-2 bg-green-400 rounded-full opacity-40 animate-pulse"
+                  style={{
+                    top: `${20 + Math.sin(i) * 60}%`,
+                    left: `${20 + Math.cos(i) * 60}%`,
+                    animationDelay: `${i * 0.5}s`,
+                    animationDuration: '2s'
+                  }}
+                />
+              ))}
+
+              {/* Connection Lines */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30">
+                <defs>
+                  <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="hsl(142 76% 36%)" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="hsl(180 84% 40%)" stopOpacity="0.1" />
+                  </linearGradient>
+                </defs>
+                {[
+                  { x1: '30%', y1: '30%', x2: '70%', y2: '70%' },
+                  { x1: '70%', y1: '30%', x2: '30%', y2: '70%' },
+                  { x1: '50%', y1: '10%', x2: '50%', y2: '90%' }
+                ].map((line, i) => (
+                  <line
+                    key={i}
+                    x1={line.x1}
+                    y1={line.y1}
+                    x2={line.x2}
+                    y2={line.y2}
+                    stroke="url(#connectionGradient)"
+                    strokeWidth="1"
+                    className="animate-pulse"
+                    style={{ animationDelay: `${i * 1}s` }}
+                  />
                 ))}
-              </div>
+              </svg>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Keyframes for orbit animation - moved to CSS */}
+      {/* Custom CSS for orbit animations */}
+      <style>{`
+        @keyframes orbit-80 {
+          from { transform: translate(-50%, -50%) rotate(0deg) translateX(80px) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg) translateX(80px) rotate(-360deg); }
+        }
+        @keyframes orbit-100 {
+          from { transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg) translateX(100px) rotate(-360deg); }
+        }
+        @keyframes orbit-130 {
+          from { transform: translate(-50%, -50%) rotate(0deg) translateX(130px) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg) translateX(130px) rotate(-360deg); }
+        }
+        @keyframes orbit-140 {
+          from { transform: translate(-50%, -50%) rotate(0deg) translateX(140px) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg) translateX(140px) rotate(-360deg); }
+        }
+        @keyframes orbit-160 {
+          from { transform: translate(-50%, -50%) rotate(0deg) translateX(160px) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg) translateX(160px) rotate(-360deg); }
+        }
+        @keyframes orbit-180 {
+          from { transform: translate(-50%, -50%) rotate(0deg) translateX(180px) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg) translateX(180px) rotate(-360deg); }
+        }
+      `}</style>
     </section>
   )
 }
