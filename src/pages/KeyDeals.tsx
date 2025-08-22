@@ -216,25 +216,6 @@ export default function KeyDeals() {
             </p>
           </div>
           
-          {/* Quick Stats */}
-          <div className="grid md:grid-cols-4 gap-4 mb-8">
-            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
-              <div className="text-2xl font-bold text-white">$847B</div>
-              <div className="text-sm text-white/70">Total Deal Value</div>
-            </div>
-            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
-              <div className="text-2xl font-bold text-green-400">2,543</div>
-              <div className="text-sm text-white/70">Transactions</div>
-            </div>
-            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
-              <div className="text-2xl font-bold text-teal-400">11.2x</div>
-              <div className="text-sm text-white/70">Avg Multiple</div>
-            </div>
-            <div className="text-center p-4 bg-gray-900/30 rounded-xl border border-gray-800">
-              <div className="text-2xl font-bold text-cyan-400">+23%</div>
-              <div className="text-sm text-white/70">YoY Growth</div>
-            </div>
-          </div>
 
           {/* Filters */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">

@@ -43,6 +43,16 @@ export function Navigation() {
               Analysis
             </Link>
             <Link 
+              to="/key-deals" 
+              className={`px-4 py-2 rounded-full transition-all duration-300 ${
+                isActive('/key-deals') 
+                  ? 'bg-gradient-to-r from-accent-green to-accent-teal text-white shadow-glow' 
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              Key Deals
+            </Link>
+            <Link 
               to="/snapshot" 
               className={`px-4 py-2 rounded-full transition-all duration-300 ${
                 isActive('/snapshot') 
@@ -61,16 +71,6 @@ export function Navigation() {
               }`}
             >
               Events
-            </Link>
-            <Link 
-              to="/key-deals" 
-              className={`px-4 py-2 rounded-full transition-all duration-300 ${
-                isActive('/key-deals') 
-                  ? 'bg-gradient-to-r from-accent-green to-accent-teal text-white shadow-glow' 
-                  : 'text-white/70 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              Key Deals
             </Link>
           </div>
           
