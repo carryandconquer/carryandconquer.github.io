@@ -714,6 +714,56 @@ const Snapshot = () => {
             ))}
           </div>
         </section>
+
+        {/* Market Trends */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">Market Trends</h2>
+          
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="bg-white/5 border-white/10 rounded-3xl p-8 border">
+              <h3 className="text-xl font-bold text-white mb-6">Deal Volume by Sector</h3>
+              <div className="space-y-4">
+                {[
+                  { sector: "Technology", percentage: 34, color: "accent-green" },
+                  { sector: "Healthcare", percentage: 28, color: "accent-teal" },
+                  { sector: "Financial Services", percentage: 22, color: "accent-cyan" },
+                  { sector: "Consumer", percentage: 16, color: "accent-blue" }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className={`w-4 h-4 bg-${item.color} rounded-full mr-3`}></div>
+                      <span className="text-white font-medium">{item.sector}</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden w-24">
+                        <div 
+                          className={`h-full bg-${item.color} rounded-full`}
+                          style={{ width: `${item.percentage}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-white/70 font-medium w-8">{item.percentage}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="bg-white/5 border-white/10 rounded-3xl p-8 border">
+              <h3 className="text-xl font-bold text-white mb-6">Average Deal Size Trend</h3>
+              <div className="h-48 bg-gradient-to-br from-accent-green/5 to-accent-teal/5 rounded-2xl flex items-end justify-around p-4">
+                <div className="w-8 bg-gradient-to-t from-accent-green/50 to-accent-green h-24 rounded-t"></div>
+                <div className="w-8 bg-gradient-to-t from-accent-green/50 to-accent-green h-32 rounded-t"></div>
+                <div className="w-8 bg-gradient-to-t from-accent-green/50 to-accent-green h-28 rounded-t"></div>
+                <div className="w-8 bg-gradient-to-t from-accent-green/50 to-accent-green h-36 rounded-t"></div>
+                <div className="w-8 bg-gradient-to-t from-accent-green/50 to-accent-green h-40 rounded-t"></div>
+                <div className="w-8 bg-gradient-to-t from-accent-green/50 to-accent-green h-44 rounded-t"></div>
+              </div>
+              <div className="mt-4 text-center">
+                <span className="text-white/70 text-sm">Consistent growth in average deal sizes</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   )

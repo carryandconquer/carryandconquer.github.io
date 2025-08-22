@@ -390,62 +390,6 @@ export default function KeyDeals() {
         </div>
       </section>
 
-      {/* Deal Flow Trends */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Market Trends
-            </h2>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="bg-gray-900/50 backdrop-blur-sm rounded-3xl p-8 shadow-lift border border-gray-800">
-              <h3 className="text-2xl font-bold text-white mb-6">Deal Volume by Sector</h3>
-              <div className="space-y-4">
-                {[
-                  { sector: "Technology", percentage: 34, color: "green-400" },
-                  { sector: "Healthcare", percentage: 28, color: "teal-400" },
-                  { sector: "Financial Services", percentage: 22, color: "cyan-400" },
-                  { sector: "Consumer", percentage: 16, color: "blue-400" }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className={`w-4 h-4 bg-${item.color} rounded-full mr-3`}></div>
-                      <span className="text-white font-medium">{item.sector}</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden w-24">
-                        <div 
-                          className={`h-full bg-${item.color} rounded-full`}
-                          style={{ width: `${item.percentage}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-white/70 font-medium w-8">{item.percentage}%</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="bg-gray-900/50 backdrop-blur-sm rounded-3xl p-8 shadow-lift border border-gray-800">
-              <h3 className="text-2xl font-bold text-white mb-6">Average Deal Size Trend</h3>
-              <div className="h-48 bg-gradient-to-br from-green-500/5 to-teal-500/5 rounded-2xl flex items-end justify-around p-4">
-                <div className="w-8 bg-gradient-to-t from-green-500/50 to-green-500 h-24 rounded-t"></div>
-                <div className="w-8 bg-gradient-to-t from-green-500/50 to-green-500 h-32 rounded-t"></div>
-                <div className="w-8 bg-gradient-to-t from-green-500/50 to-green-500 h-28 rounded-t"></div>
-                <div className="w-8 bg-gradient-to-t from-green-500/50 to-green-500 h-36 rounded-t"></div>
-                <div className="w-8 bg-gradient-to-t from-green-500/50 to-green-500 h-40 rounded-t"></div>
-                <div className="w-8 bg-gradient-to-t from-green-500/50 to-green-500 h-44 rounded-t"></div>
-              </div>
-              <div className="mt-4 text-center">
-                <span className="text-white/70 text-sm">Consistent growth in average deal sizes</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <Footer />
     </div>
   )
