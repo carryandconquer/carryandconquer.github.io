@@ -9,6 +9,7 @@ import { Navigation } from "@/components/Navigation"
 import { Footer } from "@/components/Footer"
 import { keyDeals } from "./KeyDeals"
 import { supabase } from "@/integrations/supabase/client"
+import { generateSlug } from "@/lib/slugUtils"
 
 // Enhanced deal data with placeholders for missing information
 const enrichDealData = (deal: any) => ({
@@ -234,7 +235,8 @@ export default function DealDetails() {
             <div className="lg:col-span-2">
               <div className="mb-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent hover:from-blue-400 hover:to-purple-400 transition-all duration-300 cursor-pointer"
+                      onClick={() => navigate(`/company/${generateSlug(enrichedDeal.companyName)}`)}>
                     {enrichedDeal.companyName}
                   </h1>
                   <Badge 
