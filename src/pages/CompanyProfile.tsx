@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { Navigation } from '@/components/Navigation'
 import { Footer } from '@/components/Footer'
 import { Badge } from '@/components/ui/badge'
@@ -114,6 +115,30 @@ const CompanyProfile = () => {
 
   return (
     <div className="min-h-screen font-primary pt-24 bg-background">
+      <Helmet>
+        <title>{displayCompany.name} - Company Profile</title>
+        <meta name="description" content={displayCompany.meta_description || displayCompany.description || `Learn more about ${displayCompany.name}`} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${displayCompany.name} - Company Profile`} />
+        <meta property="og:description" content={displayCompany.meta_description || displayCompany.description || `Learn more about ${displayCompany.name}`} />
+        <meta property="og:image" content={displayCompany.logo_url || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1200&h=630&fit=crop'} />
+        <meta property="og:url" content={`${window.location.origin}/companies/${displayCompany.slug}`} />
+        <meta property="og:site_name" content="Private Equity Directory" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${displayCompany.name} - Company Profile`} />
+        <meta name="twitter:description" content={displayCompany.meta_description || displayCompany.description || `Learn more about ${displayCompany.name}`} />
+        <meta name="twitter:image" content={displayCompany.logo_url || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1200&h=630&fit=crop'} />
+        
+        {/* Additional Meta Tags */}
+        <meta name="author" content={displayCompany.name} />
+        <meta name="keywords" content={`${displayCompany.name}, ${displayCompany.industry_tags?.join(', ') || ''}, ${displayCompany.company_type}`} />
+        <link rel="canonical" href={`${window.location.origin}/companies/${displayCompany.slug}`} />
+      </Helmet>
+      
       <Navigation />
       
       <main className="container mx-auto px-4 py-12">
