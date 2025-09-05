@@ -247,6 +247,43 @@ export default function KeyDeals() {
     }))
   }
 
+  // Filter deals based on selected filters
+  const getFilteredDeals = () => {
+    return keyDeals.filter(deal => {
+      // Region filter
+      if (selectedRegion !== "all-regions") {
+        const regionName = selectedRegion.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+        if (!deal.region.toLowerCase().includes(regionName.toLowerCase())) {
+          return false
+        }
+      }
+
+      // Country filter
+      if (selectedCountry !== "all-countries") {
+        const countryName = selectedCountry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+        if (!deal.location.toLowerCase().includes(countryName.toLowerCase())) {
+          return false
+        }
+      }
+
+      // Sector filter
+      if (selectedSector !== "all-sectors") {
+        if (deal.sector !== selectedSector) {
+          return false
+        }
+      }
+
+      // Sub-sector filter
+      if (selectedSubSector !== "all-sub-sectors") {
+        if (!deal.subIndustries.toLowerCase().includes(selectedSubSector.toLowerCase())) {
+          return false
+        }
+      }
+
+      return true
+    })
+  }
+
   return (
     <div className="min-h-screen font-primary bg-black">
       <Navigation />
@@ -363,12 +400,12 @@ export default function KeyDeals() {
               Recent Transactions
             </h2>
             <p className="text-white/70">
-              Latest high-impact deals in the private equity market
+              Latest high-impact deals in the private equity market ({getFilteredDeals().length} {getFilteredDeals().length === 1 ? 'deal' : 'deals'})
             </p>
           </div>
 
           <div className="space-y-6">
-            {keyDeals.map((deal, index) => (
+            {getFilteredDeals().map((deal, index) => (
               <Card 
                 key={index}
                 className="group hover:shadow-lift transition-all duration-300 hover:-translate-y-1 bg-gray-900/50 backdrop-blur-sm border-gray-800"
@@ -410,10 +447,10 @@ export default function KeyDeals() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm text-white/70 mb-1">Multiple</div>
+                      <div className="text-sm text-white/70 mb-1">Location</div>
                       <div className="flex items-center">
-                        <TrendingUp className="w-4 h-4 mr-2 text-teal-400" />
-                        <span className="font-medium text-white">{deal.multiple}</span>
+                        <DollarSign className="w-4 h-4 mr-2 text-teal-400" />
+                        <span className="font-medium text-white">{deal.location}</span>
                       </div>
                     </div>
                     <div>
