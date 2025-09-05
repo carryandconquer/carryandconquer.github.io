@@ -9,44 +9,44 @@ import { useState, useEffect } from "react"
 
 const keyDeals = [
   {
-    title: "Vista Equity Partners Acquires Solera",
-    amount: "$6.5B",
-    date: "March 2024",
-    sector: "Technology",
-    description: "Vista's acquisition of automotive software provider Solera in a take-private transaction.",
+    title: "ZenScreen AI Platform Investment",
+    amount: "$2.5M",
+    date: "2024",
+    sector: "Software & Related",
+    description: "Founded in 2017 and based in California, US, ZenScreen operates as a provider of an AI-based platform that enables users to monitor screen time and control electronic device usage. The platform offers digital-dieting features including App Analytics, App Categories, Smart Mornings, Calm Nights, Zen breaks, Daily Time Limit, Quiet Time, and Screen Sense.",
     status: "Completed",
-    firms: ["Vista Equity Partners"],
-    multiple: "12.3x"
+    firms: ["500 Startups", "Bessemer Venture Partners", "BMW i Ventures"],
+    multiple: "N/A"
   },
   {
-    title: "Blackstone's Retail Portfolio Exit",
-    amount: "$4.2B",
-    date: "February 2024",
-    sector: "Retail",
-    description: "Strategic exit of retail portfolio companies generating significant returns for LPs.",
+    title: "Van Leeuwen Artisan Ice Cream Series A",
+    amount: "$18.7M",
+    date: "2024",
+    sector: "Food and Ag.",
+    description: "Founded in 2008 and based in New York, US, Van Leeuwen Artisan Ice Cream operates as a producer of dairy-based and vegan ice cream products. The products are offered through their ice cream trucks and grocery stores.",
     status: "Completed",
-    firms: ["Blackstone"],
-    multiple: "8.7x"
+    firms: ["Strand Equity"],
+    multiple: "N/A"
   },
   {
-    title: "KKR Healthcare Acquisition",
-    amount: "$3.8B",
-    date: "January 2024",
+    title: "Conifer Point Pharmaceuticals Add-on Investment",
+    amount: "$5.0M",
+    date: "2024",
     sector: "Healthcare",
-    description: "Acquisition of leading healthcare services provider with strong recurring revenue model.",
-    status: "Pending",
-    firms: ["KKR"],
-    multiple: "14.2x"
+    description: "Founded in 2014 and based in Pennsylvania, US, Conifer Point Pharmaceuticals LLC develops drug discovery technology using computational tools to help drug researchers improve early stage compounds. The company also offers industry-standard computational chemistry services to help small firms solve chemistry research and development problems.",
+    status: "Completed",
+    firms: ["180 Degree Capital", "AbbVie Biotech Ventures", "ARCH Venture Partners"],
+    multiple: "N/A"
   },
   {
-    title: "Apollo Infrastructure Investment",
-    amount: "$5.1B",
-    date: "December 2023",
-    sector: "Infrastructure",
-    description: "Major infrastructure investment in renewable energy assets across North America.",
+    title: "OmniView Sports Seed Investment",
+    amount: "$1.2M",
+    date: "2024",
+    sector: "Software & Related",
+    description: "Founded in 2020 and based in Massachusetts, US, OmniView Sports Inc. operates as sports viewing application that's showing its users a personalized view experience according to the user preference.",
     status: "Completed",
-    firms: ["Apollo Global Management"],
-    multiple: "9.4x"
+    firms: ["Undisclosed Investors"],
+    multiple: "N/A"
   }
 ]
 
