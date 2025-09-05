@@ -113,7 +113,7 @@ const CompanyProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-950 to-black">
       <Navigation />
       
       <main className="container mx-auto px-4 py-12 pt-32">
@@ -121,7 +121,7 @@ const CompanyProfile = () => {
         <Button 
           variant="ghost" 
           size="sm" 
-          className="mb-8 text-slate-600 hover:text-slate-900 hover:bg-white/60 backdrop-blur-sm transition-all duration-300" 
+          className="mb-8 text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300" 
           asChild
         >
           <Link to="/companies">
@@ -137,7 +137,7 @@ const CompanyProfile = () => {
               <img 
                 src={displayCompany.logo_url} 
                 alt={`${displayCompany.name} logo`}
-                className="w-24 h-24 rounded-2xl object-contain bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg"
+                className="w-24 h-24 rounded-2xl object-contain bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 shadow-lg"
               />
             ) : (
               <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
@@ -148,7 +148,7 @@ const CompanyProfile = () => {
           
           <div className="space-y-4">
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <h1 className="text-5xl font-bold text-slate-900">{displayCompany.name}</h1>
+              <h1 className="text-5xl font-bold text-white">{displayCompany.name}</h1>
               {displayCompany.featured && (
                 <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-3 py-1">
                   Featured
@@ -161,11 +161,11 @@ const CompanyProfile = () => {
               )}
             </div>
             
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
               {displayCompany.description}
             </p>
             
-            <div className="flex flex-wrap items-center justify-center gap-6 text-slate-500">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-gray-400">
               {displayCompany.city && (
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
@@ -207,7 +207,7 @@ const CompanyProfile = () => {
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white/90 shadow-lg"
+                  className="bg-gray-800/80 backdrop-blur-sm border-gray-600/50 text-white hover:bg-gray-700/80 shadow-lg"
                   asChild
                 >
                   <a href={`mailto:${displayCompany.contact_email}`}>
@@ -223,44 +223,44 @@ const CompanyProfile = () => {
         {/* Performance Metrics for ZenScreen */}
         {placeholderCompany && slug === 'zenscreen' && (
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">Performance Metrics</h2>
+            <h2 className="text-3xl font-bold text-center text-white mb-12">Performance Metrics</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                 <CardContent className="p-8 text-center">
-                  <div className="text-4xl font-bold text-green-600 mb-2">127%</div>
-                  <div className="text-slate-600">Revenue Growth</div>
-                  <div className="w-full bg-green-100 rounded-full h-2 mt-4">
-                    <div className="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full" style={{width: '85%'}}></div>
+                  <div className="text-4xl font-bold text-green-400 mb-2">127%</div>
+                  <div className="text-gray-300">Revenue Growth</div>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-green-400 to-green-500 h-2 rounded-full" style={{width: '85%'}}></div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                 <CardContent className="p-8 text-center">
-                  <div className="text-4xl font-bold text-blue-600 mb-2">94%</div>
-                  <div className="text-slate-600">Customer Retention</div>
-                  <div className="w-full bg-blue-100 rounded-full h-2 mt-4">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full" style={{width: '94%'}}></div>
+                  <div className="text-4xl font-bold text-blue-400 mb-2">94%</div>
+                  <div className="text-gray-300">Customer Retention</div>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-blue-400 to-blue-500 h-2 rounded-full" style={{width: '94%'}}></div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                 <CardContent className="p-8 text-center">
-                  <div className="text-4xl font-bold text-purple-600 mb-2">500+</div>
-                  <div className="text-slate-600">Enterprise Clients</div>
-                  <div className="w-full bg-purple-100 rounded-full h-2 mt-4">
-                    <div className="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full" style={{width: '75%'}}></div>
+                  <div className="text-4xl font-bold text-purple-400 mb-2">500+</div>
+                  <div className="text-gray-300">Enterprise Clients</div>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-purple-400 to-purple-500 h-2 rounded-full" style={{width: '75%'}}></div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                 <CardContent className="p-8 text-center">
-                  <div className="text-4xl font-bold text-orange-600 mb-2">50k+</div>
-                  <div className="text-slate-600">Screens Managed</div>
-                  <div className="w-full bg-orange-100 rounded-full h-2 mt-4">
-                    <div className="bg-gradient-to-r from-orange-400 to-orange-600 h-2 rounded-full" style={{width: '90%'}}></div>
+                  <div className="text-4xl font-bold text-orange-400 mb-2">50k+</div>
+                  <div className="text-gray-300">Screens Managed</div>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-orange-400 to-orange-500 h-2 rounded-full" style={{width: '90%'}}></div>
                   </div>
                 </CardContent>
               </Card>
@@ -273,10 +273,10 @@ const CompanyProfile = () => {
           {/* Key Features for ZenScreen */}
           {placeholderCompany && slug === 'zenscreen' && (
             <div className="lg:col-span-2">
-              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl h-full">
+              <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl h-full">
                 <CardHeader className="pb-6">
-                  <CardTitle className="text-2xl text-slate-900 flex items-center gap-2">
-                    <Zap className="w-6 h-6 text-blue-600" />
+                  <CardTitle className="text-2xl text-white flex items-center gap-2">
+                    <Zap className="w-6 h-6 text-blue-400" />
                     Key Features & Capabilities
                   </CardTitle>
                 </CardHeader>
@@ -284,48 +284,48 @@ const CompanyProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl">
-                          <Cpu className="w-6 h-6 text-blue-600" />
+                        <div className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30">
+                          <Cpu className="w-6 h-6 text-blue-400" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900">AI-Powered Optimization</h3>
-                          <p className="text-sm text-slate-600">Intelligent content delivery and audience engagement</p>
+                          <h3 className="font-semibold text-white">AI-Powered Optimization</h3>
+                          <p className="text-sm text-gray-400">Intelligent content delivery and audience engagement</p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 bg-gradient-to-br from-green-100 to-green-200 rounded-xl">
-                          <Monitor className="w-6 h-6 text-green-600" />
+                        <div className="p-3 bg-green-500/20 rounded-xl border border-green-500/30">
+                          <Monitor className="w-6 h-6 text-green-400" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900">Multi-Location Management</h3>
-                          <p className="text-sm text-slate-600">Centralized control across multiple locations</p>
+                          <h3 className="font-semibold text-white">Multi-Location Management</h3>
+                          <p className="text-sm text-gray-400">Centralized control across multiple locations</p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl">
-                          <BarChart3 className="w-6 h-6 text-purple-600" />
+                        <div className="p-3 bg-purple-500/20 rounded-xl border border-purple-500/30">
+                          <BarChart3 className="w-6 h-6 text-purple-400" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900">Real-time Analytics</h3>
-                          <p className="text-sm text-slate-600">Comprehensive performance metrics and insights</p>
+                          <h3 className="font-semibold text-white">Real-time Analytics</h3>
+                          <p className="text-sm text-gray-400">Comprehensive performance metrics and insights</p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl">
-                          <Shield className="w-6 h-6 text-orange-600" />
+                        <div className="p-3 bg-orange-500/20 rounded-xl border border-orange-500/30">
+                          <Shield className="w-6 h-6 text-orange-400" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900">Enterprise Security</h3>
-                          <p className="text-sm text-slate-600">Enterprise-grade security with compliance</p>
+                          <h3 className="font-semibold text-white">Enterprise Security</h3>
+                          <p className="text-sm text-gray-400">Enterprise-grade security with compliance</p>
                         </div>
                       </div>
                     </div>
@@ -339,31 +339,31 @@ const CompanyProfile = () => {
           <div className="space-y-6">
             {/* Recent Investment for ZenScreen */}
             {placeholderCompany && slug === 'zenscreen' && (
-              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl">
+              <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-slate-900 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-green-400" />
                     Recent Investment
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="text-center p-6 bg-gradient-to-br from-green-50 to-blue-50 rounded-xl">
-                      <div className="text-3xl font-bold text-green-600 mb-1">$35M</div>
-                      <div className="text-sm text-slate-600">Series B Round</div>
+                    <div className="text-center p-6 bg-gray-800/50 rounded-xl border border-gray-700/50">
+                      <div className="text-3xl font-bold text-green-400 mb-1">$35M</div>
+                      <div className="text-sm text-gray-300">Series B Round</div>
                     </div>
                     <div className="space-y-3">
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Date</span>
-                        <span className="font-medium">October 2024</span>
+                        <span className="text-gray-400">Date</span>
+                        <span className="font-medium text-white">October 2024</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Lead Investor</span>
-                        <span className="font-medium">Sequoia Capital</span>
+                        <span className="text-gray-400">Lead Investor</span>
+                        <span className="font-medium text-white">Sequoia Capital</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Valuation</span>
-                        <span className="font-medium">$150M</span>
+                        <span className="text-gray-400">Valuation</span>
+                        <span className="font-medium text-white">$150M</span>
                       </div>
                     </div>
                   </div>
@@ -372,22 +372,22 @@ const CompanyProfile = () => {
             )}
 
             {/* Company Information */}
-            <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl">
+            <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl">
               <CardHeader className="pb-4">
-                <CardTitle className="text-slate-900">Company Information</CardTitle>
+                <CardTitle className="text-white">Company Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <span className="text-sm font-medium text-slate-600">Type</span>
-                  <p className="font-medium text-slate-900">
+                  <span className="text-sm font-medium text-gray-400">Type</span>
+                  <p className="font-medium text-white">
                     {displayCompany.company_type.charAt(0).toUpperCase() + displayCompany.company_type.slice(1)}
                   </p>
                 </div>
                 
                 {displayCompany.city && (
                   <div>
-                    <span className="text-sm font-medium text-slate-600">Location</span>
-                    <p className="font-medium text-slate-900">
+                    <span className="text-sm font-medium text-gray-400">Location</span>
+                    <p className="font-medium text-white">
                       {displayCompany.city}, {displayCompany.country}
                     </p>
                   </div>
@@ -395,8 +395,8 @@ const CompanyProfile = () => {
                 
                 {displayCompany.founded_date && (
                   <div>
-                    <span className="text-sm font-medium text-slate-600">Founded</span>
-                    <p className="font-medium text-slate-900">
+                    <span className="text-sm font-medium text-gray-400">Founded</span>
+                    <p className="font-medium text-white">
                       {new Date(displayCompany.founded_date).getFullYear()}
                     </p>
                   </div>
@@ -404,8 +404,8 @@ const CompanyProfile = () => {
                 
                 {displayCompany.employee_count && (
                   <div>
-                    <span className="text-sm font-medium text-slate-600">Team Size</span>
-                    <p className="font-medium text-slate-900">
+                    <span className="text-sm font-medium text-gray-400">Team Size</span>
+                    <p className="font-medium text-white">
                       {displayCompany.employee_count.toLocaleString()} employees
                     </p>
                   </div>
@@ -415,9 +415,9 @@ const CompanyProfile = () => {
 
             {/* Social Links */}
             {displayCompany.social_links && Object.keys(displayCompany.social_links).length > 0 && (
-              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl">
+              <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700/50 shadow-xl">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-slate-900">Connect</CardTitle>
+                  <CardTitle className="text-white">Connect</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {Object.entries(displayCompany.social_links).map(([platform, url]) => (
@@ -425,7 +425,7 @@ const CompanyProfile = () => {
                       key={platform} 
                       variant="ghost" 
                       size="sm" 
-                      className="w-full justify-between hover:bg-white/60 text-slate-700" 
+                      className="w-full justify-between hover:bg-gray-800/50 text-gray-300 hover:text-white" 
                       asChild
                     >
                       <a href={url as string} target="_blank" rel="noopener noreferrer">
@@ -443,12 +443,12 @@ const CompanyProfile = () => {
         {/* Industry Tags */}
         {displayCompany.industry_tags && displayCompany.industry_tags.length > 0 && (
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-slate-900 mb-6">Industries & Expertise</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">Industries & Expertise</h3>
             <div className="flex flex-wrap justify-center gap-3">
               {displayCompany.industry_tags.map((tag) => (
                 <Badge 
                   key={tag} 
-                  className="bg-white/70 text-slate-700 border-white/30 hover:bg-white/90 px-4 py-2 text-sm backdrop-blur-sm"
+                  className="bg-gray-800/50 text-gray-300 border-gray-600/50 hover:bg-gray-700/50 px-4 py-2 text-sm backdrop-blur-sm"
                 >
                   {tag}
                 </Badge>
