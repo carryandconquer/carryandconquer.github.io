@@ -12,18 +12,24 @@ export default function DealDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
 
+  console.log('DealDetails - ID from params:', id)
+  console.log('DealDetails - keyDeals array:', keyDeals)
+
   // Find the deal from our real data
   const deal = keyDeals.find(d => d.id === id)
 
+  console.log('DealDetails - found deal:', deal)
+
   // If no deal found, show error
   if (!deal) {
+    console.log('DealDetails - No deal found for id:', id)
     return (
       <div className="min-h-screen bg-black">
         <Navigation />
         <section className="pt-32 pb-20 bg-black">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
             <h1 className="text-4xl font-bold text-white mb-4">Deal Not Found</h1>
-            <p className="text-white/70 mb-8">The requested deal could not be found.</p>
+            <p className="text-white/70 mb-8">The requested deal could not be found. ID: {id}</p>
             <Button onClick={() => navigate('/key-deals')} className="bg-blue-600 hover:bg-blue-700">
               Back to Key Deals
             </Button>
