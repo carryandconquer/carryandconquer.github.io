@@ -113,87 +113,106 @@ const CompanyProfile = () => {
   }
 
   return (
-    <div className="min-h-screen font-primary pt-24 bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-12 pt-32">
         {/* Back Navigation */}
-        <Button variant="ghost" size="sm" className="mb-6" asChild>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="mb-8 text-slate-600 hover:text-slate-900 hover:bg-white/60 backdrop-blur-sm transition-all duration-300" 
+          asChild
+        >
           <Link to="/companies">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Companies
           </Link>
         </Button>
 
-        {/* Header */}
-        <div className="flex items-start gap-6 mb-8">
-          {displayCompany.logo_url ? (
-            <img 
-              src={displayCompany.logo_url} 
-              alt={`${displayCompany.name} logo`}
-              className="w-20 h-20 rounded-xl object-contain bg-background border shadow-sm"
-            />
-          ) : (
-            <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border shadow-sm">
-              <Monitor className="w-10 h-10 text-white" />
-            </div>
-          )}
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <div className="flex justify-center mb-6">
+            {displayCompany.logo_url ? (
+              <img 
+                src={displayCompany.logo_url} 
+                alt={`${displayCompany.name} logo`}
+                className="w-24 h-24 rounded-2xl object-contain bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                <Monitor className="w-12 h-12 text-white" />
+              </div>
+            )}
+          </div>
           
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold">{displayCompany.name}</h1>
-              <Badge variant="secondary">
-                {displayCompany.company_type.charAt(0).toUpperCase() + displayCompany.company_type.slice(1)}
-              </Badge>
+          <div className="space-y-4">
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <h1 className="text-5xl font-bold text-slate-900">{displayCompany.name}</h1>
               {displayCompany.featured && (
-                <Badge variant="default">Featured</Badge>
+                <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-3 py-1">
+                  Featured
+                </Badge>
               )}
               {placeholderCompany && (
-                <Badge variant="outline" className="text-orange-600 border-orange-600">
+                <Badge className="bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 px-3 py-1">
                   Recently Invested
                 </Badge>
               )}
             </div>
             
-            <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-4">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              {displayCompany.description}
+            </p>
+            
+            <div className="flex flex-wrap items-center justify-center gap-6 text-slate-500">
               {displayCompany.city && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
-                  <span>{displayCompany.city}{displayCompany.country && `, ${displayCompany.country}`}</span>
+                  <span>{displayCompany.city}, {displayCompany.country}</span>
                 </div>
               )}
               
               {displayCompany.employee_count && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <Users className="w-4 h-4" />
                   <span>{displayCompany.employee_count.toLocaleString()} employees</span>
                 </div>
               )}
               
               {displayCompany.founded_date && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   <span>Founded {new Date(displayCompany.founded_date).getFullYear()}</span>
                 </div>
               )}
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-4 justify-center mt-8">
               {displayCompany.website && (
-                <Button asChild>
+                <Button 
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg"
+                  asChild
+                >
                   <a href={displayCompany.website} target="_blank" rel="noopener noreferrer">
                     <Globe className="w-4 h-4 mr-2" />
-                    Website
+                    Visit Website
                     <ExternalLink className="w-3 h-3 ml-2" />
                   </a>
                 </Button>
               )}
               
               {displayCompany.contact_email && (
-                <Button variant="outline" asChild>
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white/90 shadow-lg"
+                  asChild
+                >
                   <a href={`mailto:${displayCompany.contact_email}`}>
                     <Mail className="w-4 h-4 mr-2" />
-                    Contact
+                    Get in Touch
                   </a>
                 </Button>
               )}
@@ -201,153 +220,183 @@ const CompanyProfile = () => {
           </div>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* About */}
-          <div className="lg:col-span-2 space-y-6">
-            {displayCompany.description && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>About {displayCompany.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {displayCompany.description}
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Key Features for ZenScreen */}
-            {placeholderCompany && slug === 'zenscreen' && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Key Features & Capabilities</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                        <Cpu className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">AI-Powered Optimization</h3>
-                        <p className="text-sm text-muted-foreground">Intelligent content delivery and audience engagement optimization</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                        <Monitor className="w-5 h-5 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Multi-Location Management</h3>
-                        <p className="text-sm text-muted-foreground">Centralized control of screens across multiple locations</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                        <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Real-time Analytics</h3>
-                        <p className="text-sm text-muted-foreground">Comprehensive performance metrics and engagement insights</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
-                        <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold mb-1">Enterprise Security</h3>
-                        <p className="text-sm text-muted-foreground">Enterprise-grade security with compliance standards</p>
-                      </div>
-                    </div>
+        {/* Performance Metrics for ZenScreen */}
+        {placeholderCompany && slug === 'zenscreen' && (
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">Performance Metrics</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="text-4xl font-bold text-green-600 mb-2">127%</div>
+                  <div className="text-slate-600">Revenue Growth</div>
+                  <div className="w-full bg-green-100 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full" style={{width: '85%'}}></div>
                   </div>
                 </CardContent>
               </Card>
-            )}
-
-            {/* Industry Tags */}
-            {displayCompany.industry_tags && displayCompany.industry_tags.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Industries & Expertise</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {displayCompany.industry_tags.map((tag) => (
-                      <Badge key={tag} variant="outline">
-                        {tag}
-                      </Badge>
-                    ))}
+              
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="text-4xl font-bold text-blue-600 mb-2">94%</div>
+                  <div className="text-slate-600">Customer Retention</div>
+                  <div className="w-full bg-blue-100 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full" style={{width: '94%'}}></div>
                   </div>
                 </CardContent>
               </Card>
-            )}
-
-            {/* Recent Metrics for ZenScreen */}
-            {placeholderCompany && slug === 'zenscreen' && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Performance Metrics</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="text-center p-4 bg-muted/50 rounded-lg">
-                      <div className="text-2xl font-bold text-green-600 mb-1">127%</div>
-                      <div className="text-sm text-muted-foreground">Revenue Growth</div>
-                    </div>
-                    <div className="text-center p-4 bg-muted/50 rounded-lg">
-                      <div className="text-2xl font-bold text-blue-600 mb-1">94%</div>
-                      <div className="text-sm text-muted-foreground">Customer Retention</div>
-                    </div>
-                    <div className="text-center p-4 bg-muted/50 rounded-lg">
-                      <div className="text-2xl font-bold text-purple-600 mb-1">500+</div>
-                      <div className="text-sm text-muted-foreground">Enterprise Clients</div>
-                    </div>
-                    <div className="text-center p-4 bg-muted/50 rounded-lg">
-                      <div className="text-2xl font-bold text-orange-600 mb-1">50k+</div>
-                      <div className="text-sm text-muted-foreground">Screens Managed</div>
-                    </div>
+              
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="text-4xl font-bold text-purple-600 mb-2">500+</div>
+                  <div className="text-slate-600">Enterprise Clients</div>
+                  <div className="w-full bg-purple-100 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full" style={{width: '75%'}}></div>
                   </div>
                 </CardContent>
               </Card>
-            )}
+              
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="text-4xl font-bold text-orange-600 mb-2">50k+</div>
+                  <div className="text-slate-600">Screens Managed</div>
+                  <div className="w-full bg-orange-100 rounded-full h-2 mt-4">
+                    <div className="bg-gradient-to-r from-orange-400 to-orange-600 h-2 rounded-full" style={{width: '90%'}}></div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
+        )}
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+          {/* Key Features for ZenScreen */}
+          {placeholderCompany && slug === 'zenscreen' && (
+            <div className="lg:col-span-2">
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl h-full">
+                <CardHeader className="pb-6">
+                  <CardTitle className="text-2xl text-slate-900 flex items-center gap-2">
+                    <Zap className="w-6 h-6 text-blue-600" />
+                    Key Features & Capabilities
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl">
+                          <Cpu className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-900">AI-Powered Optimization</h3>
+                          <p className="text-sm text-slate-600">Intelligent content delivery and audience engagement</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 bg-gradient-to-br from-green-100 to-green-200 rounded-xl">
+                          <Monitor className="w-6 h-6 text-green-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-900">Multi-Location Management</h3>
+                          <p className="text-sm text-slate-600">Centralized control across multiple locations</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl">
+                          <BarChart3 className="w-6 h-6 text-purple-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-900">Real-time Analytics</h3>
+                          <p className="text-sm text-slate-600">Comprehensive performance metrics and insights</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl">
+                          <Shield className="w-6 h-6 text-orange-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-900">Enterprise Security</h3>
+                          <p className="text-sm text-slate-600">Enterprise-grade security with compliance</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Quick Info */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Company Information</CardTitle>
+            {/* Recent Investment for ZenScreen */}
+            {placeholderCompany && slug === 'zenscreen' && (
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-slate-900 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-green-600" />
+                    Recent Investment
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="text-center p-6 bg-gradient-to-br from-green-50 to-blue-50 rounded-xl">
+                      <div className="text-3xl font-bold text-green-600 mb-1">$35M</div>
+                      <div className="text-sm text-slate-600">Series B Round</div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Date</span>
+                        <span className="font-medium">October 2024</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Lead Investor</span>
+                        <span className="font-medium">Sequoia Capital</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Valuation</span>
+                        <span className="font-medium">$150M</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Company Information */}
+            <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-slate-900">Company Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <span className="text-sm font-medium text-muted-foreground">Type</span>
-                  <p className="text-sm">
+                  <span className="text-sm font-medium text-slate-600">Type</span>
+                  <p className="font-medium text-slate-900">
                     {displayCompany.company_type.charAt(0).toUpperCase() + displayCompany.company_type.slice(1)}
                   </p>
                 </div>
                 
                 {displayCompany.city && (
                   <div>
-                    <span className="text-sm font-medium text-muted-foreground">Location</span>
-                    <p className="text-sm">
-                      {displayCompany.city}
-                      {displayCompany.region && `, ${displayCompany.region}`}
-                      {displayCompany.country && `, ${displayCompany.country}`}
+                    <span className="text-sm font-medium text-slate-600">Location</span>
+                    <p className="font-medium text-slate-900">
+                      {displayCompany.city}, {displayCompany.country}
                     </p>
                   </div>
                 )}
                 
                 {displayCompany.founded_date && (
                   <div>
-                    <span className="text-sm font-medium text-muted-foreground">Founded</span>
-                    <p className="text-sm">
+                    <span className="text-sm font-medium text-slate-600">Founded</span>
+                    <p className="font-medium text-slate-900">
                       {new Date(displayCompany.founded_date).getFullYear()}
                     </p>
                   </div>
@@ -355,78 +404,33 @@ const CompanyProfile = () => {
                 
                 {displayCompany.employee_count && (
                   <div>
-                    <span className="text-sm font-medium text-muted-foreground">Size</span>
-                    <p className="text-sm">
+                    <span className="text-sm font-medium text-slate-600">Team Size</span>
+                    <p className="font-medium text-slate-900">
                       {displayCompany.employee_count.toLocaleString()} employees
                     </p>
                   </div>
                 )}
-                
-                {placeholderCompany && slug === 'zenscreen' && (
-                  <>
-                    <div>
-                      <span className="text-sm font-medium text-muted-foreground">Funding Status</span>
-                      <p className="text-sm flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3 text-green-500" />
-                        Recently Raised Series B
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-muted-foreground">Valuation</span>
-                      <p className="text-sm">$150M (estimated)</p>
-                    </div>
-                  </>
-                )}
               </CardContent>
             </Card>
 
-            {/* Recent Investment for ZenScreen */}
-            {placeholderCompany && slug === 'zenscreen' && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Investment</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Amount</span>
-                      <span className="text-lg font-bold text-green-600">$35M</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Round</span>
-                      <span className="text-sm">Series B</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Date</span>
-                      <span className="text-sm">October 2024</span>
-                    </div>
-                    <div className="pt-2 border-t">
-                      <span className="text-sm font-medium text-muted-foreground">Lead Investor</span>
-                      <p className="text-sm">Sequoia Capital</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Social Links */}
             {displayCompany.social_links && Object.keys(displayCompany.social_links).length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Connect</CardTitle>
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-xl">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-slate-900">Connect</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {Object.entries(displayCompany.social_links).map(([platform, url]) => (
                     <Button 
                       key={platform} 
-                      variant="outline" 
+                      variant="ghost" 
                       size="sm" 
-                      className="w-full justify-start" 
+                      className="w-full justify-between hover:bg-white/60 text-slate-700" 
                       asChild
                     >
                       <a href={url as string} target="_blank" rel="noopener noreferrer">
-                        {platform.charAt(0).toUpperCase() + platform.slice(1)}
-                        <ExternalLink className="w-3 h-3 ml-auto" />
+                        <span>{platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
+                        <ExternalLink className="w-3 h-3" />
                       </a>
                     </Button>
                   ))}
@@ -435,6 +439,23 @@ const CompanyProfile = () => {
             )}
           </div>
         </div>
+
+        {/* Industry Tags */}
+        {displayCompany.industry_tags && displayCompany.industry_tags.length > 0 && (
+          <div className="text-center">
+            <h3 className="text-2xl font-bold text-slate-900 mb-6">Industries & Expertise</h3>
+            <div className="flex flex-wrap justify-center gap-3">
+              {displayCompany.industry_tags.map((tag) => (
+                <Badge 
+                  key={tag} 
+                  className="bg-white/70 text-slate-700 border-white/30 hover:bg-white/90 px-4 py-2 text-sm backdrop-blur-sm"
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
 
       <Footer />
