@@ -78,10 +78,18 @@ export function PrivateEquityAIChat() {
         maxHeight: 200,
     });
 
+    const handleQuery = (query: string) => {
+        if (query.trim()) {
+            const encodedQuery = encodeURIComponent(query.trim());
+            window.open(`https://frondex.co?q=${encodedQuery}`, '_blank');
+        }
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (value.trim()) {
+                handleQuery(value);
                 setValue("");
                 adjustHeight(true);
             }
@@ -150,6 +158,13 @@ export function PrivateEquityAIChat() {
                             </button>
                             <button
                                 type="button"
+                                onClick={() => {
+                                    if (value.trim()) {
+                                        handleQuery(value);
+                                        setValue("");
+                                        adjustHeight(true);
+                                    }
+                                }}
                                 className={cn(
                                     "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-green-500/30 hover:border-green-400/50 hover:bg-gray-800/50 flex items-center justify-between gap-1",
                                     value.trim()
@@ -175,22 +190,27 @@ export function PrivateEquityAIChat() {
                     <ActionButton
                         icon={<TrendingUp className="w-4 h-4" />}
                         label="Market Analysis"
+                        onClick={() => handleQuery("Provide market analysis for private equity deals")}
                     />
                     <ActionButton
                         icon={<Target className="w-4 h-4" />}
                         label="Deal Sourcing"
+                        onClick={() => handleQuery("Help me with deal sourcing strategies")}
                     />
                     <ActionButton
                         icon={<BarChart3 className="w-4 h-4" />}
                         label="Portfolio Performance"
+                        onClick={() => handleQuery("Analyze portfolio performance metrics")}
                     />
                     <ActionButton
                         icon={<Building2 className="w-4 h-4" />}
                         label="Due Diligence"
+                        onClick={() => handleQuery("Create a due diligence checklist")}
                     />
                     <ActionButton
                         icon={<DollarSign className="w-4 h-4" />}
                         label="Valuation Models"
+                        onClick={() => handleQuery("Show me valuation models for private equity")}
                     />
                 </div>
             </div>
@@ -201,12 +221,14 @@ export function PrivateEquityAIChat() {
 interface ActionButtonProps {
     icon: React.ReactNode;
     label: string;
+    onClick: () => void;
 }
 
-function ActionButton({ icon, label }: ActionButtonProps) {
+function ActionButton({ icon, label, onClick }: ActionButtonProps) {
     return (
         <button
             type="button"
+            onClick={onClick}
             className="flex items-center gap-2 px-4 py-2 bg-gray-900/50 hover:bg-gray-800/70 rounded-full border border-green-500/30 text-green-300/70 hover:text-green-300 hover:border-green-400/50 transition-all duration-300"
         >
             {icon}
