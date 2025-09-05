@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TrendingUp, Building2, DollarSign, ArrowRight, ExternalLink } from "lucide-react"
+import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 const keyDeals = [
@@ -375,11 +376,14 @@ export default function KeyDeals() {
                     </div>
                     <div className="flex justify-end">
                       <Button 
+                        asChild
                         variant="outline" 
                         className="border-gray-700 bg-gray-800 hover:bg-gray-700 text-white transition-all duration-300"
                       >
-                        View Details
-                        <ExternalLink className="ml-2 w-4 h-4" />
+                        <Link to={`/deal/${index + 1}`}>
+                          View Details
+                          <ExternalLink className="ml-2 w-4 h-4" />
+                        </Link>
                       </Button>
                     </div>
                   </div>
