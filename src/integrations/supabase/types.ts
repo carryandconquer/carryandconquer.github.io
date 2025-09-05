@@ -116,11 +116,13 @@ export type Database = {
           cap_rate: number | null
           city: string | null
           closing_date: string | null
+          company_id: string | null
           competitive_dynamics: string | null
           confidence_score: number | null
           country: string | null
           created_at: string
           data_quality_score: number | null
+          deal_currency: string | null
           deal_highlights: Json | null
           deal_id: string
           deal_name: string
@@ -128,17 +130,24 @@ export type Database = {
           deal_status: string
           deal_value: number | null
           deal_value_formatted: string | null
+          deal_value_usd: number | null
           description: string | null
+          ebitda_ltm: number | null
+          ebitda_margin: number | null
+          enterprise_value: number | null
           featured_deal: boolean | null
           full_address: string | null
+          fx_rate: number | null
           id: string
           image_url: string | null
+          investment_status_label: string | null
           investment_strategy: string | null
           last_updated: string | null
           latitude: number | null
           lender: string | null
           longitude: number | null
           market_intelligence: string | null
+          multiple_label: string | null
           occupancy_rate: number | null
           pipeline_deal: boolean | null
           postal_code: string | null
@@ -149,10 +158,13 @@ export type Database = {
           published: boolean | null
           recent_deal: boolean | null
           region: string | null
+          revenue_growth_yoy: number | null
+          revenue_ltm: number | null
           seller: string | null
           seller_type: string | null
           source: string | null
           square_footage: number | null
+          stage_label: string | null
           state_province: string | null
           strategic_significance: string | null
           street_address: string | null
@@ -169,11 +181,13 @@ export type Database = {
           cap_rate?: number | null
           city?: string | null
           closing_date?: string | null
+          company_id?: string | null
           competitive_dynamics?: string | null
           confidence_score?: number | null
           country?: string | null
           created_at?: string
           data_quality_score?: number | null
+          deal_currency?: string | null
           deal_highlights?: Json | null
           deal_id: string
           deal_name: string
@@ -181,17 +195,24 @@ export type Database = {
           deal_status?: string
           deal_value?: number | null
           deal_value_formatted?: string | null
+          deal_value_usd?: number | null
           description?: string | null
+          ebitda_ltm?: number | null
+          ebitda_margin?: number | null
+          enterprise_value?: number | null
           featured_deal?: boolean | null
           full_address?: string | null
+          fx_rate?: number | null
           id?: string
           image_url?: string | null
+          investment_status_label?: string | null
           investment_strategy?: string | null
           last_updated?: string | null
           latitude?: number | null
           lender?: string | null
           longitude?: number | null
           market_intelligence?: string | null
+          multiple_label?: string | null
           occupancy_rate?: number | null
           pipeline_deal?: boolean | null
           postal_code?: string | null
@@ -202,10 +223,13 @@ export type Database = {
           published?: boolean | null
           recent_deal?: boolean | null
           region?: string | null
+          revenue_growth_yoy?: number | null
+          revenue_ltm?: number | null
           seller?: string | null
           seller_type?: string | null
           source?: string | null
           square_footage?: number | null
+          stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
           street_address?: string | null
@@ -222,11 +246,13 @@ export type Database = {
           cap_rate?: number | null
           city?: string | null
           closing_date?: string | null
+          company_id?: string | null
           competitive_dynamics?: string | null
           confidence_score?: number | null
           country?: string | null
           created_at?: string
           data_quality_score?: number | null
+          deal_currency?: string | null
           deal_highlights?: Json | null
           deal_id?: string
           deal_name?: string
@@ -234,17 +260,24 @@ export type Database = {
           deal_status?: string
           deal_value?: number | null
           deal_value_formatted?: string | null
+          deal_value_usd?: number | null
           description?: string | null
+          ebitda_ltm?: number | null
+          ebitda_margin?: number | null
+          enterprise_value?: number | null
           featured_deal?: boolean | null
           full_address?: string | null
+          fx_rate?: number | null
           id?: string
           image_url?: string | null
+          investment_status_label?: string | null
           investment_strategy?: string | null
           last_updated?: string | null
           latitude?: number | null
           lender?: string | null
           longitude?: number | null
           market_intelligence?: string | null
+          multiple_label?: string | null
           occupancy_rate?: number | null
           pipeline_deal?: boolean | null
           postal_code?: string | null
@@ -255,10 +288,13 @@ export type Database = {
           published?: boolean | null
           recent_deal?: boolean | null
           region?: string | null
+          revenue_growth_yoy?: number | null
+          revenue_ltm?: number | null
           seller?: string | null
           seller_type?: string | null
           source?: string | null
           square_footage?: number | null
+          stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
           street_address?: string | null
@@ -267,7 +303,358 @@ export type Database = {
           updated_at?: string
           year_built?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "deals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "deals_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals_companies: {
+        Row: {
+          country: string | null
+          created_at: string
+          description: string | null
+          external_company_id: string | null
+          headquarters_city: string | null
+          id: string
+          name: string
+          region: string | null
+          state_province: string | null
+          total_known_funding_usd: number | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          external_company_id?: string | null
+          headquarters_city?: string | null
+          id?: string
+          name: string
+          region?: string | null
+          state_province?: string | null
+          total_known_funding_usd?: number | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          external_company_id?: string | null
+          headquarters_city?: string | null
+          id?: string
+          name?: string
+          region?: string | null
+          state_province?: string | null
+          total_known_funding_usd?: number | null
+          updated_at?: string
+          website?: string | null
+        }
         Relationships: []
+      }
+      deals_company_industries: {
+        Row: {
+          classification: string | null
+          company_id: string
+          created_at: string
+          id: string
+          industry_id: string
+          is_primary: boolean
+          sub_industry_id: string | null
+        }
+        Insert: {
+          classification?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          industry_id: string
+          is_primary?: boolean
+          sub_industry_id?: string | null
+        }
+        Update: {
+          classification?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          industry_id?: string
+          is_primary?: boolean
+          sub_industry_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_company_industries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "deals_companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_company_industries_industry_id_fkey"
+            columns: ["industry_id"]
+            isOneToOne: false
+            referencedRelation: "deals_industries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_company_industries_sub_industry_id_fkey"
+            columns: ["sub_industry_id"]
+            isOneToOne: false
+            referencedRelation: "deals_sub_industries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals_deal_investors: {
+        Row: {
+          board_representative_person_id: string | null
+          committed_amount: number | null
+          committed_amount_usd: number | null
+          committed_currency: string | null
+          created_at: string
+          deal_id: string
+          fund_id: string | null
+          id: string
+          investor_id: string
+          lead_partner_person_id: string | null
+          role: Database["public"]["Enums"]["deal_investor_role"]
+        }
+        Insert: {
+          board_representative_person_id?: string | null
+          committed_amount?: number | null
+          committed_amount_usd?: number | null
+          committed_currency?: string | null
+          created_at?: string
+          deal_id: string
+          fund_id?: string | null
+          id?: string
+          investor_id: string
+          lead_partner_person_id?: string | null
+          role?: Database["public"]["Enums"]["deal_investor_role"]
+        }
+        Update: {
+          board_representative_person_id?: string | null
+          committed_amount?: number | null
+          committed_amount_usd?: number | null
+          committed_currency?: string | null
+          created_at?: string
+          deal_id?: string
+          fund_id?: string | null
+          id?: string
+          investor_id?: string
+          lead_partner_person_id?: string | null
+          role?: Database["public"]["Enums"]["deal_investor_role"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_deal_investors_board_representative_person_id_fkey"
+            columns: ["board_representative_person_id"]
+            isOneToOne: false
+            referencedRelation: "deals_people"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_deal_investors_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_deal_investors_fund_id_fkey"
+            columns: ["fund_id"]
+            isOneToOne: false
+            referencedRelation: "deals_funds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_deal_investors_investor_id_fkey"
+            columns: ["investor_id"]
+            isOneToOne: false
+            referencedRelation: "deals_investors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_deal_investors_lead_partner_person_id_fkey"
+            columns: ["lead_partner_person_id"]
+            isOneToOne: false
+            referencedRelation: "deals_people"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals_funds: {
+        Row: {
+          created_at: string
+          fund_size_usd: number | null
+          id: string
+          investor_id: string
+          name: string
+          updated_at: string
+          vintage_year: number | null
+        }
+        Insert: {
+          created_at?: string
+          fund_size_usd?: number | null
+          id?: string
+          investor_id: string
+          name: string
+          updated_at?: string
+          vintage_year?: number | null
+        }
+        Update: {
+          created_at?: string
+          fund_size_usd?: number | null
+          id?: string
+          investor_id?: string
+          name?: string
+          updated_at?: string
+          vintage_year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_funds_investor_id_fkey"
+            columns: ["investor_id"]
+            isOneToOne: false
+            referencedRelation: "deals_investors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals_industries: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      deals_investors: {
+        Row: {
+          country: string | null
+          created_at: string
+          id: string
+          name: string
+          region: string | null
+          type: Database["public"]["Enums"]["investor_type"] | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          region?: string | null
+          type?: Database["public"]["Enums"]["investor_type"] | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          region?: string | null
+          type?: Database["public"]["Enums"]["investor_type"] | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      deals_people: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          investor_id: string | null
+          role: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          investor_id?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          investor_id?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_people_investor_id_fkey"
+            columns: ["investor_id"]
+            isOneToOne: false
+            referencedRelation: "deals_investors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals_sub_industries: {
+        Row: {
+          created_at: string
+          id: string
+          industry_id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          industry_id: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          industry_id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_sub_industries_industry_id_fkey"
+            columns: ["industry_id"]
+            isOneToOne: false
+            referencedRelation: "deals_industries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       events: {
         Row: {
@@ -944,7 +1331,19 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      deal_investor_role:
+        | "lead"
+        | "co_lead"
+        | "participant"
+        | "seller"
+        | "lender"
+      investor_type:
+        | "vc"
+        | "pe"
+        | "strategic"
+        | "sovereign"
+        | "family_office"
+        | "angel"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1071,6 +1470,22 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      deal_investor_role: [
+        "lead",
+        "co_lead",
+        "participant",
+        "seller",
+        "lender",
+      ],
+      investor_type: [
+        "vc",
+        "pe",
+        "strategic",
+        "sovereign",
+        "family_office",
+        "angel",
+      ],
+    },
   },
 } as const
