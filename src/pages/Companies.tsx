@@ -9,7 +9,6 @@ import { Search, Building2 } from 'lucide-react'
 import { useCompanies } from '@/hooks/useCompanies'
 
 const companyTypes = [
-  { value: '', label: 'All Types' },
   { value: 'startup', label: 'Startup' },
   { value: 'investor', label: 'Investor' },
   { value: 'corporate', label: 'Corporate' },
@@ -20,7 +19,10 @@ const companyTypes = [
 const Companies = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedType, setSelectedType] = useState('')
-  const { data: companies = [], isLoading, error } = useCompanies(searchQuery, selectedType)
+  const { data: companies = [], isLoading, error } = useCompanies(
+    searchQuery, 
+    selectedType === 'all' ? '' : selectedType
+  )
 
   const featuredCompanies = companies.filter(company => company.featured)
   const regularCompanies = companies.filter(company => !company.featured)
@@ -53,9 +55,10 @@ const Companies = () => {
           </div>
           <Select value={selectedType} onValueChange={setSelectedType}>
             <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Company Type" />
+              <SelectValue placeholder="All Company Types" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-background border shadow-lg z-50">
+              <SelectItem value="all">All Types</SelectItem>
               {companyTypes.map(type => (
                 <SelectItem key={type.value} value={type.value}>
                   {type.label}
@@ -82,10 +85,10 @@ const Companies = () => {
                   <button onClick={() => setSearchQuery('')} className="ml-1 hover:text-destructive">×</button>
                 </Badge>
               )}
-              {selectedType && (
+              {selectedType && selectedType !== 'all' && (
                 <Badge variant="secondary" className="gap-1">
                   Type: {companyTypes.find(t => t.value === selectedType)?.label}
-                  <button onClick={() => setSelectedType('')} className="ml-1 hover:text-destructive">×</button>
+                  <button onClick={() => setSelectedType('all')} className="ml-1 hover:text-destructive">×</button>
                 </Badge>
               )}
             </div>
@@ -146,7 +149,7 @@ const Companies = () => {
             <Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-2">No companies found</h3>
             <p className="text-muted-foreground">
-              {searchQuery || selectedType 
+              {searchQuery || (selectedType && selectedType !== 'all')
                 ? 'Try adjusting your search criteria'
                 : 'No companies have been added yet'
               }
