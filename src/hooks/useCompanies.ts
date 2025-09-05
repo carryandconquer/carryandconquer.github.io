@@ -60,10 +60,10 @@ export const useCompany = (slug: string) => {
         .select('*')
         .eq('slug', slug)
         .eq('published', true)
-        .single()
+        .maybeSingle()
 
       if (error) throw error
-      return data as Company
+      return data as Company | null
     },
     enabled: !!slug
   })
