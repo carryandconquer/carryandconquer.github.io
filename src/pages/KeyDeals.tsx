@@ -258,10 +258,34 @@ export default function KeyDeals() {
         }
       }
 
-      // Country filter
+      // Country filter (supports abbreviations like US, UK, UAE)
       if (selectedCountry !== "all-countries") {
-        const countryName = selectedCountry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-        if (!deal.location.toLowerCase().includes(countryName.toLowerCase())) {
+        const allCountries = Object.values(regionCountries).flat()
+        const entry = allCountries.find(c => c.value === selectedCountry)
+        const baseLabel = entry?.label || selectedCountry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+        const synonyms: string[] = [baseLabel.toLowerCase()]
+
+        // Parenthetical alt labels, e.g., "UAE (United Arab Emirates)"
+        const parenMatch = baseLabel.match(/^(.*)\s*\((.*)\)\s*$/)
+        if (parenMatch) {
+          synonyms.push(parenMatch[1].trim().toLowerCase())
+          synonyms.push(parenMatch[2].trim().toLowerCase())
+        }
+
+        // Common aliases
+        const slug = selectedCountry
+        if (slug === 'united-states') {
+          synonyms.push('us','u.s.','usa','united states')
+        }
+        if (slug === 'united-kingdom') {
+          synonyms.push('uk','u.k.','united kingdom','britain')
+        }
+        if (slug === 'uae-united-arab-emirates') {
+          synonyms.push('uae','united arab emirates')
+        }
+
+        const location = deal.location.toLowerCase()
+        if (!synonyms.some(s => location.includes(s))) {
           return false
         }
       }
