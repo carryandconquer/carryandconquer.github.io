@@ -12,13 +12,65 @@ import {
   Mail, 
   Calendar,
   ExternalLink,
-  ArrowLeft
+  ArrowLeft,
+  Monitor,
+  Zap,
+  BarChart3,
+  Cpu,
+  Shield,
+  TrendingUp
 } from 'lucide-react'
 import { useCompany } from '@/hooks/useCompanies'
+
+// Placeholder data for companies not in database
+const getPlaceholderCompany = (slug: string) => {
+  if (slug === 'zenscreen') {
+    return {
+      id: 'zenscreen-placeholder',
+      name: 'ZenScreen',
+      slug: 'zenscreen',
+      description: 'ZenScreen is a market-leading SaaS platform transforming how enterprises manage and deploy screens across multiple locations with AI-powered content optimization. Our cutting-edge technology enables businesses to seamlessly coordinate digital displays, optimize content delivery, and maximize audience engagement through intelligent automation and real-time analytics.',
+      website: 'https://zenscreen.ai',
+      logo_url: null,
+      company_type: 'startup' as const,
+      founded_date: '2019-03-15',
+      employee_count: 85,
+      industry_tags: [
+        'Digital Signage',
+        'AI/ML',
+        'SaaS',
+        'Enterprise Software',
+        'Content Management',
+        'Real-time Analytics',
+        'IoT',
+        'Computer Vision'
+      ],
+      city: 'San Francisco',
+      country: 'United States',
+      region: 'North America',
+      social_links: {
+        linkedin: 'https://linkedin.com/company/zenscreen',
+        twitter: 'https://twitter.com/zenscreen',
+        github: 'https://github.com/zenscreen'
+      },
+      contact_email: 'hello@zenscreen.ai',
+      meta_description: 'ZenScreen - AI-powered digital signage platform for enterprise screen management',
+      featured: true,
+      published: true,
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z'
+    }
+  }
+  return null
+}
 
 const CompanyProfile = () => {
   const { slug } = useParams<{ slug: string }>()
   const { data: company, isLoading, error } = useCompany(slug!)
+  
+  // Check for placeholder data if company not found in database
+  const placeholderCompany = !company && !isLoading ? getPlaceholderCompany(slug!) : null
+  const displayCompany = company || placeholderCompany
 
   if (isLoading) {
     return (
@@ -39,7 +91,7 @@ const CompanyProfile = () => {
     )
   }
 
-  if (error || !company) {
+  if (error || (!company && !placeholderCompany)) {
     return (
       <div className="min-h-screen font-primary pt-24 bg-background">
         <Navigation />
@@ -75,56 +127,61 @@ const CompanyProfile = () => {
 
         {/* Header */}
         <div className="flex items-start gap-6 mb-8">
-          {company.logo_url ? (
+          {displayCompany.logo_url ? (
             <img 
-              src={company.logo_url} 
-              alt={`${company.name} logo`}
+              src={displayCompany.logo_url} 
+              alt={`${displayCompany.name} logo`}
               className="w-20 h-20 rounded-xl object-contain bg-background border shadow-sm"
             />
           ) : (
-            <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center border shadow-sm">
-              <Building2 className="w-10 h-10 text-muted-foreground" />
+            <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border shadow-sm">
+              <Monitor className="w-10 h-10 text-white" />
             </div>
           )}
           
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold">{company.name}</h1>
+              <h1 className="text-3xl font-bold">{displayCompany.name}</h1>
               <Badge variant="secondary">
-                {company.company_type.charAt(0).toUpperCase() + company.company_type.slice(1)}
+                {displayCompany.company_type.charAt(0).toUpperCase() + displayCompany.company_type.slice(1)}
               </Badge>
-              {company.featured && (
+              {displayCompany.featured && (
                 <Badge variant="default">Featured</Badge>
+              )}
+              {placeholderCompany && (
+                <Badge variant="outline" className="text-orange-600 border-orange-600">
+                  Recently Invested
+                </Badge>
               )}
             </div>
             
             <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-4">
-              {company.city && (
+              {displayCompany.city && (
                 <div className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
-                  <span>{company.city}{company.country && `, ${company.country}`}</span>
+                  <span>{displayCompany.city}{displayCompany.country && `, ${displayCompany.country}`}</span>
                 </div>
               )}
               
-              {company.employee_count && (
+              {displayCompany.employee_count && (
                 <div className="flex items-center gap-1">
                   <Users className="w-4 h-4" />
-                  <span>{company.employee_count.toLocaleString()} employees</span>
+                  <span>{displayCompany.employee_count.toLocaleString()} employees</span>
                 </div>
               )}
               
-              {company.founded_date && (
+              {displayCompany.founded_date && (
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  <span>Founded {new Date(company.founded_date).getFullYear()}</span>
+                  <span>Founded {new Date(displayCompany.founded_date).getFullYear()}</span>
                 </div>
               )}
             </div>
 
             <div className="flex gap-3">
-              {company.website && (
+              {displayCompany.website && (
                 <Button asChild>
-                  <a href={company.website} target="_blank" rel="noopener noreferrer">
+                  <a href={displayCompany.website} target="_blank" rel="noopener noreferrer">
                     <Globe className="w-4 h-4 mr-2" />
                     Website
                     <ExternalLink className="w-3 h-3 ml-2" />
@@ -132,9 +189,9 @@ const CompanyProfile = () => {
                 </Button>
               )}
               
-              {company.contact_email && (
+              {displayCompany.contact_email && (
                 <Button variant="outline" asChild>
-                  <a href={`mailto:${company.contact_email}`}>
+                  <a href={`mailto:${displayCompany.contact_email}`}>
                     <Mail className="w-4 h-4 mr-2" />
                     Contact
                   </a>
@@ -148,32 +205,113 @@ const CompanyProfile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* About */}
           <div className="lg:col-span-2 space-y-6">
-            {company.description && (
+            {displayCompany.description && (
               <Card>
                 <CardHeader>
-                  <CardTitle>About {company.name}</CardTitle>
+                  <CardTitle>About {displayCompany.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground leading-relaxed">
-                    {company.description}
+                    {displayCompany.description}
                   </p>
                 </CardContent>
               </Card>
             )}
 
+            {/* Key Features for ZenScreen */}
+            {placeholderCompany && slug === 'zenscreen' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Key Features & Capabilities</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                        <Cpu className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-1">AI-Powered Optimization</h3>
+                        <p className="text-sm text-muted-foreground">Intelligent content delivery and audience engagement optimization</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
+                        <Monitor className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-1">Multi-Location Management</h3>
+                        <p className="text-sm text-muted-foreground">Centralized control of screens across multiple locations</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                        <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-1">Real-time Analytics</h3>
+                        <p className="text-sm text-muted-foreground">Comprehensive performance metrics and engagement insights</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                        <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-1">Enterprise Security</h3>
+                        <p className="text-sm text-muted-foreground">Enterprise-grade security with compliance standards</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Industry Tags */}
-            {company.industry_tags && company.industry_tags.length > 0 && (
+            {displayCompany.industry_tags && displayCompany.industry_tags.length > 0 && (
               <Card>
                 <CardHeader>
                   <CardTitle>Industries & Expertise</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {company.industry_tags.map((tag) => (
+                    {displayCompany.industry_tags.map((tag) => (
                       <Badge key={tag} variant="outline">
                         {tag}
                       </Badge>
                     ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Recent Metrics for ZenScreen */}
+            {placeholderCompany && slug === 'zenscreen' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Performance Metrics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="text-center p-4 bg-muted/50 rounded-lg">
+                      <div className="text-2xl font-bold text-green-600 mb-1">127%</div>
+                      <div className="text-sm text-muted-foreground">Revenue Growth</div>
+                    </div>
+                    <div className="text-center p-4 bg-muted/50 rounded-lg">
+                      <div className="text-2xl font-bold text-blue-600 mb-1">94%</div>
+                      <div className="text-sm text-muted-foreground">Customer Retention</div>
+                    </div>
+                    <div className="text-center p-4 bg-muted/50 rounded-lg">
+                      <div className="text-2xl font-bold text-purple-600 mb-1">500+</div>
+                      <div className="text-sm text-muted-foreground">Enterprise Clients</div>
+                    </div>
+                    <div className="text-center p-4 bg-muted/50 rounded-lg">
+                      <div className="text-2xl font-bold text-orange-600 mb-1">50k+</div>
+                      <div className="text-sm text-muted-foreground">Screens Managed</div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -191,49 +329,94 @@ const CompanyProfile = () => {
                 <div>
                   <span className="text-sm font-medium text-muted-foreground">Type</span>
                   <p className="text-sm">
-                    {company.company_type.charAt(0).toUpperCase() + company.company_type.slice(1)}
+                    {displayCompany.company_type.charAt(0).toUpperCase() + displayCompany.company_type.slice(1)}
                   </p>
                 </div>
                 
-                {company.city && (
+                {displayCompany.city && (
                   <div>
                     <span className="text-sm font-medium text-muted-foreground">Location</span>
                     <p className="text-sm">
-                      {company.city}
-                      {company.region && `, ${company.region}`}
-                      {company.country && `, ${company.country}`}
+                      {displayCompany.city}
+                      {displayCompany.region && `, ${displayCompany.region}`}
+                      {displayCompany.country && `, ${displayCompany.country}`}
                     </p>
                   </div>
                 )}
                 
-                {company.founded_date && (
+                {displayCompany.founded_date && (
                   <div>
                     <span className="text-sm font-medium text-muted-foreground">Founded</span>
                     <p className="text-sm">
-                      {new Date(company.founded_date).getFullYear()}
+                      {new Date(displayCompany.founded_date).getFullYear()}
                     </p>
                   </div>
                 )}
                 
-                {company.employee_count && (
+                {displayCompany.employee_count && (
                   <div>
                     <span className="text-sm font-medium text-muted-foreground">Size</span>
                     <p className="text-sm">
-                      {company.employee_count.toLocaleString()} employees
+                      {displayCompany.employee_count.toLocaleString()} employees
                     </p>
                   </div>
+                )}
+                
+                {placeholderCompany && slug === 'zenscreen' && (
+                  <>
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground">Funding Status</span>
+                      <p className="text-sm flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3 text-green-500" />
+                        Recently Raised Series B
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground">Valuation</span>
+                      <p className="text-sm">$150M (estimated)</p>
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
 
+            {/* Recent Investment for ZenScreen */}
+            {placeholderCompany && slug === 'zenscreen' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Investment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Amount</span>
+                      <span className="text-lg font-bold text-green-600">$35M</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Round</span>
+                      <span className="text-sm">Series B</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Date</span>
+                      <span className="text-sm">October 2024</span>
+                    </div>
+                    <div className="pt-2 border-t">
+                      <span className="text-sm font-medium text-muted-foreground">Lead Investor</span>
+                      <p className="text-sm">Sequoia Capital</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Social Links */}
-            {company.social_links && Object.keys(company.social_links).length > 0 && (
+            {displayCompany.social_links && Object.keys(displayCompany.social_links).length > 0 && (
               <Card>
                 <CardHeader>
                   <CardTitle>Connect</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {Object.entries(company.social_links).map(([platform, url]) => (
+                  {Object.entries(displayCompany.social_links).map(([platform, url]) => (
                     <Button 
                       key={platform} 
                       variant="outline" 
