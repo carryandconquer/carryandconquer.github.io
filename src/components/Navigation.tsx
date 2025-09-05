@@ -72,6 +72,26 @@ export function Navigation() {
             >
               Events
             </Link>
+            <Link 
+              to="/companies" 
+              className={`px-4 py-2 rounded-full transition-all duration-300 ${
+                isActive('/companies') 
+                  ? 'bg-gradient-to-r from-accent-green to-accent-teal text-white shadow-glow' 
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              Companies
+            </Link>
+            <Link 
+              to="/people" 
+              className={`px-4 py-2 rounded-full transition-all duration-300 ${
+                isActive('/people') 
+                  ? 'bg-gradient-to-r from-accent-green to-accent-teal text-white shadow-glow' 
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              People
+            </Link>
           </div>
           
           {/* CTA Button */}

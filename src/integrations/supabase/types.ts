@@ -107,6 +107,75 @@ export type Database = {
         }
         Relationships: []
       }
+      companies: {
+        Row: {
+          city: string | null
+          company_type: string | null
+          contact_email: string | null
+          country: string | null
+          created_at: string
+          description: string | null
+          employee_count: number | null
+          featured: boolean | null
+          founded_date: string | null
+          id: string
+          industry_tags: string[] | null
+          logo_url: string | null
+          meta_description: string | null
+          name: string
+          published: boolean | null
+          region: string | null
+          slug: string
+          social_links: Json | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          city?: string | null
+          company_type?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          employee_count?: number | null
+          featured?: boolean | null
+          founded_date?: string | null
+          id?: string
+          industry_tags?: string[] | null
+          logo_url?: string | null
+          meta_description?: string | null
+          name: string
+          published?: boolean | null
+          region?: string | null
+          slug: string
+          social_links?: Json | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          city?: string | null
+          company_type?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          employee_count?: number | null
+          featured?: boolean | null
+          founded_date?: string | null
+          id?: string
+          industry_tags?: string[] | null
+          logo_url?: string | null
+          meta_description?: string | null
+          name?: string
+          published?: boolean | null
+          region?: string | null
+          slug?: string
+          social_links?: Json | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       deals: {
         Row: {
           announcement_date: string | null
@@ -778,6 +847,83 @@ export type Database = {
           value?: string
         }
         Relationships: []
+      }
+      people: {
+        Row: {
+          bio: string | null
+          city: string | null
+          contact_email: string | null
+          country: string | null
+          created_at: string
+          current_company_id: string | null
+          expertise_tags: string[] | null
+          featured: boolean | null
+          full_name: string
+          id: string
+          linkedin_url: string | null
+          meta_description: string | null
+          profile_image_url: string | null
+          published: boolean | null
+          region: string | null
+          slug: string
+          social_links: Json | null
+          title: string | null
+          twitter_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          city?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          current_company_id?: string | null
+          expertise_tags?: string[] | null
+          featured?: boolean | null
+          full_name: string
+          id?: string
+          linkedin_url?: string | null
+          meta_description?: string | null
+          profile_image_url?: string | null
+          published?: boolean | null
+          region?: string | null
+          slug: string
+          social_links?: Json | null
+          title?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          city?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          current_company_id?: string | null
+          expertise_tags?: string[] | null
+          featured?: boolean | null
+          full_name?: string
+          id?: string
+          linkedin_url?: string | null
+          meta_description?: string | null
+          profile_image_url?: string | null
+          published?: boolean | null
+          region?: string | null
+          slug?: string
+          social_links?: Json | null
+          title?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "people_current_company_id_fkey"
+            columns: ["current_company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       snapshot_cities: {
         Row: {

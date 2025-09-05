@@ -10,6 +10,10 @@ import KeyDeals from "./pages/KeyDeals";
 import DealDetails from "./pages/DealDetails";
 import Snapshot from "./pages/Snapshot";
 import Admin from "./pages/Admin";
+import Companies from "./pages/Companies";
+import People from "./pages/People";
+import CompanyProfile from "./pages/CompanyProfile";
+import PersonProfile from "./pages/PersonProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +32,10 @@ const App = () => (
           <Route path="/deal/:id" element={<DealDetails />} />
           <Route path="/snapshot" element={<Snapshot />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/companies" element={<Companies />} />
+          <Route path="/people" element={<People />} />
+          <Route path="/company/:slug" element={<CompanyProfile />} />
+          <Route path="/person/:slug" element={<PersonProfile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
