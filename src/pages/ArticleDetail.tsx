@@ -109,23 +109,6 @@ export default function ArticleDetail() {
               className="w-full h-full object-cover"
             />
           </div>
-          
-          {/* Title Section */}
-          <div className="px-6 py-8">
-            <div className="max-w-4xl mx-auto">
-              <Badge variant="secondary" className="mb-4 bg-green-500/20 text-green-300">
-                {article.category}
-              </Badge>
-              <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
-                {article.title}
-              </h1>
-              {article.subtitle && (
-                <p className="text-xl text-white/80 max-w-3xl">
-                  {article.subtitle}
-                </p>
-              )}
-            </div>
-          </div>
         </section>
 
         {/* Article Content */}
@@ -169,6 +152,21 @@ export default function ArticleDetail() {
                   Back
                 </Button>
               </div>
+            </div>
+
+            {/* Article Title */}
+            <div className="mb-8">
+              <Badge variant="secondary" className="mb-4 bg-green-500/20 text-green-300">
+                {article.category}
+              </Badge>
+              <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
+                {article.title}
+              </h1>
+              {article.subtitle && (
+                <p className="text-xl text-white/80 max-w-3xl">
+                  {article.subtitle}
+                </p>
+              )}
             </div>
 
             {/* Article Body */}
