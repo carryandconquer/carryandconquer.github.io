@@ -67,6 +67,7 @@ export default function ArticleDetail() {
 
   const articleUrl = `${window.location.origin}/analysis/${generateSlug(article.title)}`
   const imageUrl = article.image_url || 'https://images.unsplash.com/photo-1518770660439-4636190af475'
+  const socialImageUrl = '/lovable-uploads/b5775111-ea8a-4273-abd5-c1f71d14d4c1.png'
 
   return (
     <>
@@ -77,7 +78,7 @@ export default function ArticleDetail() {
         {/* Open Graph tags for social sharing */}
         <meta property="og:title" content={article.title} />
         <meta property="og:description" content={article.excerpt || article.subtitle || `${article.title} - Market analysis and insights from Carry & Conquer`} />
-        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image" content={socialImageUrl} />
         <meta property="og:url" content={articleUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Carry & Conquer" />
@@ -86,7 +87,7 @@ export default function ArticleDetail() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={article.title} />
         <meta name="twitter:description" content={article.excerpt || article.subtitle || `${article.title} - Market analysis and insights from Carry & Conquer`} />
-        <meta name="twitter:image" content={imageUrl} />
+        <meta name="twitter:image" content={socialImageUrl} />
         
         {/* Article specific tags */}
         {article.author_name && <meta name="author" content={article.author_name} />}
