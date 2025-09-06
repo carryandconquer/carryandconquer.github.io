@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe } from "lucide-react"
 import { useState, useEffect } from "react"
 import { usePeople } from "@/hooks/usePeople"
+import { useCompanies } from "@/hooks/useCompanies"
 import { Link } from "react-router-dom"
 
 const Snapshot = () => {
@@ -16,6 +17,10 @@ const Snapshot = () => {
   // Fetch featured people for trending section
   const { data: peopleData } = usePeople()
   const featuredPeople = peopleData?.filter(person => person.featured).slice(0, 4) || []
+  
+  // Fetch featured companies for trending section
+  const { data: companiesData } = useCompanies()
+  const featuredCompanies = companiesData?.filter(company => company.featured).slice(0, 4) || []
 
   // Region to countries mapping based on Private Equity Regional Taxonomy
   const regionCountries = {
@@ -561,12 +566,51 @@ const Snapshot = () => {
 
   const displayTrendingPeople = trendingPeople.length > 0 ? trendingPeople : fallbackTrendingPeople
 
-  const trendingProjects = [
-    { status: "Due Diligence", icon: Building },
-    { status: "Portfolio Growth", icon: TrendingUp },
-    { status: "Pre-Exit", icon: Target },
-    { status: "Capital Deployment", icon: DollarSign }
+  // Create trending companies from featured companies
+  const trendingCompanies = featuredCompanies.map(company => {
+    const getCompanyIcon = (companyType: string) => {
+      switch (companyType) {
+        case 'fintech': return DollarSign
+        case 'enterprise': return Building
+        case 'startup': return Zap
+        case 'biotech': return Target
+        case 'cybersecurity': return Briefcase
+        case 'healthcare': return Users
+        default: return TrendingUp
+      }
+    }
+
+    const getGrowthMetric = (companyType: string) => {
+      // Generate realistic growth metrics based on company type
+      switch (companyType) {
+        case 'fintech': return '+127% Revenue Growth'
+        case 'enterprise': return '+85M Active Users'
+        case 'startup': return '+240% YoY Growth'
+        case 'biotech': return '+3 Clinical Trials'
+        case 'cybersecurity': return '+95% Threat Detection'
+        case 'healthcare': return '+2M Patients Served'
+        default: return '+150% Market Expansion'
+      }
+    }
+
+    return {
+      name: company.name,
+      type: company.company_type || 'startup',
+      icon: getCompanyIcon(company.company_type || 'startup'),
+      metric: getGrowthMetric(company.company_type || 'startup'),
+      slug: company.slug
+    }
+  })
+
+  // Fallback to hardcoded data if no featured companies
+  const fallbackTrendingCompanies = [
+    { name: "TechVenture Inc", type: "startup", icon: Zap, metric: "+240% YoY Growth", slug: null },
+    { name: "FinanceCore", type: "fintech", icon: DollarSign, metric: "+127% Revenue Growth", slug: null },
+    { name: "Enterprise Solutions", type: "enterprise", icon: Building, metric: "+85M Active Users", slug: null },
+    { name: "BiosystemsAI", type: "biotech", icon: Target, metric: "+3 Clinical Trials", slug: null }
   ]
+
+  const displayTrendingCompanies = trendingCompanies.length > 0 ? trendingCompanies : fallbackTrendingCompanies
 
   return (
     <div className="min-h-screen bg-black text-white font-primary pt-24">
@@ -738,6 +782,50 @@ const Snapshot = () => {
           </div>
         </section>
 
+        {/* Trending Companies */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Trending Companies</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {displayTrendingCompanies.map((company, index) => (
+              <div key={index}>
+                {company.slug ? (
+                  <Link to={`/company/${company.slug}`} className="block">
+                    <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                          <company.icon className="w-8 h-8 text-accent-green" />
+                          <div className="flex-1">
+                            <div className="text-sm text-accent-green font-medium uppercase tracking-wide">{company.type}</div>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="font-bold text-white">{company.name}</div>
+                          <div className="text-sm text-white/60">{company.metric}</div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ) : (
+                  <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <company.icon className="w-8 h-8 text-accent-green" />
+                        <div className="flex-1">
+                          <div className="text-sm text-accent-green font-medium uppercase tracking-wide">{company.type}</div>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="font-bold text-white">{company.name}</div>
+                        <div className="text-sm text-white/60">{company.metric}</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Trending People */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Trending People</h2>
@@ -786,23 +874,6 @@ const Snapshot = () => {
                   </Card>
                 )}
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Trending Projects */}
-        <section>
-          <h2 className="text-2xl font-bold mb-6">Trending Project Stages</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {trendingProjects.map((project, index) => (
-              <Card key={index} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3">
-                    <project.icon className="w-8 h-8 text-accent-green" />
-                    <div className="font-semibold text-white">{project.status}</div>
-                  </div>
-                </CardContent>
-              </Card>
             ))}
           </div>
         </section>
