@@ -1,25 +1,28 @@
 import { Button } from "@/components/ui/button"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { MetricsCarousel } from "./MetricsCarousel"
-import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { SearchCommand } from "./SearchCommand"
 
 export function Navigation() {
   const location = useLocation()
-  const navigate = useNavigate()
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchOpen, setSearchOpen] = useState(false)
   
   const isActive = (path: string) => location.pathname === path
   
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      // Navigate to a search results page or handle search logic
-      // For now, we'll redirect to people page with search
-      navigate(`/people?search=${encodeURIComponent(searchQuery.trim())}`)
+  // Keyboard shortcut to open search (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
     }
-  }
+    
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
   
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
@@ -88,21 +91,23 @@ export function Navigation() {
             </Link>
           </div>
           
-          {/* Search Bar */}
+          {/* Search Trigger */}
           <div className="flex items-center">
-            <form onSubmit={handleSearch} className="relative">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 w-4 h-4" />
-                <Input
-                  type="text"
-                  placeholder="Search people, companies..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-64 bg-white/10 border-white/20 text-white placeholder:text-white/60 rounded-full focus:ring-2 focus:ring-accent-green focus:border-transparent"
-                />
-              </div>
-            </form>
+            <Button
+              variant="ghost"
+              onClick={() => setSearchOpen(true)}
+              className="relative w-64 h-9 justify-start bg-white/10 border-white/20 text-white/60 hover:text-white hover:bg-white/20 rounded-full px-3"
+            >
+              <Search className="mr-2 h-4 w-4" />
+              <span className="text-sm">Search people, companies...</span>
+              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden h-5 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1.5 font-mono text-xs text-white/60 sm:flex">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </Button>
           </div>
+          
+          {/* Search Command Dialog */}
+          <SearchCommand open={searchOpen} onOpenChange={setSearchOpen} />
         </div>
       </div>
       </nav>
