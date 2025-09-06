@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe } from "lucide-react"
 import { useState, useEffect } from "react"
+import { usePeople } from "@/hooks/usePeople"
+import { Link } from "react-router-dom"
 
 const Snapshot = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all-regions")
@@ -10,6 +12,10 @@ const Snapshot = () => {
   const [selectedSector, setSelectedSector] = useState<string>("all-sectors")
   const [selectedSubSector, setSelectedSubSector] = useState<string>("all-sub-sectors")
   const [selectedTertiary, setSelectedTertiary] = useState<string>("all-tertiary")
+  
+  // Fetch featured people for trending section
+  const { data: peopleData } = usePeople()
+  const featuredPeople = peopleData?.filter(person => person.featured).slice(0, 4) || []
 
   // Region to countries mapping based on Private Equity Regional Taxonomy
   const regionCountries = {
@@ -459,14 +465,70 @@ const Snapshot = () => {
     { value: "425 bps", label: "Credit Spread", sublabel: "vs 10-year treasury" }
   ]
 
-  const trendingPeople = [
+  // Create trending people from featured people with achievements
+  const trendingPeople = featuredPeople.map(person => {
+    const getInitials = (name: string) => {
+      return name.split(' ')
+        .map(word => word.charAt(0))
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    }
+
+    const getAchievement = (title: string, company: string) => {
+      // Generate relevant achievements based on role and company
+      if (title.includes('CEO') || title.includes('Chief Executive')) {
+        return `Leading ${company} transformation`
+      }
+      if (title.includes('Founder') || title.includes('Co-Founder')) {
+        return `Founded and scaling ${company}`
+      }
+      if (title.includes('CTO') || title.includes('Chief Technology')) {
+        return `Driving tech innovation at ${company}`
+      }
+      if (title.includes('President')) {
+        return `Expanding global operations`
+      }
+      return `Strategic leadership at ${company}`
+    }
+
+    const getSector = (tags: string[] | null, companyType: string) => {
+      if (tags && tags.length > 0) {
+        return tags[0] // Use first expertise tag
+      }
+      // Map company types to sectors
+      switch (companyType) {
+        case 'fintech': return 'Financial Technology'
+        case 'enterprise': return 'Enterprise Technology'
+        case 'startup': return 'Growth & Innovation'
+        case 'biotech': return 'Biotechnology'
+        case 'cybersecurity': return 'Cybersecurity'
+        case 'healthcare': return 'Healthcare'
+        default: return 'Technology & Innovation'
+      }
+    }
+
+    return {
+      initials: getInitials(person.full_name),
+      name: person.full_name,
+      title: person.title || 'Executive',
+      firm: person.company?.name || 'Leading Company',
+      achievement: getAchievement(person.title || '', person.company?.name || ''),
+      sector: getSector(person.expertise_tags, person.company?.company_type || 'startup'),
+      slug: person.slug
+    }
+  })
+
+  // Fallback to hardcoded data if no featured people
+  const fallbackTrendingPeople = [
     {
       initials: "JB",
       name: "Jennifer Brooks",
       title: "Managing Partner",
       firm: "Apollo Global Management",
       achievement: "Led $3.2B healthcare buyout",
-      sector: "Healthcare & Technology"
+      sector: "Healthcare & Technology",
+      slug: null
     },
     {
       initials: "MR",
@@ -474,7 +536,8 @@ const Snapshot = () => {
       title: "Senior Partner",
       firm: "KKR & Co",
       achievement: "Closed $850M growth fund",
-      sector: "Growth Equity"
+      sector: "Growth Equity",
+      slug: null
     },
     {
       initials: "SL",
@@ -482,7 +545,8 @@ const Snapshot = () => {
       title: "Investment Director",
       firm: "Blackstone",
       achievement: "Structured €1.2B infrastructure deal",
-      sector: "Infrastructure"
+      sector: "Infrastructure",
+      slug: null
     },
     {
       initials: "DK",
@@ -490,9 +554,12 @@ const Snapshot = () => {
       title: "Principal",
       firm: "Carlyle Group",
       achievement: "Pioneering ESG-focused investments",
-      sector: "Sustainable Investing"
+      sector: "Sustainable Investing",
+      slug: null
     }
   ]
+
+  const displayTrendingPeople = trendingPeople.length > 0 ? trendingPeople : fallbackTrendingPeople
 
   const trendingProjects = [
     { status: "Due Diligence", icon: Building },
@@ -675,25 +742,50 @@ const Snapshot = () => {
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Trending People</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {trendingPeople.map((person, index) => (
-              <Card key={index} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-accent-green to-accent-teal rounded-full flex items-center justify-center text-black font-bold">
-                      {person.initials}
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-accent-green font-medium">{person.sector}</div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="font-bold text-white">{person.name}</div>
-                    <div className="text-sm text-white/80">{person.title}</div>
-                    <div className="text-sm text-accent-green">{person.firm}</div>
-                    <div className="text-sm text-white/60">{person.achievement}</div>
-                  </div>
-                </CardContent>
-              </Card>
+            {displayTrendingPeople.map((person, index) => (
+              <div key={index}>
+                {person.slug ? (
+                  <Link to={`/person/${person.slug}`} className="block">
+                    <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-3 mb-4">
+                          <div className="w-12 h-12 bg-gradient-to-r from-accent-green to-accent-teal rounded-full flex items-center justify-center text-black font-bold">
+                            {person.initials}
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-sm text-accent-green font-medium">{person.sector}</div>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="font-bold text-white">{person.name}</div>
+                          <div className="text-sm text-white/80">{person.title}</div>
+                          <div className="text-sm text-accent-green">{person.firm}</div>
+                          <div className="text-sm text-white/60">{person.achievement}</div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ) : (
+                  <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-3 mb-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-accent-green to-accent-teal rounded-full flex items-center justify-center text-black font-bold">
+                          {person.initials}
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-accent-green font-medium">{person.sector}</div>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="font-bold text-white">{person.name}</div>
+                        <div className="text-sm text-white/80">{person.title}</div>
+                        <div className="text-sm text-accent-green">{person.firm}</div>
+                        <div className="text-sm text-white/60">{person.achievement}</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             ))}
           </div>
         </section>
