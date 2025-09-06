@@ -101,15 +101,22 @@ export function PrivateEquityAIChat() {
         <div className="flex flex-col items-center w-full max-w-4xl mx-auto p-4 space-y-8">
             <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-white">
-                    What can I help with?
+                    Your AI-Powered Investment Assistant
                 </h2>
                 <p className="text-white/70 text-lg max-w-2xl">
-                    Your business copilot for smarter insights, sharper strategy, seamless execution
+                    Get instant insights on deals, market trends, due diligence, and investment strategies
                 </p>
                 <div className="flex items-center justify-center gap-2 text-green-300/60 text-sm">
                     <span>Powered by</span>
-                    <span className="font-semibold text-green-400">frondex.co</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <a 
+                        href="https://frondex.co" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="font-semibold text-green-400 hover:text-green-300 transition-colors flex items-center gap-1"
+                    >
+                        frondex.co
+                        <ExternalLink className="w-3 h-3" />
+                    </a>
                 </div>
             </div>
 
@@ -229,12 +236,6 @@ export function PrivateEquityAIChat() {
                         label="Valuation Models"
                         onClick={() => handleQuery("Show me valuation models for private equity")}
                     />
-                </div>
-                
-                <div className="text-center mt-4">
-                    <p className="text-green-300/40 text-xs">
-                        All interactions continue on frondex.co • Opens in new tab
-                    </p>
                 </div>
             </div>
         </div>

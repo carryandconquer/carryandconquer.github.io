@@ -12,7 +12,7 @@ const Index = () => {
       <HeroSection />
       
       {/* AI Chat Assistant */}
-      <section className="py-20 bg-black">
+      <section className="py-12 bg-black">
         <PrivateEquityAIChat />
       </section>
       
