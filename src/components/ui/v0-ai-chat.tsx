@@ -13,6 +13,7 @@ import {
     ArrowUpIcon,
     Paperclip,
     PlusIcon,
+    ExternalLink,
 } from "lucide-react";
 
 interface UseAutoResizeTextareaProps {
@@ -100,11 +101,16 @@ export function PrivateEquityAIChat() {
         <div className="flex flex-col items-center w-full max-w-4xl mx-auto p-4 space-y-8">
             <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-white">
-                    Your AI-Powered Investment Assistant
+                    What can I help with?
                 </h2>
                 <p className="text-white/70 text-lg max-w-2xl">
-                    Get instant insights on deals, market trends, due diligence, and investment strategies
+                    Your business copilot for smarter insights, sharper strategy, seamless execution
                 </p>
+                <div className="flex items-center justify-center gap-2 text-green-300/60 text-sm">
+                    <span>Powered by</span>
+                    <span className="font-semibold text-green-400">frondex.co</span>
+                    <ExternalLink className="w-3 h-3" />
+                </div>
             </div>
 
             <div className="w-full">
@@ -118,7 +124,7 @@ export function PrivateEquityAIChat() {
                                 adjustHeight();
                             }}
                             onKeyDown={handleKeyDown}
-                            placeholder="Ask about market analysis, deal structuring, portfolio optimization..."
+                            placeholder="Ask me anything... (opens frondex.co in new tab)"
                             className={cn(
                                 "w-full px-4 py-3",
                                 "resize-none",
@@ -165,6 +171,7 @@ export function PrivateEquityAIChat() {
                                         adjustHeight(true);
                                     }
                                 }}
+                                title="Continue on frondex.co (opens in new tab)"
                                 className={cn(
                                     "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-green-500/30 hover:border-green-400/50 hover:bg-gray-800/50 flex items-center justify-between gap-1",
                                     value.trim()
@@ -172,15 +179,25 @@ export function PrivateEquityAIChat() {
                                         : "text-green-300/70"
                                 )}
                             >
-                                <ArrowUpIcon
-                                    className={cn(
-                                        "w-4 h-4",
-                                        value.trim()
-                                            ? "text-black"
-                                            : "text-green-300/70"
-                                    )}
-                                />
-                                <span className="sr-only">Send</span>
+                                <div className="flex items-center gap-1">
+                                    <ArrowUpIcon
+                                        className={cn(
+                                            "w-3 h-3",
+                                            value.trim()
+                                                ? "text-black"
+                                                : "text-green-300/70"
+                                        )}
+                                    />
+                                    <ExternalLink
+                                        className={cn(
+                                            "w-3 h-3",
+                                            value.trim()
+                                                ? "text-black"
+                                                : "text-green-300/70"
+                                        )}
+                                    />
+                                </div>
+                                <span className="sr-only">Continue on frondex.co</span>
                             </button>
                         </div>
                     </div>
@@ -213,6 +230,12 @@ export function PrivateEquityAIChat() {
                         onClick={() => handleQuery("Show me valuation models for private equity")}
                     />
                 </div>
+                
+                <div className="text-center mt-4">
+                    <p className="text-green-300/40 text-xs">
+                        All interactions continue on frondex.co • Opens in new tab
+                    </p>
+                </div>
             </div>
         </div>
     );
@@ -229,10 +252,12 @@ function ActionButton({ icon, label, onClick }: ActionButtonProps) {
         <button
             type="button"
             onClick={onClick}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-900/50 hover:bg-gray-800/70 rounded-full border border-green-500/30 text-green-300/70 hover:text-green-300 hover:border-green-400/50 transition-all duration-300"
+            title="Continue on frondex.co"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-900/50 hover:bg-gray-800/70 rounded-full border border-green-500/30 text-green-300/70 hover:text-green-300 hover:border-green-400/50 transition-all duration-300 group"
         >
             {icon}
             <span className="text-xs">{label}</span>
+            <ExternalLink className="w-3 h-3 opacity-40 group-hover:opacity-70 transition-opacity" />
         </button>
     );
 }
