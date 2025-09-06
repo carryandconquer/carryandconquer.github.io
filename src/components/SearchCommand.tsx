@@ -29,9 +29,9 @@ export function SearchCommand({ open, onOpenChange }: SearchCommandProps) {
     setQuery('')
     
     if (result.type === 'person') {
-      navigate(`/people/${result.slug}`)
+      navigate(`/person/${result.slug}`)
     } else {
-      navigate(`/companies/${result.slug}`)
+      navigate(`/company/${result.slug}`)
     }
   }, [navigate, onOpenChange])
 
