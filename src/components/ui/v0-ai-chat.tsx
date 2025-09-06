@@ -253,12 +253,10 @@ function ActionButton({ icon, label, onClick }: ActionButtonProps) {
         <button
             type="button"
             onClick={onClick}
-            title="Continue on frondex.co"
-            className="flex items-center gap-2 px-4 py-2 bg-gray-900/50 hover:bg-gray-800/70 rounded-full border border-green-500/30 text-green-300/70 hover:text-green-300 hover:border-green-400/50 transition-all duration-300 group"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-900/50 hover:bg-gray-800/70 rounded-full border border-green-500/30 text-green-300/70 hover:text-green-300 hover:border-green-400/50 transition-all duration-300"
         >
             {icon}
             <span className="text-xs">{label}</span>
-            <ExternalLink className="w-3 h-3 opacity-40 group-hover:opacity-70 transition-opacity" />
         </button>
     );
 }
