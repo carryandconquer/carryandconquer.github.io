@@ -513,6 +513,13 @@ const Snapshot = () => {
       }
     }
 
+    const getProfileImage = (profileUrl: string | null, index: number) => {
+      // Use existing profile image or generate placeholder
+      if (profileUrl) return profileUrl
+      const portraitIds = [91, 177, 186, 188, 203, 233, 251, 256, 280, 295]
+      return `https://picsum.photos/id/${portraitIds[index % portraitIds.length]}/120/120`
+    }
+
     return {
       initials: getInitials(person.full_name),
       name: person.full_name,
@@ -520,6 +527,7 @@ const Snapshot = () => {
       firm: person.company?.name || 'Leading Company',
       achievement: getAchievement(person.title || '', person.company?.name || ''),
       sector: getSector(person.expertise_tags, person.company?.company_type || 'startup'),
+      profileImage: getProfileImage(person.profile_image_url, featuredPeople.indexOf(person)),
       slug: person.slug
     }
   })
@@ -533,6 +541,7 @@ const Snapshot = () => {
       firm: "Apollo Global Management",
       achievement: "Led $3.2B healthcare buyout",
       sector: "Healthcare & Technology",
+      profileImage: "https://picsum.photos/id/91/120/120",
       slug: null
     },
     {
@@ -542,6 +551,7 @@ const Snapshot = () => {
       firm: "KKR & Co",
       achievement: "Closed $850M growth fund",
       sector: "Growth Equity",
+      profileImage: "https://picsum.photos/id/177/120/120",
       slug: null
     },
     {
@@ -551,6 +561,7 @@ const Snapshot = () => {
       firm: "Blackstone",
       achievement: "Structured €1.2B infrastructure deal",
       sector: "Infrastructure",
+      profileImage: "https://picsum.photos/id/186/120/120",
       slug: null
     },
     {
@@ -560,6 +571,7 @@ const Snapshot = () => {
       firm: "Carlyle Group",
       achievement: "Pioneering ESG-focused investments",
       sector: "Sustainable Investing",
+      profileImage: "https://picsum.photos/id/188/120/120",
       slug: null
     }
   ]
@@ -593,21 +605,56 @@ const Snapshot = () => {
       }
     }
 
+    const getCompanyLogo = (companyName: string, index: number) => {
+      // Use company logos or placeholder logos
+      const logoIds = [100, 101, 102, 103, 104, 105, 106, 107, 108, 109]
+      return `https://picsum.photos/id/${logoIds[index % logoIds.length]}/120/120`
+    }
+
     return {
       name: company.name,
       type: company.company_type || 'startup',
       icon: getCompanyIcon(company.company_type || 'startup'),
       metric: getGrowthMetric(company.company_type || 'startup'),
+      logo: company.logo_url || getCompanyLogo(company.name, featuredCompanies.indexOf(company)),
       slug: company.slug
     }
   })
 
   // Fallback to hardcoded data if no featured companies
   const fallbackTrendingCompanies = [
-    { name: "TechVenture Inc", type: "startup", icon: Zap, metric: "+240% YoY Growth", slug: null },
-    { name: "FinanceCore", type: "fintech", icon: DollarSign, metric: "+127% Revenue Growth", slug: null },
-    { name: "Enterprise Solutions", type: "enterprise", icon: Building, metric: "+85M Active Users", slug: null },
-    { name: "BiosystemsAI", type: "biotech", icon: Target, metric: "+3 Clinical Trials", slug: null }
+    { 
+      name: "TechVenture Inc", 
+      type: "startup", 
+      icon: Zap, 
+      metric: "+240% YoY Growth", 
+      logo: "https://picsum.photos/id/100/120/120",
+      slug: null 
+    },
+    { 
+      name: "FinanceCore", 
+      type: "fintech", 
+      icon: DollarSign, 
+      metric: "+127% Revenue Growth", 
+      logo: "https://picsum.photos/id/101/120/120",
+      slug: null 
+    },
+    { 
+      name: "Enterprise Solutions", 
+      type: "enterprise", 
+      icon: Building, 
+      metric: "+85M Active Users", 
+      logo: "https://picsum.photos/id/102/120/120",
+      slug: null 
+    },
+    { 
+      name: "BiosystemsAI", 
+      type: "biotech", 
+      icon: Target, 
+      metric: "+3 Clinical Trials", 
+      logo: "https://picsum.photos/id/103/120/120",
+      slug: null 
+    }
   ]
 
   const displayTrendingCompanies = trendingCompanies.length > 0 ? trendingCompanies : fallbackTrendingCompanies
@@ -749,7 +796,21 @@ const Snapshot = () => {
                     <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
                       <CardContent className="p-6">
                         <div className="flex items-center gap-3 mb-4">
-                          <company.icon className="w-8 h-8 text-accent-green" />
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex items-center justify-center">
+                            <img 
+                              src={company.logo} 
+                              alt={`${company.name} logo`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                const iconWrapper = target.parentElement;
+                                if (iconWrapper) {
+                                  iconWrapper.innerHTML = `<company.icon className="w-8 h-8 text-accent-green" />`;
+                                }
+                              }}
+                            />
+                          </div>
                           <div className="flex-1">
                             <div className="text-sm text-accent-green font-medium uppercase tracking-wide">{company.type}</div>
                           </div>
@@ -765,7 +826,21 @@ const Snapshot = () => {
                   <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <company.icon className="w-8 h-8 text-accent-green" />
+                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex items-center justify-center">
+                          <img 
+                            src={company.logo} 
+                            alt={`${company.name} logo`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const iconWrapper = target.parentElement;
+                              if (iconWrapper) {
+                                iconWrapper.innerHTML = `<company.icon className="w-8 h-8 text-accent-green" />`;
+                              }
+                            }}
+                          />
+                        </div>
                         <div className="flex-1">
                           <div className="text-sm text-accent-green font-medium uppercase tracking-wide">{company.type}</div>
                         </div>
@@ -793,8 +868,21 @@ const Snapshot = () => {
                     <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-3 mb-4">
-                          <div className="w-12 h-12 bg-gradient-to-r from-accent-green to-accent-teal rounded-full flex items-center justify-center text-black font-bold">
-                            {person.initials}
+                          <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-r from-accent-green to-accent-teal">
+                            <img 
+                              src={person.profileImage} 
+                              alt={`${person.name} profile`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                const wrapper = target.parentElement;
+                                if (wrapper) {
+                                  wrapper.className = "w-12 h-12 bg-gradient-to-r from-accent-green to-accent-teal rounded-full flex items-center justify-center text-black font-bold";
+                                  wrapper.innerHTML = person.initials;
+                                }
+                              }}
+                            />
                           </div>
                           <div className="flex-1">
                             <div className="text-sm text-accent-green font-medium">{person.sector}</div>
@@ -813,8 +901,21 @@ const Snapshot = () => {
                   <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 h-full">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-3 mb-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-accent-green to-accent-teal rounded-full flex items-center justify-center text-black font-bold">
-                          {person.initials}
+                        <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-r from-accent-green to-accent-teal">
+                          <img 
+                            src={person.profileImage} 
+                            alt={`${person.name} profile`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const wrapper = target.parentElement;
+                              if (wrapper) {
+                                wrapper.className = "w-12 h-12 bg-gradient-to-r from-accent-green to-accent-teal rounded-full flex items-center justify-center text-black font-bold";
+                                wrapper.innerHTML = person.initials;
+                              }
+                            }}
+                          />
                         </div>
                         <div className="flex-1">
                           <div className="text-sm text-accent-green font-medium">{person.sector}</div>
