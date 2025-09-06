@@ -67,7 +67,7 @@ export default function ArticleDetail() {
 
   const articleUrl = `${window.location.origin}/analysis/${generateSlug(article.title)}`
   const imageUrl = article.image_url || 'https://images.unsplash.com/photo-1518770660439-4636190af475'
-  const socialImageUrl = '/lovable-uploads/b5775111-ea8a-4273-abd5-c1f71d14d4c1.png'
+  const socialImageUrl = `${window.location.origin}/lovable-uploads/b5775111-ea8a-4273-abd5-c1f71d14d4c1.png`
 
   return (
     <>
