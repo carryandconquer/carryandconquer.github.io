@@ -1,11 +1,25 @@
 import { Button } from "@/components/ui/button"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { MetricsCarousel } from "./MetricsCarousel"
+import { Input } from "@/components/ui/input"
+import { Search } from "lucide-react"
+import { useState } from "react"
 
 export function Navigation() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const [searchQuery, setSearchQuery] = useState("")
   
   const isActive = (path: string) => location.pathname === path
+  
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      // Navigate to a search results page or handle search logic
+      // For now, we'll redirect to people page with search
+      navigate(`/people?search=${encodeURIComponent(searchQuery.trim())}`)
+    }
+  }
   
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
@@ -72,36 +86,22 @@ export function Navigation() {
             >
               Events
             </Link>
-            <Link 
-              to="/companies" 
-              className={`px-4 py-2 rounded-full transition-all duration-300 ${
-                isActive('/companies') 
-                  ? 'bg-gradient-to-r from-accent-green to-accent-teal text-white shadow-glow' 
-                  : 'text-white/70 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              Companies
-            </Link>
-            <Link 
-              to="/people" 
-              className={`px-4 py-2 rounded-full transition-all duration-300 ${
-                isActive('/people') 
-                  ? 'bg-gradient-to-r from-accent-green to-accent-teal text-white shadow-glow' 
-                  : 'text-white/70 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              People
-            </Link>
           </div>
           
-          {/* CTA Button */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="hidden md:inline-flex text-white/70 hover:text-white hover:bg-white/10">
-              Sign In
-            </Button>
-            <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-black font-semibold transition-all duration-300 hover:scale-105 rounded-full">
-              Get Started
-            </Button>
+          {/* Search Bar */}
+          <div className="flex items-center">
+            <form onSubmit={handleSearch} className="relative">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 w-4 h-4" />
+                <Input
+                  type="text"
+                  placeholder="Search people, companies..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-64 bg-white/10 border-white/20 text-white placeholder:text-white/60 rounded-full focus:ring-2 focus:ring-accent-green focus:border-transparent"
+                />
+              </div>
+            </form>
           </div>
         </div>
       </div>

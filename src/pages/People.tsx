@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Navigation } from '@/components/Navigation'
 import { Footer } from '@/components/Footer'
 import { PersonCard } from '@/components/PersonCard'
@@ -8,7 +9,17 @@ import { Search, Users } from 'lucide-react'
 import { usePeople } from '@/hooks/usePeople'
 
 const People = () => {
+  const [searchParams] = useSearchParams()
   const [searchQuery, setSearchQuery] = useState('')
+  
+  // Initialize search query from URL parameters
+  useEffect(() => {
+    const urlSearch = searchParams.get('search')
+    if (urlSearch) {
+      setSearchQuery(urlSearch)
+    }
+  }, [searchParams])
+  
   const { data: people = [], isLoading, error } = usePeople(searchQuery)
 
   const featuredPeople = people.filter(person => person.featured)
