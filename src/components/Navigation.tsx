@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { MetricsCarousel } from "./MetricsCarousel"
 import { Search } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { SearchCommand } from "./SearchCommand"
 
 export function Navigation() {
@@ -10,19 +10,6 @@ export function Navigation() {
   const [searchOpen, setSearchOpen] = useState(false)
   
   const isActive = (path: string) => location.pathname === path
-  
-  // Keyboard shortcut to open search (Cmd/Ctrl + K)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setSearchOpen(true)
-      }
-    }
-    
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [])
   
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
@@ -100,9 +87,6 @@ export function Navigation() {
             >
               <Search className="mr-2 h-4 w-4" />
               <span className="text-sm">Search people, companies...</span>
-              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden h-5 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1.5 font-mono text-xs text-white/60 sm:flex">
-                <span className="text-xs">⌘</span>K
-              </kbd>
             </Button>
           </div>
           
