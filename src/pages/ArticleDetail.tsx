@@ -102,27 +102,28 @@ export default function ArticleDetail() {
         
         {/* Hero Section */}
         <section className="pt-20">
-          <div className="relative h-64 md:h-96 overflow-hidden">
+          <div className="h-64 md:h-96 overflow-hidden">
             <img 
               src={imageUrl}
               alt={article.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6">
-              <div className="max-w-4xl mx-auto">
-                <Badge variant="secondary" className="mb-4 bg-green-500/20 text-green-300">
-                  {article.category}
-                </Badge>
-                <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
-                  {article.title}
-                </h1>
-                {article.subtitle && (
-                  <p className="text-xl text-white/80 max-w-3xl">
-                    {article.subtitle}
-                  </p>
-                )}
-              </div>
+          </div>
+          
+          {/* Title Section */}
+          <div className="px-6 py-8">
+            <div className="max-w-4xl mx-auto">
+              <Badge variant="secondary" className="mb-4 bg-green-500/20 text-green-300">
+                {article.category}
+              </Badge>
+              <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
+                {article.title}
+              </h1>
+              {article.subtitle && (
+                <p className="text-xl text-white/80 max-w-3xl">
+                  {article.subtitle}
+                </p>
+              )}
             </div>
           </div>
         </section>
