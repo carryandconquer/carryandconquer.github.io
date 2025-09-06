@@ -1,77 +1,25 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Navigation } from "@/components/Navigation"
 import { Footer } from "@/components/Footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, Calendar, Clock, User, Search, TrendingUp, Target, Briefcase, Users, Newspaper, FileText } from 'lucide-react';
-import { supabase } from "@/integrations/supabase/client"
-import ReactMarkdown from 'react-markdown';
-
-interface Article {
-  id: string;
-  category: string;
-  title: string;
-  subtitle: string | null;
-  excerpt: string | null;
-  author_name: string | null;
-  published_date: string | null;
-  read_time: number | null;
-  content: string | null;
-  image_url: string | null;
-  published: boolean | null;
-}
+import { Search, TrendingUp, Target, Briefcase, Users, Newspaper, FileText, Clock, User } from 'lucide-react';
+import { useArticles, useArticleCategories } from '@/hooks/useArticles'
+import { generateSlug } from '@/lib/slugUtils';
 
 export default function Analysis() {
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('All Articles');
   const [searchQuery, setSearchQuery] = useState('');
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch articles and categories from Supabase
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch articles
-        const { data: articlesData, error: articlesError } = await supabase
-          .from('articles')
-          .select('*')
-          .eq('published', true)
-          .order('published_date', { ascending: false });
-
-        if (articlesError) throw articlesError;
-
-        // Fetch unique categories
-        const { data: categoriesData, error: categoriesError } = await supabase
-          .from('articles')
-          .select('category')
-          .eq('published', true)
-          .not('category', 'is', null);
-
-        if (categoriesError) throw categoriesError;
-
-        const uniqueCategories = [...new Set(categoriesData.map(item => item.category))].filter(Boolean);
-        
-        setArticles(articlesData || []);
-        setCategories(uniqueCategories);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load articles');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  
+  const { data: articles = [], isLoading: articlesLoading, error: articlesError } = useArticles();
+  const { data: categories = [], isLoading: categoriesLoading } = useArticleCategories();
+  
+  const loading = articlesLoading || categoriesLoading;
+  const error = articlesError;
 
   const filteredArticles = useMemo(() => {
     let filtered = articles;
@@ -98,13 +46,6 @@ export default function Analysis() {
     return articles.filter(article => article.category === category).length;
   };
 
-  const openArticle = (article: Article) => {
-    setSelectedArticle(article);
-  };
-
-  const closeArticle = () => {
-    setSelectedArticle(null);
-  };
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
@@ -169,7 +110,7 @@ export default function Analysis() {
         <Navigation />
         <div className="flex items-center justify-center min-h-[50vh] pt-20">
           <div className="text-center">
-            <p className="text-red-400 mb-4">{error}</p>
+            <p className="text-red-400 mb-4">Failed to load articles</p>
             <Button onClick={() => window.location.reload()} variant="outline">
               Try Again
             </Button>
@@ -180,8 +121,25 @@ export default function Analysis() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <Navigation />
+    <>
+      <Helmet>
+        <title>Market Analysis | Carry & Conquer</title>
+        <meta name="description" content="Comprehensive market analysis, insights, and strategic intelligence for informed investment decisions. Stay ahead with our expert analysis and trends." />
+        
+        {/* Open Graph tags */}
+        <meta property="og:title" content="Market Analysis | Carry & Conquer" />
+        <meta property="og:description" content="Comprehensive market analysis, insights, and strategic intelligence for informed investment decisions." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${window.location.origin}/analysis`} />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Market Analysis | Carry & Conquer" />
+        <meta name="twitter:description" content="Comprehensive market analysis, insights, and strategic intelligence for informed investment decisions." />
+      </Helmet>
+
+      <div className="min-h-screen bg-black text-white">
+        <Navigation />
       
       {/* Hero Section */}
       <section className="pt-20 pb-12 px-6">
@@ -249,11 +207,10 @@ export default function Analysis() {
           {filteredArticles.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredArticles.map((article) => (
-                <Card 
-                  key={article.id}
-                  className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer hover:-translate-y-1 group overflow-hidden"
-                  onClick={() => openArticle(article)}
-                >
+                <Link key={article.id} to={`/analysis/${generateSlug(article.title)}`}>
+                  <Card 
+                    className="bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:border-green-500/30 transition-all duration-300 cursor-pointer hover:-translate-y-1 group overflow-hidden h-full"
+                  >
                   <div className="relative h-48 overflow-hidden">
                     <img 
                       src={article.image_url || 'https://images.unsplash.com/photo-1518770660439-4636190af475'} 
@@ -286,7 +243,8 @@ export default function Analysis() {
                       </div>
                     </div>
                   </CardContent>
-                </Card>
+                  </Card>
+                </Link>
               ))}
             </div>
           ) : (
@@ -313,84 +271,8 @@ export default function Analysis() {
         </div>
       </section>
 
-      {/* Article Modal */}
-      <Dialog open={!!selectedArticle} onOpenChange={closeArticle}>
-        <DialogContent className="max-w-5xl max-h-[90vh] bg-black border-gray-800 text-white overflow-y-auto">
-          {selectedArticle && (
-            <>
-              {/* Hero Image */}
-              <div className="relative h-64 md:h-80 -m-6 mb-6 overflow-hidden">
-                <img 
-                  src={selectedArticle.image_url || 'https://images.unsplash.com/photo-1518770660439-4636190af475'} 
-                  alt={selectedArticle.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <Badge variant="secondary" className="mb-4 bg-green-500/20 text-green-300">
-                    {selectedArticle.category}
-                  </Badge>
-                  <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">
-                    {selectedArticle.title}
-                  </h1>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={closeArticle}
-                  className="absolute top-4 right-4 text-white hover:text-green-300 bg-black/20 hover:bg-black/40"
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
-                </Button>
-              </div>
-              
-              <div className="px-6 pb-6">
-                <div className="flex items-center gap-4 text-sm text-white/60 mb-6">
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    <span>{selectedArticle.author_name || 'Unknown Author'}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
-                    <span>{formatDate(selectedArticle.published_date)}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    <span>{formatReadTime(selectedArticle.read_time)}</span>
-                  </div>
-                </div>
-                <div className="prose prose-invert prose-lg max-w-none text-white/90 leading-relaxed
-                    prose-headings:text-white prose-headings:font-bold
-                    prose-h1:text-3xl prose-h1:mb-6 prose-h1:mt-8
-                    prose-h2:text-2xl prose-h2:mb-4 prose-h2:mt-6 prose-h2:text-green-400
-                    prose-h3:text-xl prose-h3:mb-3 prose-h3:mt-5 prose-h3:text-green-400
-                    prose-h4:text-lg prose-h4:mb-2 prose-h4:mt-4
-                    prose-p:mb-4 prose-p:leading-relaxed
-                    prose-ul:mb-4 prose-li:mb-1
-                    prose-strong:text-white prose-strong:font-semibold">
-                  <ReactMarkdown
-                    components={{
-                      h1: ({children}) => <h1 className="text-3xl font-bold text-white mb-6 mt-8">{children}</h1>,
-                      h2: ({children}) => <h2 className="text-2xl font-bold text-green-400 mb-4 mt-6">{children}</h2>,
-                      h3: ({children}) => <h3 className="text-xl font-bold text-green-400 mb-3 mt-5">{children}</h3>,
-                      h4: ({children}) => <h4 className="text-lg font-bold text-white mb-2 mt-4">{children}</h4>,
-                      p: ({children}) => <p className="mb-4 leading-relaxed text-white/90">{children}</p>,
-                      ul: ({children}) => <ul className="mb-4 text-white/90">{children}</ul>,
-                      li: ({children}) => <li className="mb-1 text-white/90">{children}</li>,
-                      strong: ({children}) => <strong className="text-white font-semibold">{children}</strong>,
-                    }}
-                  >
-                    {selectedArticle.content || 'No content available'}
-                  </ReactMarkdown>
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-
       <Footer />
-    </div>
+      </div>
+    </>
   )
 }
