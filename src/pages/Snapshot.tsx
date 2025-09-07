@@ -394,40 +394,88 @@ const Snapshot = () => {
   const handleTertiaryChange = (value: string) => {
     setSelectedTertiary(value)
   }
-  const marketMetrics = [
-    {
-      icon: DollarSign,
-      value: "$47.3B",
-      label: "Transaction Volume",
-      sublabel: "Value & number of transactions",
-      change: "+18.5%",
-      isPositive: true
-    },
-    {
-      icon: Building,
-      value: "324",
-      label: "New Deals",
-      sublabel: "Deals newly announced",
-      change: "+12.7%",
-      isPositive: true
-    },
-    {
-      icon: Clock,
-      value: "89",
-      label: "Avg Days to Close",
-      sublabel: "Time to transaction",
-      change: "-8.3%",
-      isPositive: false
-    },
-    {
-      icon: Target,
-      value: "14.2x",
-      label: "Exit Multiple",
-      sublabel: "Average across major funds",
-      change: "+5.9%",
-      isPositive: true
+  // Market Activity metrics - data changes based on filter selection
+  const getMarketMetrics = () => {
+    // Check if filters match Australian Fruit and Vegetables
+    if (selectedRegion === "asia-pacific" && 
+        selectedCountry === "australia" && 
+        selectedSector === "Food and Ag." && 
+        selectedSubSector === "Food" && 
+        selectedTertiary === "Fruit and Vegetables") {
+      return [
+        {
+          icon: DollarSign,
+          value: "$16.07B",
+          label: "Transaction Volume",
+          sublabel: "Fresh fruit & vegetable market size",
+          change: "+4.05%",
+          isPositive: true
+        },
+        {
+          icon: Building,
+          value: "6+",
+          label: "Active Major Players",
+          sublabel: "Key companies in the sector",
+          change: "+13.0%",
+          isPositive: true
+        },
+        {
+          icon: Clock,
+          value: "4.6%",
+          label: "Price Inflation",
+          sublabel: "Annual increase (12 months to June)",
+          change: "-2.0%",
+          isPositive: false
+        },
+        {
+          icon: Target,
+          value: "3.0%",
+          label: "Food CPI Inflation",
+          sublabel: "Stable food & beverage inflation",
+          change: "0.0%",
+          isPositive: true
+        }
+      ]
     }
-  ]
+    
+    // Default metrics for other filter combinations
+    return [
+      {
+        icon: DollarSign,
+        value: "$47.3B",
+        label: "Transaction Volume",
+        sublabel: "Value & number of transactions",
+        change: "+18.5%",
+        isPositive: true
+      },
+      {
+        icon: Building,
+        value: "324",
+        label: "New Deals",
+        sublabel: "Deals newly announced",
+        change: "+12.7%",
+        isPositive: true
+      },
+      {
+        icon: Clock,
+        value: "89",
+        label: "Avg Days to Close",
+        sublabel: "Time to transaction",
+        change: "-8.3%",
+        isPositive: false
+      },
+      {
+        icon: Target,
+        value: "14.2x",
+        label: "Exit Multiple",
+        sublabel: "Average across major funds",
+        change: "+5.9%",
+        isPositive: true
+      }
+    ]
+  }
+
+  const marketMetrics = getMarketMetrics()
 
   const investmentMetrics = [
     {
@@ -470,8 +518,67 @@ const Snapshot = () => {
     { value: "425 bps", label: "Credit Spread", sublabel: "vs 10-year treasury" }
   ]
 
-  // Create trending people from featured people with achievements
-  const trendingPeople = featuredPeople.map(person => {
+  // Create trending people from featured people with achievements - or use specific data for filters
+  const getTrendingPeople = () => {
+    // Check if filters match Australian Fruit and Vegetables
+    if (selectedRegion === "asia-pacific" && 
+        selectedCountry === "australia" && 
+        selectedSector === "Food and Ag." && 
+        selectedSubSector === "Food" && 
+        selectedTertiary === "Fruit and Vegetables") {
+      return [
+        {
+          name: "Peter Cundall",
+          company: "Gardening Australia",
+          achievements: "Iconic gardening advocate",
+          initials: "PC",
+          sectors: "Horticulture, Sustainability",
+          profileImage: "https://picsum.photos/id/91/120/120"
+        },
+        {
+          name: "Costa Georgiadis",
+          company: "ABC Gardening Australia",
+          achievements: "TV host & organic advocate",
+          initials: "CG",
+          sectors: "Organic Gardening, Media",
+          profileImage: "https://picsum.photos/id/177/120/120"
+        },
+        {
+          name: "Dean Gall",
+          company: "IFPA ANZ",
+          achievements: "Chairman of IFPA ANZ",
+          initials: "DG",
+          sectors: "Fresh Produce, Industry Leadership",
+          profileImage: "https://picsum.photos/id/186/120/120"
+        },
+        {
+          name: "Richard Clayton",
+          company: "Australian Fresh Produce Alliance",
+          achievements: "Chair of AFPA",
+          initials: "RC",
+          sectors: "Industry Advocacy, Policy",
+          profileImage: "https://picsum.photos/id/188/120/120"
+        },
+        {
+          name: "Rocky Lamattina",
+          company: "Rocky Lamattina and Sons",
+          achievements: "Vegetable Farm of the Year",
+          initials: "RL",
+          sectors: "Vegetable Growing, Excellence",
+          profileImage: "https://picsum.photos/id/203/120/120"
+        },
+        {
+          name: "Edna Margaret Walling",
+          company: "Landscape Design Legacy",
+          achievements: "Influential landscape designer",
+          initials: "EW",
+          sectors: "Landscape Design, Horticulture",
+          profileImage: "https://picsum.photos/id/233/120/120"
+        }
+      ]
+    }
+
+    // Default processing for other filters
     const getInitials = (name: string) => {
       return name.split(' ')
         .map(word => word.charAt(0))
@@ -520,17 +627,17 @@ const Snapshot = () => {
       return `https://picsum.photos/id/${portraitIds[index % portraitIds.length]}/120/120`
     }
 
-    return {
-      initials: getInitials(person.full_name),
+    return featuredPeople.map(person => ({
       name: person.full_name,
-      title: person.title || 'Executive',
-      firm: person.company?.name || 'Leading Company',
-      achievement: getAchievement(person.title || '', person.company?.name || ''),
-      sector: getSector(person.expertise_tags, person.company?.company_type || 'startup'),
-      profileImage: getProfileImage(person.profile_image_url, featuredPeople.indexOf(person)),
-      slug: person.slug
-    }
-  })
+      company: person.company?.name || "Startup",
+      achievements: getAchievement(person.title || "", person.company?.name || ""),
+      initials: getInitials(person.full_name),
+      sectors: getSector(person.expertise_tags, person.company?.company_type || 'startup'),
+      profileImage: getProfileImage(person.profile_image_url, featuredPeople.indexOf(person))
+    }))
+  }
+
+  const trendingPeople = getTrendingPeople()
 
   // Fallback to hardcoded data if no featured people
   const fallbackTrendingPeople = [
@@ -578,8 +685,67 @@ const Snapshot = () => {
 
   const displayTrendingPeople = trendingPeople.length > 0 ? trendingPeople : fallbackTrendingPeople
 
-  // Create trending companies from featured companies
-  const trendingCompanies = featuredCompanies.map(company => {
+  // Create trending companies from featured companies - or use specific data for filters
+  const getTrendingCompanies = () => {
+    // Check if filters match Australian Fruit and Vegetables
+    if (selectedRegion === "asia-pacific" && 
+        selectedCountry === "australia" && 
+        selectedSector === "Food and Ag." && 
+        selectedSubSector === "Food" && 
+        selectedTertiary === "Fruit and Vegetables") {
+      return [
+        {
+          name: "Costa Group",
+          type: "agriculture",
+          icon: Globe,
+          metric: "+23% Market Expansion",
+          logo: "https://picsum.photos/id/100/120/120",
+          slug: "costa-group"
+        },
+        {
+          name: "Perfection Fresh Australia",
+          type: "agriculture",
+          icon: Zap,
+          metric: "+18% Supply Growth",
+          logo: "https://picsum.photos/id/101/120/120",
+          slug: "perfection-fresh-australia"
+        },
+        {
+          name: "Fresh Produce Group",
+          type: "agriculture",
+          icon: Briefcase,
+          metric: "+35% MAM Investment",
+          logo: "https://picsum.photos/id/102/120/120",
+          slug: "fresh-produce-group"
+        },
+        {
+          name: "Premier Fresh Australia",
+          type: "agriculture",
+          icon: Users,
+          metric: "+28% Supply Chain",
+          logo: "https://picsum.photos/id/103/120/120",
+          slug: "premier-fresh-australia"
+        },
+        {
+          name: "Harvest Moon Australia",
+          type: "agriculture",
+          icon: Globe,
+          metric: "+20% Tasmania Growth",
+          logo: "https://picsum.photos/id/104/120/120",
+          slug: "harvest-moon-australia"
+        },
+        {
+          name: "One Harvest",
+          type: "agriculture",
+          icon: Zap,
+          metric: "+31% Innovation",
+          logo: "https://picsum.photos/id/105/120/120",
+          slug: "one-harvest"
+        }
+      ]
+    }
+
+    // Default processing for other filters
     const getCompanyIcon = (companyType: string) => {
       switch (companyType) {
         case 'fintech': return DollarSign
@@ -611,15 +777,17 @@ const Snapshot = () => {
       return `https://picsum.photos/id/${logoIds[index % logoIds.length]}/120/120`
     }
 
-    return {
+    return featuredCompanies.map(company => ({
       name: company.name,
       type: company.company_type || 'startup',
       icon: getCompanyIcon(company.company_type || 'startup'),
       metric: getGrowthMetric(company.company_type || 'startup'),
       logo: company.logo_url || getCompanyLogo(company.name, featuredCompanies.indexOf(company)),
       slug: company.slug
-    }
-  })
+    }))
+  }
+
+  const trendingCompanies = getTrendingCompanies()
 
   // Fallback to hardcoded data if no featured companies
   const fallbackTrendingCompanies = [
