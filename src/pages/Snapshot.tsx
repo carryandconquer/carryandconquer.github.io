@@ -509,7 +509,8 @@ const Snapshot = () => {
         achievements: person.description || person.position,
         initials: person.name.split(' ').map(n => n[0]).join(''),
         sectors: "Growth & Innovation", // Could be mapped from sector data
-        profileImage: person.image_url || "https://picsum.photos/id/91/120/120"
+        profileImage: person.image_url || "https://picsum.photos/id/91/120/120",
+        slug: person.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
       }))
     }
 
@@ -568,7 +569,8 @@ const Snapshot = () => {
       achievements: getAchievement(person.title || "", person.company?.name || ""),
       initials: getInitials(person.full_name),
       sectors: getSector(person.expertise_tags, person.company?.company_type || 'startup'),
-      profileImage: getProfileImage(person.profile_image_url, featuredPeople.indexOf(person))
+      profileImage: getProfileImage(person.profile_image_url, featuredPeople.indexOf(person)),
+      slug: person.slug
     }))
   }
 
@@ -627,7 +629,7 @@ const Snapshot = () => {
       sector: "Growth & Innovation",
       profileImage: person.image_url || "https://picsum.photos/id/91/120/120",
       initials: person.name.split(' ').map(n => n[0]).join(''),
-      slug: null
+      slug: person.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     })) : 
     (trendingPeople.length > 0 ? trendingPeople.map(person => ({
       name: person.name,
@@ -637,7 +639,7 @@ const Snapshot = () => {
       sector: person.sectors,
       profileImage: person.profileImage,
       initials: person.initials,
-      slug: null
+      slug: person.slug
     })) : fallbackTrendingPeople)
 
   // Convert database trending companies to display format
@@ -649,9 +651,20 @@ const Snapshot = () => {
         icon: Building,
         metric: company.change_percentage ? `+${company.change_percentage}%` : "Growth Leader",
         logo: company.image_url || "https://picsum.photos/id/100/120/120",
-        slug: null
+        slug: company.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
       }))
     }
+
+    // Check for placeholder companies
+    const placeholderCompanySlugs = ['zenscreen', 'agritech-solutions', 'freshproduce-logistics', 'vertical-farms-innovations']
+    return placeholderCompanySlugs.map((slug, index) => ({
+      name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+      type: "growth",
+      icon: Building,
+      metric: "Growth Leader",
+      logo: `https://picsum.photos/id/${100 + index}/120/120`,
+      slug: slug
+    }))
 
     // Fallback to original logic if no database data
     const getCompanyIcon = (companyType: string) => {
