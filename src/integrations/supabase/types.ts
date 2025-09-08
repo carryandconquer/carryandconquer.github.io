@@ -1306,6 +1306,48 @@ export type Database = {
           },
         ]
       }
+      snapshot_trending_companies: {
+        Row: {
+          change_percentage: number | null
+          country_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          published: boolean | null
+          region_id: string | null
+          sector_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          change_percentage?: number | null
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          change_percentage?: number | null
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       snapshot_trending_people: {
         Row: {
           change_percentage: number | null
