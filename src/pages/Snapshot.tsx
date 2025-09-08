@@ -1,7 +1,8 @@
 import { Navigation } from "@/components/Navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe, BarChart3 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { usePeople } from "@/hooks/usePeople"
 import { useCompanies } from "@/hooks/useCompanies"
@@ -1010,49 +1011,113 @@ const Snapshot = () => {
           </div>
         </section>
 
-        {/* Key Deals */}
-        {dbDeals.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Key Deals</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {dbDeals.map((deal, index) => (
-                <Card key={deal.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <DollarSign className="w-5 h-5 text-accent-green" />
-                        <span className="text-sm text-accent-green font-medium uppercase tracking-wide">
-                          {deal.transaction_type}
-                        </span>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-white">
-                          {deal.deal_value_formatted || "Undisclosed"}
-                        </div>
-                      </div>
+        {/* Market Intelligence */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Market Intelligence</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="bg-white/5 border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5" />
+                  Sector Outlook
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Agricultural Technology</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Strong growth momentum with increasing focus on sustainability and supply chain optimization.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Growth Sector</Badge>
+                      <Badge variant="outline" className="text-xs">ESG Focus</Badge>
                     </div>
-                    <div className="space-y-2">
-                      <div className="font-bold text-white">{deal.deal_name}</div>
-                      <div className="text-sm text-white/60">
-                        {deal.city}, {deal.country}
-                      </div>
-                      {deal.description && (
-                        <div className="text-sm text-white/70 line-clamp-2">
-                          {deal.description}
-                        </div>
-                      )}
-                      {deal.announcement_date && (
-                        <div className="text-xs text-accent-green">
-                          {new Date(deal.announcement_date).toLocaleDateString()}
-                        </div>
-                      )}
+                  </div>
+                  
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Fresh Produce</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Increasing demand for organic and locally-sourced produce driving sector expansion.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Organic Growth</Badge>
+                      <Badge variant="outline" className="text-xs">Local Sourcing</Badge>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/5 border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  Investment Trends
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Food Tech Focus</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Increased investor appetite for sustainable agriculture and food tech companies.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Food Tech</Badge>
+                      <Badge variant="outline" className="text-xs">Sustainability</Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Supply Chain Innovation</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Growing investment in cold-chain logistics and supply chain optimization.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Logistics</Badge>
+                      <Badge variant="outline" className="text-xs">Cold Chain</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/5 border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Globe className="w-5 h-5" />
+                  Regional Insights
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Asia-Pacific Growth</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Australia leading in agricultural innovation and vertical farming adoption.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Innovation Hub</Badge>
+                      <Badge variant="outline" className="text-xs">APAC</Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Export Opportunities</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Strong export potential for fresh produce to Asian markets.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Export Growth</Badge>
+                      <Badge variant="outline" className="text-xs">Trade</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
         {/* Investment Metrics */}
         <section className="mb-12">

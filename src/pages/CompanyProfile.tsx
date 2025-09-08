@@ -23,47 +23,7 @@ import {
 } from 'lucide-react'
 import { useCompany } from '@/hooks/useCompanies'
 
-// Placeholder data for companies not in database
-const getPlaceholderCompany = (slug: string) => {
-  if (slug === 'zenscreen') {
-    return {
-      id: 'zenscreen-placeholder',
-      name: 'ZenScreen',
-      slug: 'zenscreen',
-      description: 'ZenScreen is a market-leading SaaS platform transforming how enterprises manage and deploy screens across multiple locations with AI-powered content optimization. Our cutting-edge technology enables businesses to seamlessly coordinate digital displays, optimize content delivery, and maximize audience engagement through intelligent automation and real-time analytics.',
-      website: 'https://zenscreen.ai',
-      logo_url: null,
-      company_type: 'startup' as const,
-      founded_date: '2019-03-15',
-      employee_count: 85,
-      industry_tags: [
-        'Digital Signage',
-        'AI/ML',
-        'SaaS',
-        'Enterprise Software',
-        'Content Management',
-        'Real-time Analytics',
-        'IoT',
-        'Computer Vision'
-      ],
-      city: 'San Francisco',
-      country: 'United States',
-      region: 'North America',
-      social_links: {
-        linkedin: 'https://linkedin.com/company/zenscreen',
-        twitter: 'https://twitter.com/zenscreen',
-        github: 'https://github.com/zenscreen'
-      },
-      contact_email: 'hello@zenscreen.ai',
-      meta_description: 'ZenScreen - AI-powered digital signage platform for enterprise screen management',
-      featured: true,
-      published: true,
-      created_at: '2024-01-01T00:00:00Z',
-      updated_at: '2024-01-01T00:00:00Z'
-    }
-  }
-  return null
-}
+import { getPlaceholderCompany } from '@/data/placeholderCompanies'
 
 const CompanyProfile = () => {
   const { slug } = useParams<{ slug: string }>()

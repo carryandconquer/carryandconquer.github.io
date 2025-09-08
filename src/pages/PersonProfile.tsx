@@ -15,10 +15,15 @@ import {
   ArrowLeft
 } from 'lucide-react'
 import { usePerson } from '@/hooks/usePeople'
+import { getPlaceholderPerson } from '@/data/placeholderPeople'
 
 const PersonProfile = () => {
   const { slug } = useParams<{ slug: string }>()
   const { data: person, isLoading, error } = usePerson(slug!)
+  
+  // Check for placeholder data if person not found in database
+  const placeholderPerson = !person && !isLoading ? getPlaceholderPerson(slug!) : null
+  const displayPerson = person || placeholderPerson
 
   if (isLoading) {
     return (
@@ -39,7 +44,7 @@ const PersonProfile = () => {
     )
   }
 
-  if (error || !person) {
+  if (error || (!person && !placeholderPerson)) {
     return (
       <div className="min-h-screen font-primary pt-24 bg-background">
         <Navigation />
@@ -75,10 +80,10 @@ const PersonProfile = () => {
 
         {/* Header */}
         <div className="flex items-start gap-6 mb-8">
-          {person.profile_image_url ? (
+          {displayPerson.profile_image_url ? (
             <img 
-              src={person.profile_image_url} 
-              alt={`${person.full_name} profile`}
+              src={displayPerson.profile_image_url} 
+              alt={`${displayPerson.full_name} profile`}
               className="w-24 h-24 rounded-full object-cover shadow-lg"
             />
           ) : (
@@ -89,41 +94,46 @@ const PersonProfile = () => {
           
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold">{person.full_name}</h1>
-              {person.featured && (
+              <h1 className="text-3xl font-bold">{displayPerson.full_name}</h1>
+              {displayPerson.featured && (
                 <Badge variant="default">Featured</Badge>
+              )}
+              {placeholderPerson && (
+                <Badge variant="outline" className="text-blue-600 border-blue-600">
+                  Industry Expert
+                </Badge>
               )}
             </div>
             
-            {person.title && (
-              <p className="text-lg text-muted-foreground mb-4">{person.title}</p>
+            {displayPerson.title && (
+              <p className="text-lg text-muted-foreground mb-4">{displayPerson.title}</p>
             )}
             
             <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-4">
-              {person.company && (
+              {displayPerson.company && (
                 <div className="flex items-center gap-1">
                   <Building2 className="w-4 h-4" />
                   <Link 
-                    to={`/company/${person.company.slug}`}
+                    to={`/company/${displayPerson.company.slug}`}
                     className="hover:text-primary transition-colors"
                   >
-                    {person.company.name}
+                    {displayPerson.company.name}
                   </Link>
                 </div>
               )}
               
-              {person.city && (
+              {displayPerson.city && (
                 <div className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
-                  <span>{person.city}{person.country && `, ${person.country}`}</span>
+                  <span>{displayPerson.city}{displayPerson.country && `, ${displayPerson.country}`}</span>
                 </div>
               )}
             </div>
 
             <div className="flex gap-3">
-              {person.linkedin_url && (
+              {displayPerson.linkedin_url && (
                 <Button asChild>
-                  <a href={person.linkedin_url} target="_blank" rel="noopener noreferrer">
+                  <a href={displayPerson.linkedin_url} target="_blank" rel="noopener noreferrer">
                     <Linkedin className="w-4 h-4 mr-2" />
                     LinkedIn
                     <ExternalLink className="w-3 h-3 ml-2" />
@@ -131,9 +141,9 @@ const PersonProfile = () => {
                 </Button>
               )}
               
-              {person.twitter_url && (
+              {displayPerson.twitter_url && (
                 <Button variant="outline" asChild>
-                  <a href={person.twitter_url} target="_blank" rel="noopener noreferrer">
+                  <a href={displayPerson.twitter_url} target="_blank" rel="noopener noreferrer">
                     <Twitter className="w-4 h-4 mr-2" />
                     Twitter
                     <ExternalLink className="w-3 h-3 ml-2" />
@@ -141,9 +151,9 @@ const PersonProfile = () => {
                 </Button>
               )}
               
-              {person.contact_email && (
+              {displayPerson.contact_email && (
                 <Button variant="outline" asChild>
-                  <a href={`mailto:${person.contact_email}`}>
+                  <a href={`mailto:${displayPerson.contact_email}`}>
                     <Mail className="w-4 h-4 mr-2" />
                     Contact
                   </a>
@@ -157,28 +167,28 @@ const PersonProfile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* About */}
           <div className="lg:col-span-2 space-y-6">
-            {person.bio && (
+            {displayPerson.bio && (
               <Card>
                 <CardHeader>
-                  <CardTitle>About {person.full_name}</CardTitle>
+                  <CardTitle>About {displayPerson.full_name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                    {person.bio}
+                    {displayPerson.bio}
                   </p>
                 </CardContent>
               </Card>
             )}
 
             {/* Expertise */}
-            {person.expertise_tags && person.expertise_tags.length > 0 && (
+            {displayPerson.expertise_tags && displayPerson.expertise_tags.length > 0 && (
               <Card>
                 <CardHeader>
                   <CardTitle>Expertise & Skills</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {person.expertise_tags.map((tag) => (
+                    {displayPerson.expertise_tags.map((tag) => (
                       <Badge key={tag} variant="outline">
                         {tag}
                       </Badge>
@@ -199,35 +209,35 @@ const PersonProfile = () => {
               <CardContent className="space-y-4">
                 <div>
                   <span className="text-sm font-medium text-muted-foreground">Full Name</span>
-                  <p className="text-sm">{person.full_name}</p>
+                  <p className="text-sm">{displayPerson.full_name}</p>
                 </div>
                 
-                {person.title && (
+                {displayPerson.title && (
                   <div>
                     <span className="text-sm font-medium text-muted-foreground">Title</span>
-                    <p className="text-sm">{person.title}</p>
+                    <p className="text-sm">{displayPerson.title}</p>
                   </div>
                 )}
                 
-                {person.company && (
+                {displayPerson.company && (
                   <div>
                     <span className="text-sm font-medium text-muted-foreground">Company</span>
                     <Link 
-                      to={`/company/${person.company.slug}`}
+                      to={`/company/${displayPerson.company.slug}`}
                       className="text-sm hover:text-primary transition-colors block"
                     >
-                      {person.company.name}
+                      {displayPerson.company.name}
                     </Link>
                   </div>
                 )}
                 
-                {person.city && (
+                {displayPerson.city && (
                   <div>
                     <span className="text-sm font-medium text-muted-foreground">Location</span>
                     <p className="text-sm">
-                      {person.city}
-                      {person.region && `, ${person.region}`}
-                      {person.country && `, ${person.country}`}
+                      {displayPerson.city}
+                      {displayPerson.region && `, ${displayPerson.region}`}
+                      {displayPerson.country && `, ${displayPerson.country}`}
                     </p>
                   </div>
                 )}
@@ -240,14 +250,14 @@ const PersonProfile = () => {
                 <CardTitle>Connect</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {person.linkedin_url && (
+                {displayPerson.linkedin_url && (
                   <Button 
                     variant="outline" 
                     size="sm" 
                     className="w-full justify-start" 
                     asChild
                   >
-                    <a href={person.linkedin_url} target="_blank" rel="noopener noreferrer">
+                    <a href={displayPerson.linkedin_url} target="_blank" rel="noopener noreferrer">
                       <Linkedin className="w-4 h-4 mr-2" />
                       LinkedIn
                       <ExternalLink className="w-3 h-3 ml-auto" />
@@ -255,14 +265,14 @@ const PersonProfile = () => {
                   </Button>
                 )}
                 
-                {person.twitter_url && (
+                {displayPerson.twitter_url && (
                   <Button 
                     variant="outline" 
                     size="sm" 
                     className="w-full justify-start" 
                     asChild
                   >
-                    <a href={person.twitter_url} target="_blank" rel="noopener noreferrer">
+                    <a href={displayPerson.twitter_url} target="_blank" rel="noopener noreferrer">
                       <Twitter className="w-4 h-4 mr-2" />
                       Twitter
                       <ExternalLink className="w-3 h-3 ml-auto" />
@@ -270,14 +280,14 @@ const PersonProfile = () => {
                   </Button>
                 )}
                 
-                {person.contact_email && (
+                {displayPerson.contact_email && (
                   <Button 
                     variant="outline" 
                     size="sm" 
                     className="w-full justify-start" 
                     asChild
                   >
-                    <a href={`mailto:${person.contact_email}`}>
+                    <a href={`mailto:${displayPerson.contact_email}`}>
                       <Mail className="w-4 h-4 mr-2" />
                       Email
                     </a>
@@ -285,7 +295,7 @@ const PersonProfile = () => {
                 )}
 
                 {/* Additional social links from social_links JSON */}
-                {person.social_links && Object.entries(person.social_links).map(([platform, url]) => (
+                {displayPerson.social_links && Object.entries(displayPerson.social_links).map(([platform, url]) => (
                   <Button 
                     key={platform} 
                     variant="outline" 
