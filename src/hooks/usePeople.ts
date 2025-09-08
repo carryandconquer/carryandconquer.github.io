@@ -68,10 +68,10 @@ export const usePerson = (slug: string) => {
         `)
         .eq('slug', slug)
         .eq('published', true)
-        .single()
+        .maybeSingle()
 
       if (error) throw error
-      return data as Person
+      return data as Person | null
     },
     enabled: !!slug
   })
