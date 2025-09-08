@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { usePeople } from "@/hooks/usePeople"
 import { useCompanies } from "@/hooks/useCompanies"
 import { Link } from "react-router-dom"
+import { useSnapshotData } from "@/hooks/useSnapshotData"
 
 const Snapshot = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all-regions")
@@ -14,11 +15,22 @@ const Snapshot = () => {
   const [selectedSubSector, setSelectedSubSector] = useState<string>("all-sub-sectors")
   const [selectedTertiary, setSelectedTertiary] = useState<string>("all-tertiary")
   
-  // Fetch featured people for trending section
+  // Build filters for the snapshot data hook
+  const filters = {
+    region: selectedRegion !== "all-regions" ? selectedRegion.replace('-', ' ') : undefined,
+    country: selectedCountry !== "all-countries" ? selectedCountry.replace('-', ' ') : undefined,
+    sector: selectedSector !== "all-sectors" ? selectedSector : undefined,
+    subSector: selectedSubSector !== "all-sub-sectors" ? selectedSubSector : undefined,
+  }
+
+  // Fetch data from database
+  const { marketMetrics: dbMarketMetrics, trendingCompanies: dbTrendingCompanies, trendingPeople: dbTrendingPeople, deals: dbDeals, isLoading } = useSnapshotData(filters)
+  
+  // Fetch featured people for trending section fallback
   const { data: peopleData } = usePeople()
   const featuredPeople = peopleData?.filter(person => person.featured).slice(0, 4) || []
   
-  // Fetch featured companies for trending section
+  // Fetch featured companies for trending section fallback
   const { data: companiesData } = useCompanies()
   const featuredCompanies = companiesData?.filter(company => company.featured).slice(0, 4) || []
 
@@ -394,75 +406,44 @@ const Snapshot = () => {
   const handleTertiaryChange = (value: string) => {
     setSelectedTertiary(value)
   }
-  // Market Activity metrics - data changes based on filter selection
+  // Convert database market metrics to display format
   const getMarketMetrics = () => {
-    // Check if filters match Australian Fruit and Vegetables
-    if (selectedRegion === "asia-pacific" && 
-        selectedCountry === "australia" && 
-        selectedSector === "Food and Ag." && 
-        selectedSubSector === "Food" && 
-        selectedTertiary === "Fruit and Vegetables") {
-      return [
-        {
-          icon: DollarSign,
-          value: "$16.07B",
-          label: "Transaction Volume",
-          sublabel: "Fresh fruit & vegetable market size",
-          change: "+4.05%",
-          isPositive: true
-        },
-        {
-          icon: Building,
-          value: "6+",
-          label: "Active Major Players",
-          sublabel: "Key companies in the sector",
-          change: "+13.0%",
-          isPositive: true
-        },
-        {
-          icon: Clock,
-          value: "4.6%",
-          label: "Price Inflation",
-          sublabel: "Annual increase (12 months to June)",
-          change: "-2.0%",
-          isPositive: false
-        },
-        {
-          icon: Target,
-          value: "3.0%",
-          label: "Food CPI Inflation",
-          sublabel: "Stable food & beverage inflation",
-          change: "0.0%",
-          isPositive: true
-        }
-      ]
+    if (dbMarketMetrics.length > 0) {
+      return dbMarketMetrics.map(metric => ({
+        icon: DollarSign, // Default icon, could be customized based on metric type
+        value: metric.current_value,
+        label: metric.metric_name,
+        sublabel: metric.metric_category,
+        change: metric.change_percentage ? `${metric.change_percentage > 0 ? '+' : ''}${metric.change_percentage}%` : "N/A",
+        isPositive: metric.change_direction === 'up' || (metric.change_percentage || 0) > 0
+      }))
     }
     
-    // Default metrics for other filter combinations
+    // Fallback to default metrics if no database data
     return [
       {
         icon: DollarSign,
-        value: "$47.3B",
+        value: "$2.1B",
         label: "Transaction Volume",
-        sublabel: "Value & number of transactions",
-        change: "+18.5%",
+        sublabel: "YTD Total Value",
+        change: "+12.5%",
         isPositive: true
       },
       {
         icon: Building,
-        value: "324",
-        label: "New Deals",
-        sublabel: "Deals newly announced",
-        change: "+12.7%",
+        value: "147",
+        label: "Number of New Deals",
+        sublabel: "Active transactions",
+        change: "+8.3%",
         isPositive: true
       },
       {
-        icon: Clock,
+        icon: Users,
         value: "89",
-        label: "Avg Days to Close",
-        sublabel: "Time to transaction",
-        change: "-8.3%",
-        isPositive: false
+        label: "Number of Active Companies",
+        sublabel: "Portfolio companies",
+        change: "+15.7%",
+        isPositive: true
       },
       {
         icon: Target,
@@ -518,67 +499,20 @@ const Snapshot = () => {
     { value: "425 bps", label: "Credit Spread", sublabel: "vs 10-year treasury" }
   ]
 
-  // Create trending people from featured people with achievements - or use specific data for filters
+  // Convert database trending people to display format  
   const getTrendingPeople = () => {
-    // Check if filters match Australian Fruit and Vegetables
-    if (selectedRegion === "asia-pacific" && 
-        selectedCountry === "australia" && 
-        selectedSector === "Food and Ag." && 
-        selectedSubSector === "Food" && 
-        selectedTertiary === "Fruit and Vegetables") {
-      return [
-        {
-          name: "Peter Cundall",
-          company: "Gardening Australia",
-          achievements: "Iconic gardening advocate",
-          initials: "PC",
-          sectors: "Horticulture, Sustainability",
-          profileImage: "https://picsum.photos/id/91/120/120"
-        },
-        {
-          name: "Costa Georgiadis",
-          company: "ABC Gardening Australia",
-          achievements: "TV host & organic advocate",
-          initials: "CG",
-          sectors: "Organic Gardening, Media",
-          profileImage: "https://picsum.photos/id/177/120/120"
-        },
-        {
-          name: "Dean Gall",
-          company: "IFPA ANZ",
-          achievements: "Chairman of IFPA ANZ",
-          initials: "DG",
-          sectors: "Fresh Produce, Industry Leadership",
-          profileImage: "https://picsum.photos/id/186/120/120"
-        },
-        {
-          name: "Richard Clayton",
-          company: "Australian Fresh Produce Alliance",
-          achievements: "Chair of AFPA",
-          initials: "RC",
-          sectors: "Industry Advocacy, Policy",
-          profileImage: "https://picsum.photos/id/188/120/120"
-        },
-        {
-          name: "Rocky Lamattina",
-          company: "Rocky Lamattina and Sons",
-          achievements: "Vegetable Farm of the Year",
-          initials: "RL",
-          sectors: "Vegetable Growing, Excellence",
-          profileImage: "https://picsum.photos/id/203/120/120"
-        },
-        {
-          name: "Edna Margaret Walling",
-          company: "Landscape Design Legacy",
-          achievements: "Influential landscape designer",
-          initials: "EW",
-          sectors: "Landscape Design, Horticulture",
-          profileImage: "https://picsum.photos/id/233/120/120"
-        }
-      ]
+    if (dbTrendingPeople.length > 0) {
+      return dbTrendingPeople.map(person => ({
+        name: person.name,
+        company: person.company,
+        achievements: person.description || person.position,
+        initials: person.name.split(' ').map(n => n[0]).join(''),
+        sectors: "Growth & Innovation", // Could be mapped from sector data
+        profileImage: person.image_url || "https://picsum.photos/id/91/120/120"
+      }))
     }
 
-    // Default processing for other filters
+    // Fallback logic for featured people when no database data
     const getInitials = (name: string) => {
       return name.split(' ')
         .map(word => word.charAt(0))
@@ -683,69 +617,42 @@ const Snapshot = () => {
     }
   ]
 
-  const displayTrendingPeople = trendingPeople.length > 0 ? trendingPeople : fallbackTrendingPeople
+  const displayTrendingPeople = dbTrendingPeople.length > 0 ? 
+    dbTrendingPeople.map(person => ({
+      name: person.name,
+      title: person.position,
+      firm: person.company,
+      achievement: person.description || person.position,
+      sector: "Growth & Innovation",
+      profileImage: person.image_url || "https://picsum.photos/id/91/120/120",
+      initials: person.name.split(' ').map(n => n[0]).join(''),
+      slug: null
+    })) : 
+    (trendingPeople.length > 0 ? trendingPeople.map(person => ({
+      name: person.name,
+      title: person.company,
+      firm: person.company,
+      achievement: person.achievements,
+      sector: person.sectors,
+      profileImage: person.profileImage,
+      initials: person.initials,
+      slug: null
+    })) : fallbackTrendingPeople)
 
-  // Create trending companies from featured companies - or use specific data for filters
+  // Convert database trending companies to display format
   const getTrendingCompanies = () => {
-    // Check if filters match Australian Fruit and Vegetables
-    if (selectedRegion === "asia-pacific" && 
-        selectedCountry === "australia" && 
-        selectedSector === "Food and Ag." && 
-        selectedSubSector === "Food" && 
-        selectedTertiary === "Fruit and Vegetables") {
-      return [
-        {
-          name: "Costa Group",
-          type: "agriculture",
-          icon: Globe,
-          metric: "+23% Market Expansion",
-          logo: "https://picsum.photos/id/100/120/120",
-          slug: "costa-group"
-        },
-        {
-          name: "Perfection Fresh Australia",
-          type: "agriculture",
-          icon: Zap,
-          metric: "+18% Supply Growth",
-          logo: "https://picsum.photos/id/101/120/120",
-          slug: "perfection-fresh-australia"
-        },
-        {
-          name: "Fresh Produce Group",
-          type: "agriculture",
-          icon: Briefcase,
-          metric: "+35% MAM Investment",
-          logo: "https://picsum.photos/id/102/120/120",
-          slug: "fresh-produce-group"
-        },
-        {
-          name: "Premier Fresh Australia",
-          type: "agriculture",
-          icon: Users,
-          metric: "+28% Supply Chain",
-          logo: "https://picsum.photos/id/103/120/120",
-          slug: "premier-fresh-australia"
-        },
-        {
-          name: "Harvest Moon Australia",
-          type: "agriculture",
-          icon: Globe,
-          metric: "+20% Tasmania Growth",
-          logo: "https://picsum.photos/id/104/120/120",
-          slug: "harvest-moon-australia"
-        },
-        {
-          name: "One Harvest",
-          type: "agriculture",
-          icon: Zap,
-          metric: "+31% Innovation",
-          logo: "https://picsum.photos/id/105/120/120",
-          slug: "one-harvest"
-        }
-      ]
+    if (dbTrendingCompanies.length > 0) {
+      return dbTrendingCompanies.map(company => ({
+        name: company.name,
+        type: "growth",
+        icon: Building,
+        metric: company.change_percentage ? `+${company.change_percentage}%` : "Growth Leader",
+        logo: company.image_url || "https://picsum.photos/id/100/120/120",
+        slug: null
+      }))
     }
 
-    // Default processing for other filters
+    // Fallback to original logic if no database data
     const getCompanyIcon = (companyType: string) => {
       switch (companyType) {
         case 'fintech': return DollarSign
@@ -1102,6 +1009,50 @@ const Snapshot = () => {
             ))}
           </div>
         </section>
+
+        {/* Key Deals */}
+        {dbDeals.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">Key Deals</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {dbDeals.map((deal, index) => (
+                <Card key={deal.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-accent-green" />
+                        <span className="text-sm text-accent-green font-medium uppercase tracking-wide">
+                          {deal.transaction_type}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-white">
+                          {deal.deal_value_formatted || "Undisclosed"}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="font-bold text-white">{deal.deal_name}</div>
+                      <div className="text-sm text-white/60">
+                        {deal.city}, {deal.country}
+                      </div>
+                      {deal.description && (
+                        <div className="text-sm text-white/70 line-clamp-2">
+                          {deal.description}
+                        </div>
+                      )}
+                      {deal.announcement_date && (
+                        <div className="text-xs text-accent-green">
+                          {new Date(deal.announcement_date).toLocaleDateString()}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Investment Metrics */}
         <section className="mb-12">
