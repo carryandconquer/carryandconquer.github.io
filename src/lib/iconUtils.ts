@@ -12,6 +12,7 @@ import {
   MessageSquare,
   Building,
   Server,
+  AlertTriangle,
   type LucideIcon
 } from "lucide-react"
 
@@ -29,6 +30,7 @@ const iconMap: Record<string, LucideIcon> = {
   MessageSquare,
   Building,
   Server,
+  AlertTriangle,
 }
 
 export function getIconComponent(iconName: string): LucideIcon {
