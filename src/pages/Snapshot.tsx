@@ -20,8 +20,9 @@ const Snapshot = () => {
   const filters = {
     region: selectedRegion !== "all-regions" ? selectedRegion.replace('-', ' ') : undefined,
     country: selectedCountry !== "all-countries" ? selectedCountry.replace('-', ' ') : undefined,
-    sector: selectedSector !== "all-sectors" ? selectedSector : undefined,
-    subSector: selectedSubSector !== "all-sub-sectors" ? selectedSubSector : undefined,
+    sector: selectedSector !== "all-sectors" ? selectedSector.replace('-', ' ') : undefined,
+    subSector: selectedSubSector !== "all-sub-sectors" ? selectedSubSector.replace('-', ' ') : undefined,
+    tertiary: selectedTertiary !== "all-tertiary" ? selectedTertiary.replace(/-/g, ' ').replace(/\s+/g, ' ') : undefined,
   }
 
   // Fetch data from database

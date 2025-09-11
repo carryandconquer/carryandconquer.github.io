@@ -6,6 +6,7 @@ interface SnapshotFilters {
   country?: string;
   sector?: string;
   subSector?: string;
+  tertiary?: string;
 }
 
 export interface MarketMetric {
@@ -89,6 +90,21 @@ export function useSnapshotData(filters: SnapshotFilters) {
         }
       }
 
+      if (filters.subSector) {
+        const { data: subSectors } = await supabase
+          .from('snapshot_sub_sectors')
+          .select('id')
+          .ilike('name', `%${filters.subSector}%`);
+        
+        if (subSectors?.[0]?.id) {
+          query = query.eq('sub_sector_id', subSectors[0].id);
+        }
+      }
+
+      if (filters.tertiary) {
+        query = query.ilike('metric_family', `%${filters.tertiary}%`);
+      }
+
       const { data, error } = await query;
       if (error) throw error;
       return data as MarketMetric[];
@@ -127,6 +143,17 @@ export function useSnapshotData(filters: SnapshotFilters) {
         }
       }
 
+      if (filters.sector) {
+        const { data: sectors } = await supabase
+          .from('snapshot_sectors')
+          .select('id')
+          .ilike('name', `%${filters.sector}%`);
+        
+        if (sectors?.[0]?.id) {
+          query = query.eq('sector_id', sectors[0].id);
+        }
+      }
+
       const { data, error } = await query;
       if (error) throw error;
       return data as TrendingCompany[];
@@ -162,6 +189,17 @@ export function useSnapshotData(filters: SnapshotFilters) {
         
         if (countries?.[0]?.id) {
           query = query.eq('country_id', countries[0].id);
+        }
+      }
+
+      if (filters.sector) {
+        const { data: sectors } = await supabase
+          .from('snapshot_sectors')
+          .select('id')
+          .ilike('name', `%${filters.sector}%`);
+        
+        if (sectors?.[0]?.id) {
+          query = query.eq('sector_id', sectors[0].id);
         }
       }
 
