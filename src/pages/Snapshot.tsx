@@ -352,51 +352,6 @@ const Snapshot = () => {
   }
   // Convert database market metrics to display format
   const getMarketMetrics = () => {
-    // Check for specific automotive industry filters
-    if (selectedRegion === "north-america" && 
-        selectedCountry === "united-states" && 
-        selectedSector === "Consumer Discretionary" && 
-        selectedSubSector === "Automobiles & Components") {
-      return [
-        {
-          icon: TrendingDown,
-          value: "Cautious",
-          label: "PE Deal Activity",
-          sublabel: "H1 2025 impacted by global tariffs and elevated interest rates",
-          change: "Global Impact",
-          isPositive: false,
-          isNews: true
-        },
-        {
-          icon: Target,
-          value: "Strong",
-          label: "Distressed Asset Focus",
-          sublabel: "PE firms actively seeking tariff-impacted opportunities",
-          change: "Active",
-          isPositive: true,
-          isNews: true
-        },
-        {
-          icon: Building,
-          value: "Growing",
-          label: "Consolidation Activity",
-          sublabel: "Divestiture of non-core assets driving larger deals",
-          change: "Strategic",
-          isPositive: true,
-          isNews: true
-        },
-        {
-          icon: Rocket,
-          value: "Strong",
-          label: "Aftermarket M&A",
-          sublabel: "Q2 2025 saw significant North American automotive aftermarket investments",
-          change: "Q2 2025",
-          isPositive: true,
-          isNews: true
-        }
-      ]
-    }
-
     if (dbMarketMetrics.length > 0) {
       return dbMarketMetrics.map(metric => {
         // Handle news items differently
@@ -521,69 +476,6 @@ const Snapshot = () => {
 
   // Convert database trending people to display format  
   const getTrendingPeople = () => {
-    // Check for specific automotive industry filters
-    if (selectedRegion === "north-america" && 
-        selectedCountry === "united-states" && 
-        selectedSector === "Consumer Discretionary" && 
-        selectedSubSector === "Automobiles & Components") {
-      return [
-        {
-          name: "Carlos Tavares",
-          company: "Stellantis",
-          achievements: "Former CEO",
-          initials: "CT",
-          sectors: "Automotive Leadership",
-          profileImage: "https://picsum.photos/id/91/120/120",
-          slug: "carlos-tavares"
-        },
-        {
-          name: "Seetarama Kotagiri",
-          company: "Magna International",
-          achievements: "CEO",
-          initials: "SK",
-          sectors: "Mobility Technology",
-          profileImage: "https://picsum.photos/id/92/120/120",
-          slug: "seetarama-kotagiri"
-        },
-        {
-          name: "Henrik Fisker",
-          company: "Fisker",
-          achievements: "CEO",
-          initials: "HF",
-          sectors: "Electric Vehicles",
-          profileImage: "https://picsum.photos/id/93/120/120",
-          slug: "henrik-fisker"
-        },
-        {
-          name: "Peter Rawlinson",
-          company: "Lucid Motors",
-          achievements: "CEO and CTO",
-          initials: "PR",
-          sectors: "EV Innovation",
-          profileImage: "https://picsum.photos/id/94/120/120",
-          slug: "peter-rawlinson"
-        },
-        {
-          name: "McKeel Hagerty",
-          company: "Hagerty",
-          achievements: "CEO",
-          initials: "MH",
-          sectors: "Automotive Insurance",
-          profileImage: "https://picsum.photos/id/95/120/120",
-          slug: "mckeel-hagerty"
-        },
-        {
-          name: "Roger Penske",
-          company: "Penske Corporation",
-          achievements: "CEO",
-          initials: "RP",
-          sectors: "Automotive Services",
-          profileImage: "https://picsum.photos/id/96/120/120",
-          slug: "roger-penske"
-        }
-      ]
-    }
-
     if (dbTrendingPeople.length > 0) {
       return dbTrendingPeople.map(person => ({
         name: person.name,
@@ -702,85 +594,30 @@ const Snapshot = () => {
     }
   ]
 
-  const isAutoUSNA = selectedRegion === "north-america" &&
-    selectedCountry === "united-states" &&
-    selectedSector === "Consumer Discretionary" &&
-    selectedSubSector === "Automobiles & Components";
-
-  const displayTrendingPeople = isAutoUSNA
-    ? (trendingPeople.length > 0 ? trendingPeople.map(person => ({
-        name: person.name,
-        title: person.company,
-        firm: person.company,
-        achievement: person.achievements,
-        sector: person.sectors,
-        profileImage: person.profileImage,
-        initials: person.initials,
-        slug: person.slug
-      })) : fallbackTrendingPeople)
-    : (dbTrendingPeople.length > 0 ? dbTrendingPeople.map(person => ({
-        name: person.name,
-        title: person.position,
-        firm: person.company,
-        achievement: person.description || person.position,
-        sector: "Growth & Innovation",
-        profileImage: person.image_url || "https://picsum.photos/id/91/120/120",
-        initials: person.name.split(' ').map(n => n[0]).join(''),
-        slug: person.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-      })) : (trendingPeople.length > 0 ? trendingPeople.map(person => ({
-        name: person.name,
-        title: person.company,
-        firm: person.company,
-        achievement: person.achievements,
-        sector: person.sectors,
-        profileImage: person.profileImage,
-        initials: person.initials,
-        slug: person.slug
-      })) : fallbackTrendingPeople))
+  const displayTrendingPeople = dbTrendingPeople.length > 0 ? 
+    dbTrendingPeople.map(person => ({
+      name: person.name,
+      title: person.position,
+      firm: person.company,
+      achievement: person.description || person.position,
+      sector: "Growth & Innovation",
+      profileImage: person.image_url || "https://picsum.photos/id/91/120/120",
+      initials: person.name.split(' ').map(n => n[0]).join(''),
+      slug: person.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    })) : 
+    (trendingPeople.length > 0 ? trendingPeople.map(person => ({
+      name: person.name,
+      title: person.company,
+      firm: person.company,
+      achievement: person.achievements,
+      sector: person.sectors,
+      profileImage: person.profileImage,
+      initials: person.initials,
+      slug: person.slug
+    })) : fallbackTrendingPeople)
 
   // Convert database trending companies to display format
   const getTrendingCompanies = () => {
-    // Check for specific automotive industry filters
-    if (selectedRegion === "north-america" && 
-        selectedCountry === "united-states" && 
-        selectedSector === "Consumer Discretionary" && 
-        selectedSubSector === "Automobiles & Components") {
-      return [
-        {
-          name: "Robert Bosch GmbH",
-          type: "automotive-supplier",
-          icon: Building,
-          metric: "World's Largest Supplier",
-          logo: "https://picsum.photos/id/100/120/120",
-          slug: "robert-bosch-gmbh"
-        },
-        {
-          name: "DENSO CORPORATION",
-          type: "automotive-components",
-          icon: Target,
-          metric: "Advanced Mobility Tech",
-          logo: "https://picsum.photos/id/101/120/120",
-          slug: "denso-corporation"
-        },
-        {
-          name: "Continental AG",
-          type: "automotive-parts",
-          icon: DollarSign,
-          metric: "200K Employees",
-          logo: "https://picsum.photos/id/102/120/120",
-          slug: "continental-ag"
-        },
-        {
-          name: "Magna International Inc.",
-          type: "mobility-technology",
-          icon: Rocket,
-          metric: "164K Global Workforce",
-          logo: "https://picsum.photos/id/103/120/120",
-          slug: "magna-international"
-        }
-      ]
-    }
-
     if (dbTrendingCompanies.length > 0) {
       return dbTrendingCompanies.map(company => ({
         name: company.name,
