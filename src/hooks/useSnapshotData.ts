@@ -12,6 +12,7 @@ export interface MarketMetric {
   id: string;
   metric_name: string;
   metric_category: string;
+  metric_family: string | null;
   current_value: string;
   change_percentage: number | null;
   change_direction: string | null;
@@ -53,7 +54,7 @@ export function useSnapshotData(filters: SnapshotFilters) {
       let query = supabase
         .from('snapshot_market_metrics')
         .select('*')
-        .eq('metric_category', 'Market Activity');
+        .in('metric_category', ['Market Activity', 'news']);
 
       if (filters.region) {
         const { data: regions } = await supabase
