@@ -355,8 +355,8 @@ const Snapshot = () => {
     // Check for specific automotive industry filters
     if (selectedRegion === "north-america" && 
         selectedCountry === "united-states" && 
-        selectedSector === "consumer-discretionary" && 
-        selectedSubSector === "automobiles-components") {
+        selectedSector === "Consumer Discretionary" && 
+        selectedSubSector === "Automobiles & Components") {
       return [
         {
           icon: TrendingDown,
@@ -524,8 +524,8 @@ const Snapshot = () => {
     // Check for specific automotive industry filters
     if (selectedRegion === "north-america" && 
         selectedCountry === "united-states" && 
-        selectedSector === "consumer-discretionary" && 
-        selectedSubSector === "automobiles-components") {
+        selectedSector === "Consumer Discretionary" && 
+        selectedSubSector === "Automobiles & Components") {
       return [
         {
           name: "Carlos Tavares",
@@ -702,35 +702,49 @@ const Snapshot = () => {
     }
   ]
 
-  const displayTrendingPeople = dbTrendingPeople.length > 0 ? 
-    dbTrendingPeople.map(person => ({
-      name: person.name,
-      title: person.position,
-      firm: person.company,
-      achievement: person.description || person.position,
-      sector: "Growth & Innovation",
-      profileImage: person.image_url || "https://picsum.photos/id/91/120/120",
-      initials: person.name.split(' ').map(n => n[0]).join(''),
-      slug: person.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-    })) : 
-    (trendingPeople.length > 0 ? trendingPeople.map(person => ({
-      name: person.name,
-      title: person.company,
-      firm: person.company,
-      achievement: person.achievements,
-      sector: person.sectors,
-      profileImage: person.profileImage,
-      initials: person.initials,
-      slug: person.slug
-    })) : fallbackTrendingPeople)
+  const isAutoUSNA = selectedRegion === "north-america" &&
+    selectedCountry === "united-states" &&
+    selectedSector === "Consumer Discretionary" &&
+    selectedSubSector === "Automobiles & Components";
+
+  const displayTrendingPeople = isAutoUSNA
+    ? (trendingPeople.length > 0 ? trendingPeople.map(person => ({
+        name: person.name,
+        title: person.company,
+        firm: person.company,
+        achievement: person.achievements,
+        sector: person.sectors,
+        profileImage: person.profileImage,
+        initials: person.initials,
+        slug: person.slug
+      })) : fallbackTrendingPeople)
+    : (dbTrendingPeople.length > 0 ? dbTrendingPeople.map(person => ({
+        name: person.name,
+        title: person.position,
+        firm: person.company,
+        achievement: person.description || person.position,
+        sector: "Growth & Innovation",
+        profileImage: person.image_url || "https://picsum.photos/id/91/120/120",
+        initials: person.name.split(' ').map(n => n[0]).join(''),
+        slug: person.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      })) : (trendingPeople.length > 0 ? trendingPeople.map(person => ({
+        name: person.name,
+        title: person.company,
+        firm: person.company,
+        achievement: person.achievements,
+        sector: person.sectors,
+        profileImage: person.profileImage,
+        initials: person.initials,
+        slug: person.slug
+      })) : fallbackTrendingPeople))
 
   // Convert database trending companies to display format
   const getTrendingCompanies = () => {
     // Check for specific automotive industry filters
     if (selectedRegion === "north-america" && 
         selectedCountry === "united-states" && 
-        selectedSector === "consumer-discretionary" && 
-        selectedSubSector === "automobiles-components") {
+        selectedSector === "Consumer Discretionary" && 
+        selectedSubSector === "Automobiles & Components") {
       return [
         {
           name: "Robert Bosch GmbH",
