@@ -2,7 +2,7 @@ import { Navigation } from "@/components/Navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe, BarChart3 } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe, BarChart3, MessageSquare, AlertTriangle, Trophy, Rocket } from "lucide-react"
 import { useState, useEffect } from "react"
 import { usePeople } from "@/hooks/usePeople"
 import { useCompanies } from "@/hooks/useCompanies"
@@ -410,14 +410,45 @@ const Snapshot = () => {
   // Convert database market metrics to display format
   const getMarketMetrics = () => {
     if (dbMarketMetrics.length > 0) {
-      return dbMarketMetrics.map(metric => ({
-        icon: DollarSign, // Default icon, could be customized based on metric type
-        value: metric.current_value,
-        label: metric.metric_name,
-        sublabel: metric.metric_category,
-        change: metric.change_percentage ? `${metric.change_percentage > 0 ? '+' : ''}${metric.change_percentage}%` : "N/A",
-        isPositive: metric.change_direction === 'up' || (metric.change_percentage || 0) > 0
-      }))
+      return dbMarketMetrics.map(metric => {
+        // Handle news items differently
+        if (metric.metric_category === 'news') {
+          const getNewsIcon = (title: string) => {
+            if (title.toLowerCase().includes('safety') || title.toLowerCase().includes('issue')) return AlertTriangle
+            if (title.toLowerCase().includes('win') || title.toLowerCase().includes('victory') || title.toLowerCase().includes('appeal')) return Trophy
+            if (title.toLowerCase().includes('launch') || title.toLowerCase().includes('rollout')) return Rocket
+            return MessageSquare
+          }
+          
+          return {
+            icon: getNewsIcon(metric.metric_name),
+            value: "Breaking", // For news items, show "Breaking" instead of a metric value
+            label: metric.metric_name,
+            sublabel: metric.current_value, // The news description goes here
+            change: "News",
+            isPositive: true,
+            isNews: true // Flag to identify news items for different styling
+          }
+        }
+        
+        // Handle regular metrics
+        const getMetricIcon = (category: string) => {
+          if (category === 'financial') return DollarSign
+          if (category === 'regulatory') return Target
+          if (category === 'innovation') return Zap
+          return BarChart3
+        }
+        
+        return {
+          icon: getMetricIcon(metric.metric_category),
+          value: metric.current_value,
+          label: metric.metric_name,
+          sublabel: metric.metric_category,
+          change: metric.change_percentage ? `${metric.change_percentage > 0 ? '+' : ''}${metric.change_percentage}%` : "N/A",
+          isPositive: metric.change_direction === 'up' || (metric.change_percentage || 0) > 0,
+          isNews: false
+        }
+      })
     }
     
     // Fallback to default metrics if no database data
@@ -852,21 +883,42 @@ const Snapshot = () => {
           <h2 className="text-2xl font-bold mb-6">Market Activity</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {marketMetrics.map((metric, index) => (
-              <Card key={index} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
+              <Card key={index} className={`bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 ${
+                metric.isNews ? 'border-l-4 border-l-accent-green' : ''
+              }`}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <metric.icon className="w-6 h-6 text-accent-green" />
-                    <div className={`flex items-center gap-1 text-sm ${
-                      metric.isPositive ? 'text-green-400' : 'text-red-400'
-                    }`}>
-                      {metric.isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                      {metric.change}
-                    </div>
+                    <metric.icon className={`w-6 h-6 ${
+                      metric.isNews 
+                        ? metric.icon === AlertTriangle ? 'text-yellow-400' : 
+                          metric.icon === Trophy ? 'text-green-400' : 
+                          metric.icon === Rocket ? 'text-blue-400' : 'text-accent-green'
+                        : 'text-accent-green'
+                    }`} />
+                    {!metric.isNews && (
+                      <div className={`flex items-center gap-1 text-sm ${
+                        metric.isPositive ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {metric.isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                        {metric.change}
+                      </div>
+                    )}
+                    {metric.isNews && (
+                      <Badge variant="outline" className="text-xs border-accent-green text-accent-green">
+                        {metric.change}
+                      </Badge>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <div className="text-3xl font-bold">{metric.value}</div>
+                    <div className={`${metric.isNews ? 'text-xl' : 'text-3xl'} font-bold`}>
+                      {metric.value}
+                    </div>
                     <div className="text-lg font-semibold text-white">{metric.label}</div>
-                    <div className="text-sm text-white/60">{metric.sublabel}</div>
+                    <div className={`text-sm text-white/60 ${
+                      metric.isNews ? 'line-clamp-2' : ''
+                    }`}>
+                      {metric.sublabel}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
