@@ -731,11 +731,11 @@ const Snapshot = () => {
                 <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
                   <SelectItem value="all-regions">All Regions</SelectItem>
                   <SelectItem value="north-america">🍁 North America</SelectItem>
-                  <SelectItem value="europe">🇪🇺 Europe</SelectItem>
-                  <SelectItem value="asia-pacific">🌏 Asia Pacific</SelectItem>
-                  <SelectItem value="emerging-asia">🌅 Emerging Asia</SelectItem>
-                  <SelectItem value="latin-america">🌎 Latin America</SelectItem>
-                  <SelectItem value="middle-east-africa">🌍 Middle East & Africa</SelectItem>
+                  <SelectItem value="europe" disabled className="opacity-50 cursor-not-allowed">🇪🇺 Europe</SelectItem>
+                  <SelectItem value="asia-pacific" disabled className="opacity-50 cursor-not-allowed">🌏 Asia Pacific</SelectItem>
+                  <SelectItem value="emerging-asia" disabled className="opacity-50 cursor-not-allowed">🌅 Emerging Asia</SelectItem>
+                  <SelectItem value="latin-america" disabled className="opacity-50 cursor-not-allowed">🌎 Latin America</SelectItem>
+                  <SelectItem value="middle-east-africa" disabled className="opacity-50 cursor-not-allowed">🌍 Middle East & Africa</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -749,7 +749,12 @@ const Snapshot = () => {
                 <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
                   <SelectItem value="all-countries">All Countries</SelectItem>
                   {getFilteredCountries().map((country) => (
-                    <SelectItem key={country.value} value={country.value}>
+                    <SelectItem 
+                      key={country.value} 
+                      value={country.value}
+                      disabled={country.value !== "united-states"}
+                      className={country.value !== "united-states" ? "opacity-50 cursor-not-allowed" : ""}
+                    >
                       {country.label}
                     </SelectItem>
                   ))}
