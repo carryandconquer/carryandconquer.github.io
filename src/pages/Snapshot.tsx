@@ -2,7 +2,7 @@ import { Navigation } from "@/components/Navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe, BarChart3, MessageSquare, AlertTriangle, Trophy, Rocket } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Building, Clock, Target, Users, Briefcase, Zap, Globe, BarChart3, MessageSquare, AlertTriangle, Trophy, Rocket, Crown } from "lucide-react"
 import { useState, useEffect } from "react"
 import { usePeople } from "@/hooks/usePeople"
 import { useCompanies } from "@/hooks/useCompanies"
@@ -792,7 +792,10 @@ const Snapshot = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-white/70 mb-2">TERTIARY SECTOR (Disabled)</label>
+              <label className="flex items-center gap-2 text-sm font-medium text-white/70 mb-2">
+                TERTIARY SECTOR
+                <Crown size={16} className="text-yellow-500" />
+              </label>
               <Select value={selectedTertiary} onValueChange={handleTertiaryChange} disabled>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white opacity-50 cursor-not-allowed">
                   <SelectValue />
