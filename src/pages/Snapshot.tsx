@@ -283,10 +283,21 @@ const Snapshot = () => {
 
   // Get filtered countries based on selected region
   const getFilteredCountries = () => {
+    let countries;
     if (selectedRegion === "all-regions") {
-      return Object.values(regionCountries).flat()
+      countries = Object.values(regionCountries).flat()
+    } else {
+      countries = regionCountries[selectedRegion as keyof typeof regionCountries] || []
     }
-    return regionCountries[selectedRegion as keyof typeof regionCountries] || []
+    
+    // Move United States to the front
+    const unitedStatesIndex = countries.findIndex(country => country.value === "united-states")
+    if (unitedStatesIndex > -1) {
+      const unitedStates = countries.splice(unitedStatesIndex, 1)[0]
+      return [unitedStates, ...countries]
+    }
+    
+    return countries
   }
 
   // Get filtered subsectors based on selected sector
