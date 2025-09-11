@@ -6,7 +6,6 @@ interface SnapshotFilters {
   country?: string;
   sector?: string;
   subSector?: string;
-  tertiary?: string;
 }
 
 export interface MarketMetric {
@@ -99,10 +98,6 @@ export function useSnapshotData(filters: SnapshotFilters) {
         if (subSectors?.[0]?.id) {
           query = query.eq('sub_sector_id', subSectors[0].id);
         }
-      }
-
-      if (filters.tertiary) {
-        query = query.ilike('metric_family', `%${filters.tertiary}%`);
       }
 
       const { data, error } = await query;
