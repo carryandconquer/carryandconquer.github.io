@@ -3,9 +3,10 @@ import { Footer } from "@/components/Footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { TrendingUp, Building2, DollarSign, ArrowRight, ExternalLink } from "lucide-react"
+import { TrendingUp, Building2, DollarSign, ArrowRight, ExternalLink, Crown } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { supabase } from "@/integrations/supabase/client"
 
 export const keyDeals = [
   {
@@ -102,47 +103,228 @@ export default function KeyDeals() {
   const [selectedSector, setSelectedSector] = useState<string>("all-sectors")
   const [selectedSubSector, setSelectedSubSector] = useState<string>("all-sub-sectors")
   const [selectedTertiary, setSelectedTertiary] = useState<string>("all-tertiary")
+  const [deals, setDeals] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Region to countries mapping based on Private Equity Regional Taxonomy
+  // Region to countries mapping based on Private Equity Regional Taxonomy - same as Snapshot
   const regionCountries = {
     "asia-pacific": [
       { value: "australia", label: "Australia" },
+      { value: "brunei", label: "Brunei" },
+      { value: "cook-islands", label: "Cook Islands" },
+      { value: "fiji", label: "Fiji" },
+      { value: "french-polynesia", label: "French Polynesia" },
       { value: "hong-kong", label: "Hong Kong" },
       { value: "japan", label: "Japan" },
+      { value: "kiribati", label: "Kiribati" },
+      { value: "macau", label: "Macau" },
+      { value: "marshall-islands", label: "Marshall Islands" },
+      { value: "micronesia", label: "Micronesia" },
+      { value: "nauru", label: "Nauru" },
+      { value: "new-caledonia", label: "New Caledonia" },
       { value: "new-zealand", label: "New Zealand" },
+      { value: "palau", label: "Palau" },
+      { value: "papua-new-guinea", label: "Papua New Guinea" },
+      { value: "samoa", label: "Samoa" },
       { value: "singapore", label: "Singapore" },
-      { value: "south-korea", label: "South Korea" }
+      { value: "solomon-islands", label: "Solomon Islands" },
+      { value: "south-korea", label: "South Korea" },
+      { value: "taiwan", label: "Taiwan" },
+      { value: "tonga", label: "Tonga" },
+      { value: "tuvalu", label: "Tuvalu" },
+      { value: "vanuatu", label: "Vanuatu" }
     ],
     "emerging-asia": [
+      { value: "afghanistan", label: "Afghanistan" },
+      { value: "bangladesh", label: "Bangladesh" },
+      { value: "bhutan", label: "Bhutan" },
+      { value: "cambodia", label: "Cambodia" },
       { value: "china", label: "China" },
+      { value: "east-timor-timor-leste", label: "East Timor (Timor-Leste)" },
       { value: "india", label: "India" },
       { value: "indonesia", label: "Indonesia" },
+      { value: "kazakhstan", label: "Kazakhstan" },
+      { value: "kyrgyzstan", label: "Kyrgyzstan" },
+      { value: "laos", label: "Laos" },
       { value: "malaysia", label: "Malaysia" },
+      { value: "maldives", label: "Maldives" },
+      { value: "mongolia", label: "Mongolia" },
+      { value: "myanmar", label: "Myanmar" },
+      { value: "nepal", label: "Nepal" },
+      { value: "north-korea", label: "North Korea" },
+      { value: "pakistan", label: "Pakistan" },
       { value: "philippines", label: "Philippines" },
+      { value: "sri-lanka", label: "Sri Lanka" },
+      { value: "tajikistan", label: "Tajikistan" },
       { value: "thailand", label: "Thailand" },
+      { value: "turkmenistan", label: "Turkmenistan" },
+      { value: "uzbekistan", label: "Uzbekistan" },
       { value: "vietnam", label: "Vietnam" }
     ],
     "europe": [
+      { value: "albania", label: "Albania" },
+      { value: "andorra", label: "Andorra" },
+      { value: "armenia", label: "Armenia" },
+      { value: "austria", label: "Austria" },
+      { value: "azerbaijan", label: "Azerbaijan" },
+      { value: "belarus", label: "Belarus" },
+      { value: "belgium", label: "Belgium" },
+      { value: "bosnia-and-herzegovina", label: "Bosnia and Herzegovina" },
+      { value: "bulgaria", label: "Bulgaria" },
+      { value: "croatia", label: "Croatia" },
+      { value: "cyprus", label: "Cyprus" },
+      { value: "czech-republic", label: "Czech Republic" },
+      { value: "denmark", label: "Denmark" },
+      { value: "estonia", label: "Estonia" },
+      { value: "finland", label: "Finland" },
       { value: "france", label: "France" },
+      { value: "georgia", label: "Georgia" },
       { value: "germany", label: "Germany" },
+      { value: "greece", label: "Greece" },
+      { value: "hungary", label: "Hungary" },
+      { value: "iceland", label: "Iceland" },
+      { value: "ireland", label: "Ireland" },
       { value: "italy", label: "Italy" },
+      { value: "kosovo", label: "Kosovo" },
+      { value: "latvia", label: "Latvia" },
+      { value: "liechtenstein", label: "Liechtenstein" },
+      { value: "lithuania", label: "Lithuania" },
+      { value: "luxembourg", label: "Luxembourg" },
+      { value: "malta", label: "Malta" },
+      { value: "moldova", label: "Moldova" },
+      { value: "monaco", label: "Monaco" },
+      { value: "montenegro", label: "Montenegro" },
       { value: "netherlands", label: "Netherlands" },
+      { value: "north-macedonia", label: "North Macedonia" },
+      { value: "norway", label: "Norway" },
+      { value: "poland", label: "Poland" },
+      { value: "portugal", label: "Portugal" },
+      { value: "romania", label: "Romania" },
+      { value: "russia", label: "Russia" },
+      { value: "san-marino", label: "San Marino" },
+      { value: "serbia", label: "Serbia" },
+      { value: "slovakia", label: "Slovakia" },
+      { value: "slovenia", label: "Slovenia" },
       { value: "spain", label: "Spain" },
-      { value: "united-kingdom", label: "United Kingdom" }
+      { value: "sweden", label: "Sweden" },
+      { value: "switzerland", label: "Switzerland" },
+      { value: "turkey", label: "Turkey" },
+      { value: "ukraine", label: "Ukraine" },
+      { value: "united-kingdom", label: "United Kingdom" },
+      { value: "vatican-city-holy-see", label: "Vatican City (Holy See)" }
     ],
     "latin-america": [
+      { value: "antigua-and-barbuda", label: "Antigua and Barbuda" },
+      { value: "anguilla", label: "Anguilla" },
       { value: "argentina", label: "Argentina" },
+      { value: "aruba", label: "Aruba" },
+      { value: "bahamas", label: "Bahamas" },
+      { value: "barbados", label: "Barbados" },
+      { value: "belize", label: "Belize" },
+      { value: "bermuda", label: "Bermuda" },
+      { value: "bolivia", label: "Bolivia" },
       { value: "brazil", label: "Brazil" },
+      { value: "cayman-islands", label: "Cayman Islands" },
       { value: "chile", label: "Chile" },
       { value: "colombia", label: "Colombia" },
-      { value: "mexico", label: "Mexico" }
+      { value: "costa-rica", label: "Costa Rica" },
+      { value: "cuba", label: "Cuba" },
+      { value: "curacao", label: "Curaçao" },
+      { value: "dominica", label: "Dominica" },
+      { value: "dominican-republic", label: "Dominican Republic" },
+      { value: "ecuador", label: "Ecuador" },
+      { value: "el-salvador", label: "El Salvador" },
+      { value: "grenada", label: "Grenada" },
+      { value: "guatemala", label: "Guatemala" },
+      { value: "guyana", label: "Guyana" },
+      { value: "haiti", label: "Haiti" },
+      { value: "honduras", label: "Honduras" },
+      { value: "jamaica", label: "Jamaica" },
+      { value: "montserrat", label: "Montserrat" },
+      { value: "nicaragua", label: "Nicaragua" },
+      { value: "panama", label: "Panama" },
+      { value: "paraguay", label: "Paraguay" },
+      { value: "peru", label: "Peru" },
+      { value: "puerto-rico", label: "Puerto Rico" },
+      { value: "saint-kitts-and-nevis", label: "Saint Kitts and Nevis" },
+      { value: "saint-lucia", label: "Saint Lucia" },
+      { value: "saint-vincent-and-the-grenadines", label: "Saint Vincent and the Grenadines" },
+      { value: "sint-maarten", label: "Sint Maarten" },
+      { value: "suriname", label: "Suriname" },
+      { value: "trinidad-and-tobago", label: "Trinidad and Tobago" },
+      { value: "turks-and-caicos-islands", label: "Turks and Caicos Islands" },
+      { value: "uruguay", label: "Uruguay" },
+      { value: "venezuela", label: "Venezuela" }
     ],
     "middle-east-africa": [
+      { value: "algeria", label: "Algeria" },
+      { value: "angola", label: "Angola" },
+      { value: "bahrain", label: "Bahrain" },
+      { value: "benin", label: "Benin" },
+      { value: "botswana", label: "Botswana" },
+      { value: "burkina-faso", label: "Burkina Faso" },
+      { value: "burundi", label: "Burundi" },
+      { value: "cameroon", label: "Cameroon" },
+      { value: "cape-verde", label: "Cape Verde (Cabo Verde)" },
+      { value: "central-african-republic", label: "Central African Republic" },
+      { value: "chad", label: "Chad" },
+      { value: "comoros", label: "Comoros" },
+      { value: "congo-brazzaville", label: "Congo (Brazzaville)" },
+      { value: "congo-kinshasa", label: "Congo (Kinshasa)" },
+      { value: "djibouti", label: "Djibouti" },
       { value: "egypt", label: "Egypt" },
+      { value: "equatorial-guinea", label: "Equatorial Guinea" },
+      { value: "eritrea", label: "Eritrea" },
+      { value: "eswatini", label: "Eswatini" },
+      { value: "ethiopia", label: "Ethiopia" },
+      { value: "gabon", label: "Gabon" },
+      { value: "gambia", label: "Gambia" },
+      { value: "ghana", label: "Ghana" },
+      { value: "guinea", label: "Guinea" },
+      { value: "guinea-bissau", label: "Guinea-Bissau" },
+      { value: "iran", label: "Iran" },
+      { value: "iraq", label: "Iraq" },
       { value: "israel", label: "Israel" },
+      { value: "ivory-coast", label: "Ivory Coast" },
+      { value: "jordan", label: "Jordan" },
+      { value: "kenya", label: "Kenya" },
+      { value: "kuwait", label: "Kuwait" },
+      { value: "lebanon", label: "Lebanon" },
+      { value: "lesotho", label: "Lesotho" },
+      { value: "liberia", label: "Liberia" },
+      { value: "libya", label: "Libya" },
+      { value: "madagascar", label: "Madagascar" },
+      { value: "malawi", label: "Malawi" },
+      { value: "mali", label: "Mali" },
+      { value: "mauritania", label: "Mauritania" },
+      { value: "mauritius", label: "Mauritius" },
+      { value: "morocco", label: "Morocco" },
+      { value: "mozambique", label: "Mozambique" },
+      { value: "namibia", label: "Namibia" },
+      { value: "niger", label: "Niger" },
+      { value: "nigeria", label: "Nigeria" },
+      { value: "oman", label: "Oman" },
+      { value: "palestine", label: "Palestine" },
+      { value: "qatar", label: "Qatar" },
+      { value: "rwanda", label: "Rwanda" },
+      { value: "sao-tome-and-principe", label: "Sao Tome and Principe" },
       { value: "saudi-arabia", label: "Saudi Arabia" },
+      { value: "senegal", label: "Senegal" },
+      { value: "seychelles", label: "Seychelles" },
+      { value: "sierra-leone", label: "Sierra Leone" },
+      { value: "somalia", label: "Somalia" },
       { value: "south-africa", label: "South Africa" },
-      { value: "uae-united-arab-emirates", label: "UAE (United Arab Emirates)" }
+      { value: "south-sudan", label: "South Sudan" },
+      { value: "sudan", label: "Sudan" },
+      { value: "syria", label: "Syria" },
+      { value: "tanzania", label: "Tanzania" },
+      { value: "togo", label: "Togo" },
+      { value: "tunisia", label: "Tunisia" },
+      { value: "uae-united-arab-emirates", label: "UAE (United Arab Emirates)" },
+      { value: "uganda", label: "Uganda" },
+      { value: "yemen", label: "Yemen" },
+      { value: "zambia", label: "Zambia" },
+      { value: "zimbabwe", label: "Zimbabwe" }
     ],
     "north-america": [
       { value: "canada", label: "Canada" },
@@ -150,7 +332,7 @@ export default function KeyDeals() {
     ]
   }
 
-  // Sector mapping
+  // Sector mapping - same as Snapshot
   const sectorMapping: Record<string, string[]> = {
     "Business Services": ["Business Services", "Financial Services", "Insurance", "Outsourcing"],
     "Clean Tech.": ["Clean Technology", "Environmental Services", "Renewable Energy"],
@@ -169,18 +351,46 @@ export default function KeyDeals() {
     "Telecoms": ["Advertising", "Media", "Network", "Telecom Media", "Telecoms"]
   }
 
-  const subsectorMapping: Record<string, string[]> = {
-    "Business Services": ["Accounting Services", "Business Services", "Consulting Services", "Legal Services"],
-    "Financial Services": ["Banks", "Consumer Finance", "Investment Banking", "Securities Brokers"],
-    "Insurance": ["Insurance Agencies", "Healthcare Insurance"],
-    "Outsourcing": ["BPO Services", "IT Outsourcing"],
-    "Clean Technology": ["Clean Technology", "Solar Power", "Wind Power"],
-    "Environmental Services": ["Waste Management", "Water Treatment"],
-    "Renewable Energy": ["Solar Power", "Wind Power", "Hydro Power"],
-    "Healthcare": ["Biotechnology", "Medical Devices", "Pharmaceuticals", "Healthcare Services"],
-    "Technology": ["Software", "Hardware", "Internet", "AI/ML"],
-    "Manufacturing": ["Automotive", "Industrial Equipment", "Aerospace"]
-  }
+  // Fetch deals from database
+  useEffect(() => {
+    const fetchDeals = async () => {
+      setLoading(true)
+      try {
+        let query = supabase
+          .from('deals')
+          .select(`
+            *,
+            deals_companies!deals_company_id_fkey(name, description, website, country, region),
+            deals_deal_investors(
+              deals_investors(name, type),
+              deals_people(full_name, role)
+            )
+          `)
+          .eq('published', true)
+        
+        // Apply filters
+        if (selectedRegion !== "all-regions") {
+          query = query.ilike('region', `%${selectedRegion.replace('-', ' ')}%`)
+        }
+        if (selectedCountry !== "all-countries") {
+          query = query.ilike('country', `%${selectedCountry.replace('-', ' ')}%`)
+        }
+        
+        const { data, error } = await query
+        
+        if (error) throw error
+        setDeals(data || [])
+      } catch (error) {
+        console.error('Error fetching deals:', error)
+        // Fallback to hardcoded data
+        setDeals(keyDeals)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDeals()
+  }, [selectedRegion, selectedCountry, selectedSector, selectedSubSector])
 
   // Reset dependent filters when parent changes
   useEffect(() => {
@@ -216,12 +426,23 @@ export default function KeyDeals() {
     setSelectedTertiary(value)
   }
 
-  // Get filtered countries based on selected region
+  // Get filtered countries based on selected region - same as Snapshot
   const getFilteredCountries = () => {
+    let countries = []
     if (selectedRegion === "all-regions") {
-      return Object.values(regionCountries).flat()
+      countries = Object.values(regionCountries).flat()
+    } else {
+      countries = regionCountries[selectedRegion as keyof typeof regionCountries] || []
     }
-    return regionCountries[selectedRegion as keyof typeof regionCountries] || []
+    
+    // Move United States to the front
+    const unitedStatesIndex = countries.findIndex(country => country.value === "united-states")
+    if (unitedStatesIndex > -1) {
+      const unitedStates = countries.splice(unitedStatesIndex, 1)[0]
+      return [unitedStates, ...countries]
+    }
+    
+    return countries
   }
 
   // Get filtered subsectors based on selected sector
@@ -236,20 +457,14 @@ export default function KeyDeals() {
     return subsectors.map(subsector => ({ value: subsector, label: subsector }))
   }
 
-  // Get filtered tertiary sectors based on selected subsector
+  // Get filtered tertiary sectors (non-functional) - same as Snapshot
   const getFilteredTertiary = () => {
-    if (selectedSubSector === "all-sub-sectors") return []
-    
-    const tertiarySectors = subsectorMapping[selectedSubSector] || []
-    return tertiarySectors.map(tertiary => ({ 
-      value: tertiary.toLowerCase().replace(/\s+/g, '-').replace(/[&/()]/g, ''), 
-      label: tertiary 
-    }))
+    return [] // Tertiary filter is disabled
   }
 
   // Filter deals based on selected filters
   const getFilteredDeals = () => {
-    return keyDeals.filter(deal => {
+    return deals.filter(deal => {
       // Region filter
       if (selectedRegion !== "all-regions") {
         const regionName = selectedRegion.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
@@ -336,11 +551,11 @@ export default function KeyDeals() {
                 <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
                   <SelectItem value="all-regions">All Regions</SelectItem>
                   <SelectItem value="north-america">🍁 North America</SelectItem>
-                  <SelectItem value="europe">🇪🇺 Europe</SelectItem>
-                  <SelectItem value="asia-pacific">🌏 Asia Pacific</SelectItem>
-                  <SelectItem value="emerging-asia">🌅 Emerging Asia</SelectItem>
-                  <SelectItem value="latin-america">🌎 Latin America</SelectItem>
-                  <SelectItem value="middle-east-africa">🌍 Middle East & Africa</SelectItem>
+                  <SelectItem value="europe" disabled className="opacity-50 cursor-not-allowed">🇪🇺 Europe</SelectItem>
+                  <SelectItem value="asia-pacific" disabled className="opacity-50 cursor-not-allowed">🌏 Asia Pacific</SelectItem>
+                  <SelectItem value="emerging-asia" disabled className="opacity-50 cursor-not-allowed">🌅 Emerging Asia</SelectItem>
+                  <SelectItem value="latin-america" disabled className="opacity-50 cursor-not-allowed">🌎 Latin America</SelectItem>
+                  <SelectItem value="middle-east-africa" disabled className="opacity-50 cursor-not-allowed">🌍 Middle East & Africa</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -354,7 +569,12 @@ export default function KeyDeals() {
                 <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
                   <SelectItem value="all-countries">All Countries</SelectItem>
                   {getFilteredCountries().map((country) => (
-                    <SelectItem key={country.value} value={country.value}>
+                    <SelectItem 
+                      key={country.value} 
+                      value={country.value}
+                      disabled={country.value !== "united-states"}
+                      className={country.value !== "united-states" ? "opacity-50 cursor-not-allowed" : ""}
+                    >
                       {country.label}
                     </SelectItem>
                   ))}
@@ -397,9 +617,12 @@ export default function KeyDeals() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-white/70 mb-2">TERTIARY SECTOR</label>
-              <Select value={selectedTertiary} onValueChange={handleTertiaryChange}>
-                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+              <label className="flex items-center gap-2 text-sm font-medium text-white/70 mb-2">
+                TERTIARY SECTOR
+                <Crown size={16} className="text-yellow-500" />
+              </label>
+              <Select value={selectedTertiary} onValueChange={handleTertiaryChange} disabled>
+                <SelectTrigger className="bg-white/5 border-white/10 text-white opacity-50 cursor-not-allowed">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-900 border-gray-700 text-white z-50 max-h-60 overflow-y-auto">
@@ -428,8 +651,17 @@ export default function KeyDeals() {
             </p>
           </div>
 
-          <div className="space-y-6">
-            {getFilteredDeals().map((deal, index) => (
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="text-white/70">Loading deals...</div>
+            </div>
+          )}
+
+          {/* Deals Grid */}
+          {!loading && (
+            <div className="space-y-6">
+              {getFilteredDeals().map((deal, index) => (
               <Card 
                 key={index}
                 className="group hover:shadow-lift transition-all duration-300 hover:-translate-y-1 bg-gray-900/50 backdrop-blur-sm border-gray-800"
@@ -497,7 +729,8 @@ export default function KeyDeals() {
                 </CardContent>
               </Card>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
