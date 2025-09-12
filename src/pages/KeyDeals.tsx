@@ -359,10 +359,7 @@ export default function KeyDeals() {
           .from('deals')
           .select(`
             *,
-            deals_companies!deals_company_id_fkey(name, description, website, country, region),
-            deals_deal_investors(
-              deals_investors(name, type)
-            )
+            deals_companies!deals_company_id_fkey(name, description, website, country, region)
           `)
           .eq('published', true)
         
@@ -380,8 +377,8 @@ export default function KeyDeals() {
         setDeals(data || [])
       } catch (error) {
         console.error('Error fetching deals:', error)
-        // Fallback to hardcoded data
-        setDeals(keyDeals)
+        // Show empty array instead of fallback to avoid confusion
+        setDeals([])
       } finally {
         setLoading(false)
       }
@@ -683,7 +680,7 @@ export default function KeyDeals() {
                     <div className="flex-1">
                       <div className="flex items-center space-x-4 mb-3">
                         <CardTitle className="text-2xl font-bold text-white">
-                          {deal.title}
+                          {deal.deal_name || deal.title || 'Untitled Deal'}
                         </CardTitle>
                         <div className={`px-3 py-1 rounded-full text-xs font-medium ${
                           (deal.stage_label || deal.deal_status || deal.status) === 'Completed' 
@@ -725,7 +722,19 @@ export default function KeyDeals() {
                     </div>
                     <div>
                       <div className="text-sm text-white/70 mb-1">Lead Firm</div>
-                      <div className="font-medium text-white">{deal.deals_deal_investors?.[0]?.deals_investors?.name || deal.firms?.[0] || '—'}</div>
+                      <div className="font-medium text-white">
+                        {(() => {
+                          // Try to get investor name from database structure
+                          if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
+                            return deal.deals_deal_investors[0]?.deals_investors?.name || '—'
+                          }
+                          // Try to get investor from firms array (hardcoded data)
+                          if (deal.firms && deal.firms.length > 0) {
+                            return deal.firms[0]
+                          }
+                          return '—'
+                        })()}
+                      </div>
                     </div>
                     <div className="flex justify-end">
                       <Button 
