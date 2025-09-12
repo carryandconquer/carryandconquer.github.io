@@ -332,24 +332,23 @@ export default function KeyDeals() {
     ]
   }
 
-  // Sector mapping - same as Snapshot
+  // GICS Sector mapping - same as Snapshot
   const sectorMapping: Record<string, string[]> = {
-    "Business Services": ["Business Services", "Financial Services", "Insurance", "Outsourcing"],
-    "Clean Tech.": ["Clean Technology", "Environmental Services", "Renewable Energy"],
-    "Consumer Disc.": ["Beverages", "Consumer Products", "Consumer Services", "Education / Training", "Leisure", "Retail"],
-    "Diversified": ["Diversified"],
-    "Energy and Util.": ["Energy", "Oil & Gas", "Power", "Utilities"],
-    "Food and Ag.": ["Agriculture", "Food"],
-    "Healthcare": ["Biomedical", "Biotechnology", "Healthcare", "Healthcare IT", "Medical Devices", "Medical Instruments", "Medical Technologies", "Pharmaceuticals"],
-    "Industrials": ["Aerospace", "Construction", "Defence", "Industrial", "Logistics", "Manufacturing", "Transportation"],
-    "Internet": ["Internet"],
-    "Materials": ["Chemicals", "Materials", "Mining", "Timber"],
-    "Other IT": ["Information Services", "IT", "IT Infrastructure", "IT Security"],
-    "Real Estate": ["Hotels and Offices", "Property"],
-    "Semic. & Electronics": ["Electronics", "Hardware", "Semiconductors"],
-    "Software & Related": ["Software", "Technology"],
-    "Telecoms": ["Advertising", "Media", "Network", "Telecom Media", "Telecoms"]
-  }
+    "Energy": ["Energy Equipment & Services", "Oil, Gas & Consumable Fuels"],
+    "Materials": ["Chemicals", "Construction Materials", "Containers & Packaging", "Metals & Mining", "Paper & Forest Products"],
+    "Industrials": ["Capital Goods", "Commercial & Professional Services", "Transportation"],
+    "Consumer Discretionary": ["Automobiles & Components", "Consumer Durables & Apparel", "Consumer Services", "Retailing"],
+    "Consumer Staples": ["Food & Staples Retailing", "Food, Beverage & Tobacco", "Household & Personal Products"],
+    "Health Care": ["Health Care Equipment & Services", "Pharmaceuticals", "Biotechnology & Life Sciences"],
+    "Financials": ["Banks", "Diversified Financials", "Insurance"],
+    "Information Technology": ["Software & Services", "Technology Hardware & Equipment", "Semiconductors & Semiconductor Equipment"],
+    "Communication Services": ["Telecommunication Services", "Media", "Entertainment"],
+    "Utilities": ["Electric Utilities", "Gas Utilities", "Multi-Utilities", "Water Utilities", "Independent Power and Renewable Electricity Producers"],
+    "Real Estate": ["Real Estate Management & Development", "Real Estate Investment Trusts (REITs)"]
+  };
+
+  // Tertiary sector mapping (non-functional, kept for UI consistency)
+  const subsectorMapping: Record<string, string[]> = {};
 
   // Fetch deals from database
   useEffect(() => {
