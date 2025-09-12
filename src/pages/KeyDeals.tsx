@@ -547,33 +547,9 @@ export default function KeyDeals() {
         }
       }
 
-      // Sector filter
-      if (selectedSector !== "all-sectors") {
-        const isDbDeal = !!deal.deal_id
-        if (isDbDeal) {
-          if (selectedSector !== "Consumer Discretionary") {
-            return false
-          }
-        } else {
-          if (deal.sector !== selectedSector) {
-            return false
-          }
-        }
-      }
+      // Sector and Sub-sector filters are applied upstream in fetchDeals to avoid double-filtering
+      // Keeping DB deals intact here ensures we don't inadvertently narrow results.
 
-      // Sub-sector filter
-      if (selectedSubSector !== "all-sub-sectors") {
-        const isDbDeal = !!deal.deal_id
-        if (isDbDeal) {
-          if (selectedSubSector !== "Automobiles & Components") {
-            return false
-          }
-        } else {
-          if (!deal.subIndustries?.toLowerCase().includes(selectedSubSector.toLowerCase())) {
-            return false
-          }
-        }
-      }
 
       return true
     })
