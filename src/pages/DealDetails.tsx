@@ -109,14 +109,16 @@ export default function DealDetails() {
           setDeal(hardcodedDeal)
         } else {
           // Try to fetch from database using deal_id
-          const { data, error } = await supabase
+          const { data: rawData, error } = await supabase
             .from('deals')
             .select(`
               *,
               deals_companies!deals_company_id_fkey(name, description, website, country, region)
             `)
             .eq('deal_id', id)
-            .single()
+          
+          // Handle potential duplicates by taking the first result
+          const data = Array.isArray(rawData) ? rawData[0] : rawData
           
           if (error) {
             console.error('Error fetching deal:', error)
