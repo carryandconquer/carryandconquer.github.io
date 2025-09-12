@@ -75,6 +75,16 @@ const enrichDealData = (deal: any) => {
     ],
     // Firms/Investors
     firms: deal.firms || ['Private Equity Firm'],
+    // Deal Structure (safe defaults)
+    dealStructure: deal.dealStructure || {
+      buyer: (deal.firms && deal.firms[0]) || 'Lead Investor',
+      seller: 'Founders & Early Investors',
+      advisors: {
+        financial: 'Goldman Sachs',
+        legal: 'Kirkland & Ellis',
+        technical: 'McKinsey & Company'
+      }
+    },
     // Other missing properties with defaults
     status: deal.status || deal.deal_status || 'Completed',
     stage: deal.stage || deal.stage_label || deal.transaction_type || 'Growth',
