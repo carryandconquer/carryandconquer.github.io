@@ -168,13 +168,7 @@ export default function DealDetails() {
   }
 
   // Enrich the deal data with placeholders
-  const [enrichedDeal, setEnrichedDeal] = useState<any>(null)
-
-  useEffect(() => {
-    if (deal) {
-      setEnrichedDeal(enrichDealData(deal))
-    }
-  }, [deal])
+  const enrichedDeal = enrichDealData(deal)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-950 to-black">
