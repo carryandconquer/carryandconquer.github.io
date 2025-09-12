@@ -402,20 +402,20 @@ export default function KeyDeals() {
           const isAutoComponents = (ci: any) => ci?.deals_sub_industries?.slug === 'automobiles-components'
           const keywordAuto = (name?: string) => {
             const s = (name || '').toLowerCase()
-            return /(auto|automotive|vehicle|ev|tire|parts|component)/.test(s)
+            return /(^|\b)(auto|automotive|vehicle|ev|tire|tires|parts|part|component|components|truck|realtruck|race|racing|ride|rides|wash|car wash|repair|clarience|bestop|fenix|nivel|sun auto|teijin|car)(\b|$)/.test(s)
           }
           
           filteredDeals = filteredDeals.filter((deal: any) => {
             const cis = deal?.deals_companies?.deals_company_industries || []
             const hasRels = Array.isArray(cis) && cis.length > 0
             
-            const sectorOk = !wantsSector || (hasRels 
-              ? cis.some(isConsumerDisc) 
-              : keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name))
+            const sectorOk = !wantsSector || (
+              cis.some(isConsumerDisc) || keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name)
+            )
             
-            const subOk = !wantsSub || (hasRels 
-              ? cis.some(isAutoComponents) 
-              : keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name))
+            const subOk = !wantsSub || (
+              cis.some(isAutoComponents) || keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name)
+            )
             
             return sectorOk && subOk
           })

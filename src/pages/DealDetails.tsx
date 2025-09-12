@@ -128,7 +128,7 @@ export default function DealDetails() {
             const transformedDeal = {
               id: data.deal_id,
               title: data.deal_name,
-              companyName: data.deals_companies?.name || 'Unknown Company',
+              companyName: data.deals_companies?.name || data.deal_name || 'Unknown Company',
               amount: data.deal_value_formatted || `$${(data.deal_value_usd / 1000000).toFixed(1)}M`,
               sector: 'Consumer Discretionary',
               stage: data.stage_label || data.deal_status || 'Growth',
