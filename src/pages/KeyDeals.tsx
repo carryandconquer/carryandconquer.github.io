@@ -374,7 +374,45 @@ export default function KeyDeals() {
         const { data, error } = await query
         
         if (error) throw error
-        setDeals(data || [])
+        
+        let filteredDeals = data || []
+        
+        // Apply sector and sub-sector filtering on the client side for now
+        // since the database relationships aren't fully set up
+        if (selectedSector !== "all-sectors") {
+          const sectorName = selectedSector.replace('-', ' ').toLowerCase()
+          if (sectorName.includes('consumer discretionary')) {
+            // Filter for automotive-related deals
+            filteredDeals = filteredDeals.filter(deal => 
+              deal.deal_name?.toLowerCase().includes('auto') ||
+              deal.deal_name?.toLowerCase().includes('tesla') ||
+              deal.deal_name?.toLowerCase().includes('ford') ||
+              deal.deal_name?.toLowerCase().includes('gm') ||
+              deal.deal_name?.toLowerCase().includes('car') ||
+              deal.deal_name?.toLowerCase().includes('automotive') ||
+              deal.deal_name?.toLowerCase().includes('vehicle') ||
+              deal.deal_name?.toLowerCase().includes('tire')
+            )
+          }
+        }
+        
+        if (selectedSubSector !== "all-sub-sectors") {
+          const subSectorName = selectedSubSector.replace('-', ' ').toLowerCase()
+          if (subSectorName.includes('automobile')) {
+            // Further filter for automobiles & components
+            filteredDeals = filteredDeals.filter(deal => 
+              deal.deal_name?.toLowerCase().includes('auto') ||
+              deal.deal_name?.toLowerCase().includes('tesla') ||
+              deal.deal_name?.toLowerCase().includes('ford') ||
+              deal.deal_name?.toLowerCase().includes('gm') ||
+              deal.deal_name?.toLowerCase().includes('automotive') ||
+              deal.deal_name?.toLowerCase().includes('tire') ||
+              deal.deal_name?.toLowerCase().includes('component')
+            )
+          }
+        }
+        
+        setDeals(filteredDeals)
       } catch (error) {
         console.error('Error fetching deals:', error)
         // Show empty array instead of fallback to avoid confusion

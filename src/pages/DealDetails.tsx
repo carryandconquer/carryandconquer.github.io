@@ -91,16 +91,82 @@ const enrichDealData = (deal: any) => ({
 export default function DealDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [deal, setDeal] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
 
   console.log('DealDetails - ID from params:', id)
-  console.log('DealDetails - keyDeals array:', keyDeals)
 
-  // Find the deal from our real data
-  const deal = keyDeals.find(d => d.id === id)
+  useEffect(() => {
+    const fetchDeal = async () => {
+      if (!id) return
+      
+      setLoading(true)
+      try {
+        // First try to find in hardcoded data
+        const hardcodedDeal = keyDeals.find(d => d.id === id)
+        
+        if (hardcodedDeal) {
+          setDeal(hardcodedDeal)
+        } else {
+          // Try to fetch from database using deal_id
+          const { data, error } = await supabase
+            .from('deals')
+            .select(`
+              *,
+              deals_companies!deals_company_id_fkey(name, description, website, country, region)
+            `)
+            .eq('deal_id', id)
+            .single()
+          
+          if (error) {
+            console.error('Error fetching deal:', error)
+            setDeal(null)
+          } else if (data) {
+            // Transform database deal to match expected format
+            const transformedDeal = {
+              id: data.deal_id,
+              title: data.deal_name,
+              companyName: data.deals_companies?.name || 'Unknown Company',
+              amount: data.deal_value_formatted || `$${(data.deal_value_usd / 1000000).toFixed(1)}M`,
+              sector: 'Consumer Discretionary',
+              stage: data.stage_label || data.deal_status || 'Growth',
+              date: new Date(data.announcement_date).getFullYear().toString(),
+              location: `${data.city || ''}, ${data.state_province || ''}, ${data.country || ''}`.replace(/^,\s*|,\s*$/g, ''),
+              description: data.description || 'Automotive industry investment opportunity',
+              firms: ['Private Equity Firm'] // Placeholder since we don't have investor data
+            }
+            setDeal(transformedDeal)
+          }
+        }
+      } catch (error) {
+        console.error('Error in fetchDeal:', error)
+        setDeal(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDeal()
+  }, [id])
 
   console.log('DealDetails - found deal:', deal)
 
-  // If no deal found, show error
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black">
+        <Navigation />
+        <section className="pt-32 pb-20 bg-black">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+            <h1 className="text-4xl font-bold text-white mb-4">Loading Deal...</h1>
+          </div>
+        </section>
+        <Footer />
+      </div>
+    )
+  }
+
+  // If no deal found after loading, show error
   if (!deal) {
     console.log('DealDetails - No deal found for id:', id)
     return (
