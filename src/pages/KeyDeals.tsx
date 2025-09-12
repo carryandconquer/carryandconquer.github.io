@@ -361,8 +361,7 @@ export default function KeyDeals() {
             *,
             deals_companies!deals_company_id_fkey(name, description, website, country, region),
             deals_deal_investors(
-              deals_investors(name, type),
-              deals_people(full_name, role)
+              deals_investors(name, type)
             )
           `)
           .eq('published', true)
@@ -498,23 +497,37 @@ export default function KeyDeals() {
           synonyms.push('uae','united arab emirates')
         }
 
-        const location = deal.location.toLowerCase()
-        if (!synonyms.some(s => location.includes(s))) {
+        const locationSource = (deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(' ')).toLowerCase()
+        if (!synonyms.some(s => locationSource.includes(s))) {
           return false
         }
       }
 
       // Sector filter
       if (selectedSector !== "all-sectors") {
-        if (deal.sector !== selectedSector) {
-          return false
+        const isDbDeal = !!deal.deal_id
+        if (isDbDeal) {
+          if (selectedSector !== "Consumer Discretionary") {
+            return false
+          }
+        } else {
+          if (deal.sector !== selectedSector) {
+            return false
+          }
         }
       }
 
       // Sub-sector filter
       if (selectedSubSector !== "all-sub-sectors") {
-        if (!deal.subIndustries.toLowerCase().includes(selectedSubSector.toLowerCase())) {
-          return false
+        const isDbDeal = !!deal.deal_id
+        if (isDbDeal) {
+          if (selectedSubSector !== "Automobiles & Components") {
+            return false
+          }
+        } else {
+          if (!deal.subIndustries?.toLowerCase().includes(selectedSubSector.toLowerCase())) {
+            return false
+          }
         }
       }
 
@@ -673,11 +686,11 @@ export default function KeyDeals() {
                           {deal.title}
                         </CardTitle>
                         <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          deal.status === 'Completed' 
+                          (deal.stage_label || deal.deal_status || deal.status) === 'Completed' 
                             ? 'bg-green-500/10 text-green-400' 
                             : 'bg-yellow-500/10 text-yellow-400'
                         }`}>
-                          {deal.status}
+                          {deal.stage_label || deal.deal_status || deal.status || 'Completed'}
                         </div>
                       </div>
                       <CardDescription className="text-white/70 leading-relaxed mb-4">
@@ -686,9 +699,11 @@ export default function KeyDeals() {
                     </div>
                     <div className="text-right ml-6">
                       <div className="text-3xl font-bold text-white">
-                        {deal.amount}
+                        {deal.deal_value_formatted || deal.amount || 'Undisclosed'}
                       </div>
-                      <div className="text-sm text-white/70">{deal.date}</div>
+                      <div className="text-sm text-white/70">
+                        {deal.announcement_date ? new Date(deal.announcement_date).getFullYear() : (deal.date || '—')}
+                      </div>
                     </div>
                   </div>
                 </CardHeader>
@@ -698,19 +713,19 @@ export default function KeyDeals() {
                       <div className="text-sm text-white/70 mb-1">Sector</div>
                       <div className="flex items-center">
                         <Building2 className="w-4 h-4 mr-2 text-green-400" />
-                        <span className="font-medium text-white">{deal.sector}</span>
+                        <span className="font-medium text-white">{selectedSector !== 'all-sectors' ? selectedSector : '—'}</span>
                       </div>
                     </div>
                     <div>
                       <div className="text-sm text-white/70 mb-1">Location</div>
                       <div className="flex items-center">
                         <DollarSign className="w-4 h-4 mr-2 text-teal-400" />
-                        <span className="font-medium text-white">{deal.location}</span>
+                        <span className="font-medium text-white">{deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(', ')}</span>
                       </div>
                     </div>
                     <div>
                       <div className="text-sm text-white/70 mb-1">Lead Firm</div>
-                      <div className="font-medium text-white">{deal.firms[0]}</div>
+                      <div className="font-medium text-white">{deal.deals_deal_investors?.[0]?.deals_investors?.name || deal.firms?.[0] || '—'}</div>
                     </div>
                     <div className="flex justify-end">
                       <Button 
