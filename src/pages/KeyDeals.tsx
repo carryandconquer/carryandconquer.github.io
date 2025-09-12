@@ -359,7 +359,17 @@ export default function KeyDeals() {
           .from('deals')
           .select(`
             *,
-            deals_companies!deals_company_id_fkey(name, description, website, country, region)
+            deals_companies!deals_company_id_fkey(
+              name, 
+              description, 
+              website, 
+              country, 
+              region,
+              deals_company_industries(
+                deals_industries(name, slug),
+                deals_sub_industries(name, slug)
+              )
+            )
           `)
           .eq('published', true)
         
@@ -377,39 +387,25 @@ export default function KeyDeals() {
         
         let filteredDeals = data || []
         
-        // Apply sector and sub-sector filtering on the client side for now
-        // since the database relationships aren't fully set up
+        // Apply sector and sub-sector filtering based on company industry classifications
         if (selectedSector !== "all-sectors") {
           const sectorName = selectedSector.replace('-', ' ').toLowerCase()
-          if (sectorName.includes('consumer discretionary')) {
-            // Filter for automotive-related deals
-            filteredDeals = filteredDeals.filter(deal => 
-              deal.deal_name?.toLowerCase().includes('auto') ||
-              deal.deal_name?.toLowerCase().includes('tesla') ||
-              deal.deal_name?.toLowerCase().includes('ford') ||
-              deal.deal_name?.toLowerCase().includes('gm') ||
-              deal.deal_name?.toLowerCase().includes('car') ||
-              deal.deal_name?.toLowerCase().includes('automotive') ||
-              deal.deal_name?.toLowerCase().includes('vehicle') ||
-              deal.deal_name?.toLowerCase().includes('tire')
+          filteredDeals = filteredDeals.filter(deal => {
+            if (!deal.deals_companies?.deals_company_industries) return false
+            return deal.deals_companies.deals_company_industries.some((ci: any) => 
+              ci.deals_industries?.slug === 'consumer-discretionary' && sectorName.includes('consumer discretionary')
             )
-          }
+          })
         }
         
         if (selectedSubSector !== "all-sub-sectors") {
           const subSectorName = selectedSubSector.replace('-', ' ').toLowerCase()
-          if (subSectorName.includes('automobile')) {
-            // Further filter for automobiles & components
-            filteredDeals = filteredDeals.filter(deal => 
-              deal.deal_name?.toLowerCase().includes('auto') ||
-              deal.deal_name?.toLowerCase().includes('tesla') ||
-              deal.deal_name?.toLowerCase().includes('ford') ||
-              deal.deal_name?.toLowerCase().includes('gm') ||
-              deal.deal_name?.toLowerCase().includes('automotive') ||
-              deal.deal_name?.toLowerCase().includes('tire') ||
-              deal.deal_name?.toLowerCase().includes('component')
+          filteredDeals = filteredDeals.filter(deal => {
+            if (!deal.deals_companies?.deals_company_industries) return false
+            return deal.deals_companies.deals_company_industries.some((ci: any) => 
+              ci.deals_sub_industries?.slug === 'automobiles-components' && subSectorName.includes('automobile')
             )
-          }
+          })
         }
         
         setDeals(filteredDeals)
