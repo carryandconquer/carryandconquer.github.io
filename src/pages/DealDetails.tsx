@@ -58,6 +58,30 @@ const enrichDealData = (deal: any) => {
       'Significant market opportunity for expansion', 
       'Strong financial performance and unit economics'
     ],
+    // Risk factors
+    risks: deal.risks || [
+      'Competitive pressure from larger industry players',
+      'Market volatility and economic downturn risks',
+      'Key person dependency and talent retention',
+      'Technology disruption and obsolescence risk',
+      'Regulatory and compliance challenges'
+    ],
+    // Timeline
+    timeline: deal.timeline || [
+      { date: 'Q1 2024', event: 'Initial Due Diligence', status: 'completed' },
+      { date: 'Q2 2024', event: 'Term Sheet Signed', status: 'completed' },
+      { date: 'Q3 2024', event: 'Final Due Diligence', status: 'completed' },
+      { date: deal.date || '2024', event: 'Deal Closed', status: 'completed' }
+    ],
+    // Firms/Investors
+    firms: deal.firms || ['Private Equity Firm'],
+    // Other missing properties with defaults
+    status: deal.status || deal.deal_status || 'Completed',
+    stage: deal.stage || deal.stage_label || deal.transaction_type || 'Growth',
+    companyName: deal.companyName || deal.title || deal.deal_name || 'Company',
+    region: deal.region || 'North America',
+    multiple: deal.multiple || 'N/A',
+    sector: deal.sector || 'Consumer Discretionary'
   }
 }
 
