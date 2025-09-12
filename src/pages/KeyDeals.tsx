@@ -385,26 +385,39 @@ export default function KeyDeals() {
         
         if (error) throw error
         
-        let filteredDeals = data || []
+        // De-dupe by deal_id (some rows appear twice in the DB)
+        const uniqueMap = new Map<string, any>()
+        ;(data || []).forEach((d: any) => {
+          const key = d.deal_id || d.id
+          if (key && !uniqueMap.has(key)) uniqueMap.set(key, d)
+        })
+        let filteredDeals = Array.from(uniqueMap.values())
         
-        // Apply sector and sub-sector filtering based on company industry classifications
-        if (selectedSector !== "all-sectors") {
-          const sectorName = selectedSector.replace('-', ' ').toLowerCase()
-          filteredDeals = filteredDeals.filter(deal => {
-            if (!deal.deals_companies?.deals_company_industries) return false
-            return deal.deals_companies.deals_company_industries.some((ci: any) => 
-              ci.deals_industries?.slug === 'consumer-discretionary' && sectorName.includes('consumer discretionary')
-            )
-          })
-        }
+        // Apply sector and sub-sector filtering
+        const wantsSector = selectedSector !== "all-sectors"
+        const wantsSub = selectedSubSector !== "all-sub-sectors"
         
-        if (selectedSubSector !== "all-sub-sectors") {
-          const subSectorName = selectedSubSector.replace('-', ' ').toLowerCase()
-          filteredDeals = filteredDeals.filter(deal => {
-            if (!deal.deals_companies?.deals_company_industries) return false
-            return deal.deals_companies.deals_company_industries.some((ci: any) => 
-              ci.deals_sub_industries?.slug === 'automobiles-components' && subSectorName.includes('automobile')
-            )
+        if (wantsSector || wantsSub) {
+          const isConsumerDisc = (ci: any) => ci?.deals_industries?.slug === 'consumer-discretionary'
+          const isAutoComponents = (ci: any) => ci?.deals_sub_industries?.slug === 'automobiles-components'
+          const keywordAuto = (name?: string) => {
+            const s = (name || '').toLowerCase()
+            return /(auto|automotive|vehicle|ev|tire|parts|component)/.test(s)
+          }
+          
+          filteredDeals = filteredDeals.filter((deal: any) => {
+            const cis = deal?.deals_companies?.deals_company_industries || []
+            const hasRels = Array.isArray(cis) && cis.length > 0
+            
+            const sectorOk = !wantsSector || (hasRels 
+              ? cis.some(isConsumerDisc) 
+              : keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name))
+            
+            const subOk = !wantsSub || (hasRels 
+              ? cis.some(isAutoComponents) 
+              : keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name))
+            
+            return sectorOk && subOk
           })
         }
         
@@ -704,9 +717,9 @@ export default function KeyDeals() {
           {/* Deals Grid */}
           {!loading && (
             <div className="space-y-6">
-              {getFilteredDeals().map((deal, index) => (
+              {getFilteredDeals().map((deal) => (
               <Card 
-                key={index}
+                key={deal.deal_id || deal.id}
                 className="group hover:shadow-lift transition-all duration-300 hover:-translate-y-1 bg-gray-900/50 backdrop-blur-sm border-gray-800"
               >
                 <CardHeader>
@@ -776,7 +789,7 @@ export default function KeyDeals() {
                         variant="outline" 
                         className="border-gray-700 bg-gray-800 hover:bg-gray-700 text-white transition-all duration-300"
                       >
-                        <Link to={`/deal/${index + 1}`}>
+                        <Link to={`/deal/${deal.deal_id || deal.id}`}>
                           View Details
                           <ExternalLink className="ml-2 w-4 h-4" />
                         </Link>
