@@ -1,0 +1,88 @@
+-- Insert Consumer Discretionary > Automobiles & Components deals data
+INSERT INTO public.deals (
+  deal_id,
+  deal_name,
+  deal_value_formatted,
+  deal_value_usd,
+  announcement_date,
+  transaction_type,
+  deal_size_category,
+  stage_label,
+  image_url,
+  full_address,
+  city,
+  state_province,
+  country,
+  region,
+  description,
+  enterprise_value,
+  revenue_ltm,
+  ebitda_ltm,
+  ebitda_margin,
+  revenue_growth_yoy,
+  investment_strategy,
+  published,
+  deal_status
+) VALUES
+  ('teijin-auto-tech-na', 'Teijin Automotive Technologies North America', '>$1B', 1000000000, '2025-03-31', 'Acquisition', 'Large Cap', 'Completed', NULL, '255 Rex Blvd Auburn Hills MI 48326', 'Auburn Hills', 'Michigan', 'United States', 'North America', 'Leading manufacturer of advanced composite materials for automotive heavy truck marine and recreational vehicle sectors with 4500+ employees across 14 locations', 1000000000, 1500000000, NULL, NULL, NULL, 'Buyout', true, 'Completed'),
+  ('fenix-parts', 'Fenix Parts', '$69M', 69000000, '2018-04-18', 'Investment', 'Mid Cap', 'Completed', NULL, 'Hurst TX', 'Hurst', 'Texas', 'United States', 'North America', 'Quality used auto parts recycler and distributor with over 1 million automotive parts inventory', 69000000, 69000000, NULL, NULL, NULL, 'Growth/Buyout', true, 'Completed'),
+  ('realtruck', 'RealTruck', 'Undisclosed', NULL, '2020-12-08', 'Investment', 'Large Cap', 'Completed', NULL, '5400 Data Ct Ann Arbor MI 48108', 'Ann Arbor', 'Michigan', 'United States', 'North America', 'Premier manufacturer and digital destination of accessories for truck Jeep Bronco and off-road vehicles', NULL, 1100000000, NULL, NULL, NULL, 'Growth/Buyout', true, 'Completed'),
+  ('race-winning-brands', 'Race Winning Brands', 'Undisclosed', NULL, '2021-11-23', 'Investment', 'Mid Cap', 'Completed', NULL, 'Mentor OH', 'Mentor', 'Ohio', 'United States', 'North America', 'Leading manufacturer of high-performance and racing parts for automotive and powersports aftermarkets', NULL, NULL, NULL, NULL, NULL, 'Buyout', true, 'Completed'),
+  ('go-car-wash', 'Go Car Wash', 'Undisclosed', NULL, '2019-02-22', 'Investment', 'Mid Cap', 'Completed', NULL, 'Phoenix AZ', 'Phoenix', 'Arizona', 'United States', 'North America', 'Express car wash operator focused on rapid expansion and market consolidation', NULL, NULL, NULL, NULL, NULL, 'Growth/Buyout', true, 'Completed'),
+  ('el-car-wash', 'El Car Wash', 'Undisclosed', NULL, '2022-07-18', 'Investment', 'Mid Cap', 'Completed', NULL, 'Miami FL', 'Miami', 'Florida', 'United States', 'North America', 'Prominent car wash operator in South Florida with premium service offerings', NULL, NULL, NULL, NULL, NULL, 'Growth/Buyout', true, 'Completed'),
+  ('repairify', 'Repairify', 'Undisclosed', NULL, '2015-07-28', 'Investment', 'Mid Cap', 'Completed', NULL, 'Plano TX', 'Plano', 'Texas', 'United States', 'North America', 'Provider of automotive diagnostic repair solutions and remote diagnostic technology', NULL, NULL, NULL, NULL, NULL, 'Growth/Buyout', true, 'Completed'),
+  ('bestop', 'Bestop', 'Undisclosed', NULL, '2015-08-03', 'Investment', 'Mid Cap', 'Completed', NULL, 'Louisville CO', 'Louisville', 'Colorado', 'United States', 'North America', 'Leading manufacturer of soft tops and fabric accessories for Jeep vehicles and sole supplier of factory soft tops', NULL, NULL, NULL, NULL, NULL, 'Buyout', true, 'Completed'),
+  ('nivel-parts-mfg', 'Nivel Parts & Manufacturing', 'Undisclosed', NULL, '2021-05-21', 'Investment', 'Mid Cap', 'Completed', NULL, 'Jacksonville FL', 'Jacksonville', 'Florida', 'United States', 'North America', 'Global supplier of aftermarket parts for specialty vehicles with focus on performance and racing applications', NULL, NULL, NULL, NULL, NULL, 'Buyout', true, 'Completed'),
+  ('sun-auto-tire', 'Sun Auto Tire & Service', 'Undisclosed', NULL, '2021-09-16', 'Investment', 'Mid Cap', 'Completed', NULL, 'Tucson AZ', 'Tucson', 'Arizona', 'United States', 'North America', 'Leading provider of automotive aftermarket services including tire installation and automotive maintenance', NULL, NULL, NULL, NULL, NULL, 'Growth/Buyout', true, 'Completed'),
+  ('big-brand-tire', 'Big Brand Tire & Service', 'Undisclosed', NULL, '2021-03-01', 'Investment', 'Mid Cap', 'Completed', NULL, 'Moorpark CA', 'Moorpark', 'California', 'United States', 'North America', 'Prominent tire and automotive service provider with strong California market presence', NULL, NULL, NULL, NULL, NULL, 'Buyout', true, 'Completed'),
+  ('clarience-tech', 'Clarience Technologies', 'Undisclosed', NULL, '2019-12-17', 'Investment', 'Mid Cap', 'Completed', NULL, 'Falconer NY', 'Falconer', 'New York', 'United States', 'North America', 'Provider of lighting and safety solutions for the transportation industry with focus on advanced technology', NULL, NULL, NULL, NULL, NULL, 'Buyout', true, 'Completed'),
+  ('ace-fence-dallas', 'Ace Fence of Dallas', 'Undisclosed', NULL, '2020-11-01', 'Investment', 'Small Cap', 'Completed', NULL, 'Dallas TX', 'Dallas', 'Texas', 'United States', 'North America', 'Automotive-related infrastructure and fencing company serving commercial and industrial clients', NULL, NULL, NULL, NULL, NULL, 'Growth', true, 'Completed'),
+  ('brians-cabinets', 'Brian''s Cabinets', 'Undisclosed', NULL, '2024-01-01', 'Investment', 'Small Cap', 'Completed', NULL, 'Unknown', 'Unknown', 'Unknown', 'United States', 'North America', 'Custom manufacturing company with automotive applications and specialized fabrication capabilities', NULL, NULL, NULL, NULL, NULL, 'Growth', true, 'Completed'),
+  ('chance-rides', 'Chance Rides', 'Undisclosed', NULL, '2021-06-01', 'Investment', 'Mid Cap', 'Completed', NULL, 'Unknown', 'Unknown', 'Unknown', 'United States', 'North America', 'Manufacturing company with transportation sector ties and entertainment equipment production', NULL, NULL, NULL, NULL, NULL, 'Growth', true, 'Completed'),
+  ('rylee-cru', 'Rylee + Cru', 'Undisclosed', NULL, '2024-02-01', 'Acquisition', 'Small Cap', 'Completed', NULL, 'Unknown', 'Unknown', 'Unknown', 'United States', 'North America', 'Consumer products company with potential automotive consumer goods overlap and lifestyle brand focus', NULL, NULL, NULL, NULL, NULL, 'Buyout', true, 'Completed');
+
+-- Also need to create companies for these deals and link them
+INSERT INTO public.deals_companies (
+  name,
+  description,
+  website,
+  country,
+  region,
+  headquarters_city,
+  state_province
+) VALUES
+  ('Teijin Automotive Technologies North America (CSP)', 'Leading manufacturer of advanced composite materials for automotive heavy truck marine and recreational vehicle sectors with 4500+ employees across 14 locations', 'https://www.teijinautomotive.com/', 'United States', 'North America', 'Auburn Hills', 'Michigan'),
+  ('Fenix Parts', 'Quality used auto parts recycler and distributor with over 1 million automotive parts inventory', 'https://fenixparts.com/', 'United States', 'North America', 'Hurst', 'Texas'),
+  ('RealTruck Inc', 'Premier manufacturer and digital destination of accessories for truck Jeep Bronco and off-road vehicles', 'https://realtruck.com/', 'United States', 'North America', 'Ann Arbor', 'Michigan'),
+  ('Race Winning Brands', 'Leading manufacturer of high-performance and racing parts for automotive and powersports aftermarkets', 'https://www.racewinningbrands.com/', 'United States', 'North America', 'Mentor', 'Ohio'),
+  ('GO Car Wash', 'Express car wash operator focused on rapid expansion and market consolidation', 'https://gocarwash.com/', 'United States', 'North America', 'Phoenix', 'Arizona'),
+  ('El Car Wash', 'Prominent car wash operator in South Florida with premium service offerings', 'https://elcarwash.com/', 'United States', 'North America', 'Miami', 'Florida'),
+  ('Repairify Inc', 'Provider of automotive diagnostic repair solutions and remote diagnostic technology', 'https://repairify.com/', 'United States', 'North America', 'Plano', 'Texas'),
+  ('Bestop Inc', 'Leading manufacturer of soft tops and fabric accessories for Jeep vehicles and sole supplier of factory soft tops', 'https://www.bestop.com/', 'United States', 'North America', 'Louisville', 'Colorado'),
+  ('Nivel Parts & Manufacturing', 'Global supplier of aftermarket parts for specialty vehicles with focus on performance and racing applications', NULL, 'United States', 'North America', 'Jacksonville', 'Florida'),
+  ('Sun Auto Tire & Service', 'Leading provider of automotive aftermarket services including tire installation and automotive maintenance', NULL, 'United States', 'North America', 'Tucson', 'Arizona'),
+  ('Big Brand Tire & Service', 'Prominent tire and automotive service provider with strong California market presence', NULL, 'United States', 'North America', 'Moorpark', 'California'),
+  ('Clarience Technologies', 'Provider of lighting and safety solutions for the transportation industry with focus on advanced technology', NULL, 'United States', 'North America', 'Falconer', 'New York'),
+  ('Ace Fence of Dallas', 'Automotive-related infrastructure and fencing company serving commercial and industrial clients', NULL, 'United States', 'North America', 'Dallas', 'Texas'),
+  ('Brian''s Cabinets', 'Custom manufacturing company with automotive applications and specialized fabrication capabilities', NULL, 'United States', 'North America', 'Unknown', 'Unknown'),
+  ('Chance Rides', 'Manufacturing company with transportation sector ties and entertainment equipment production', NULL, 'United States', 'North America', 'Unknown', 'Unknown'),
+  ('Rylee + Cru', 'Consumer products company with potential automotive consumer goods overlap and lifestyle brand focus', NULL, 'United States', 'North America', 'Unknown', 'Unknown');
+
+-- Create investors for these deals
+INSERT INTO public.deals_investors (name, type, region, country) VALUES
+  ('AURELIUS Private Equity', 'pe', 'North America', 'United States'),
+  ('Stellex Capital Management', 'pe', 'North America', 'United States'),
+  ('L Catterton Partners', 'pe', 'North America', 'United States'),
+  ('CCMP Capital', 'pe', 'North America', 'United States'),
+  ('Constitution Capital Partners', 'pe', 'North America', 'United States'),
+  ('MiddleGround Capital', 'pe', 'North America', 'United States'),
+  ('Imperial Capital', 'pe', 'North America', 'United States'),
+  ('Warburg Pincus', 'pe', 'North America', 'United States'),
+  ('Kinderhook Industries', 'pe', 'North America', 'United States'),
+  ('Morgan Stanley Capital Partners', 'pe', 'North America', 'United States'),
+  ('Morgan Stanley Tactical Value Investing', 'pe', 'North America', 'United States'),
+  ('Leonard Green & Partners', 'pe', 'North America', 'United States'),
+  ('Percheron Capital', 'pe', 'North America', 'United States'),
+  ('Genstar Capital', 'pe', 'North America', 'United States'),
+  ('Permanent Equity', 'pe', 'North America', 'United States')
+ON CONFLICT (name) DO NOTHING;
