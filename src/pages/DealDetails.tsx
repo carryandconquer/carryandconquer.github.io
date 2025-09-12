@@ -189,93 +189,13 @@ export default function DealDetails() {
   }
 
   // Enrich the deal data with placeholders
-  const [enrichedDeal, setEnrichedDeal] = useState<any>(enrichDealData(deal))
+  const [enrichedDeal, setEnrichedDeal] = useState<any>(null)
 
   useEffect(() => {
-    const map: Record<string, string> = {
-      '1': 'zenscreen-deal-2024',
-      '2': 'vanleeuwen-deal-2024',
-      '3': 'coniferpoint-deal-2024',
-      '4': 'omniview-deal-2024'
+    if (deal) {
+      setEnrichedDeal(enrichDealData(deal))
     }
-    const slug = id ? map[id] : undefined
-    const base = enrichDealData(deal)
-    setEnrichedDeal(base)
-    if (!slug) return
-
-    const formatUsd = (n?: number | null) => {
-      if (!n) return undefined
-      try {
-        return '$' + Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(Number(n))
-      } catch {
-        return `$${n}`
-      }
-    }
-
-    const fetchData = async () => {
-      const { data: dealRow, error } = await supabase
-        .from('deals')
-        .select('*')
-        .eq('deal_id', slug)
-        .maybeSingle()
-
-      if (error) {
-        console.error('Fetch deal error:', error)
-        return
-      }
-      if (!dealRow) return
-
-      const merged: any = {
-        ...base,
-        title: dealRow.deal_name ?? base.title,
-        status: dealRow.deal_status ?? base.status,
-        amount: dealRow.deal_value_formatted ?? formatUsd((dealRow as any).deal_value_usd) ?? base.amount,
-        date: (dealRow as any).announcement_date ?? (dealRow as any).closing_date ?? base.date,
-        stage: (dealRow as any).stage_label ?? (dealRow as any).transaction_type ?? base.stage,
-        description: dealRow.description ?? base.description,
-        location: [dealRow.city, dealRow.state_province, dealRow.country].filter(Boolean).join(', ') || base.location,
-        region: dealRow.region ?? base.region,
-        multiple: (dealRow as any).multiple_label ?? base.multiple,
-      }
-
-      const { data: idRow } = await supabase
-        .from('deals')
-        .select('id')
-        .eq('deal_id', slug)
-        .maybeSingle()
-
-      if (idRow?.id) {
-        const { data: participation } = await supabase
-          .from('deals_deal_investors')
-          .select('investor_id, role')
-          .eq('deal_id', idRow.id)
-
-        if (participation?.length) {
-          const investorIds = participation.map((p: any) => p.investor_id).filter(Boolean)
-          if (investorIds.length) {
-            const { data: investors } = await supabase
-              .from('deals_investors')
-              .select('id, name')
-              .in('id', investorIds)
-            if (investors) {
-              merged.firms = investors.map(i => i.name)
-              let lead = participation.find((p: any) => p.role === 'lead')
-              if (!lead) lead = participation[0]
-              if (lead) {
-                const leadName = investors.find(i => i.id === lead.investor_id)?.name
-                if (leadName) merged.leadPartners = leadName
-              }
-            }
-          }
-        }
-      }
-
-      setEnrichedDeal(merged)
-    }
-
-    fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
+  }, [deal])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-950 to-black">
