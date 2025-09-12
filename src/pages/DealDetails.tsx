@@ -12,81 +12,54 @@ import { supabase } from "@/integrations/supabase/client"
 import { generateSlug } from "@/lib/slugUtils"
 
 // Enhanced deal data with placeholders for missing information
-const enrichDealData = (deal: any) => ({
-  ...deal,
-  // Financial placeholders based on deal amount
-  keyMetrics: {
-    enterpriseValue: deal.amount,
-    revenue: deal.totalFundingUSD ? `$${(parseFloat(deal.totalFundingUSD) * 2.2).toFixed(1)}M` : "$12.4M",
-    ebitda: deal.totalFundingUSD ? `$${(parseFloat(deal.totalFundingUSD) * 0.8).toFixed(1)}M` : "$4.2M", 
-    ebitdaMargin: "34.2%",
-    revenueGrowth: deal.sector === "Software & Related" ? "127%" : "43%",
-    customerRetention: deal.sector === "Software & Related" ? "94%" : "89%",
-    grossMargin: deal.sector === "Software & Related" ? "82%" : "67%"
-  },
-  
-  // Investment highlights based on sector
-  highlights: deal.sector === "Software & Related" ? [
-    "Market-leading AI technology platform with patent portfolio",
-    "Strong recurring SaaS revenue model with 94% customer retention", 
-    "Significant expansion opportunities in enterprise market",
-    "Proven management team with previous successful exits",
-    "Strategic partnerships with major tech companies"
-  ] : deal.sector === "Healthcare" ? [
-    "Breakthrough drug discovery technology platform",
-    "Strong IP portfolio with 12+ patents pending",
-    "Partnerships with major pharmaceutical companies", 
-    "Experienced leadership team from Big Pharma",
-    "Large addressable market opportunity ($50B+)"
-  ] : deal.sector === "Food and Ag." ? [
-    "Premium brand with strong consumer loyalty",
-    "Omnichannel distribution strategy showing rapid growth",
-    "Sustainable and innovative product portfolio", 
-    "Experienced management team with CPG expertise",
-    "Strong unit economics and scalable business model"
-  ] : [
-    "Strong market position with competitive moats",
-    "Proven business model with recurring revenue",
-    "Experienced leadership team with track record",
-    "Significant market opportunity for expansion", 
-    "Strong financial performance and unit economics"
-  ],
-
-  // Risk factors
-  risks: [
-    "Competitive pressure from larger industry players",
-    "Market volatility and economic downturn risks",
-    "Key person dependency and talent retention",
-    "Technology disruption and obsolescence risk",
-    "Regulatory and compliance challenges"
-  ],
-
-  // Investment thesis
-  investmentThesis: `${deal.companyName} represents a compelling investment opportunity in the ${deal.sector.toLowerCase()} sector. The company's strong market position, innovative technology platform, and experienced management team position it well for significant growth and value creation.`,
-
-  // Company background
-  foundingYear: deal.description.includes("Founded in") ? 
-    deal.description.match(/Founded in (\d{4})/)?.[1] : "2015",
-  
-  // Deal structure placeholders
-  dealStructure: {
-    buyer: deal.firms[0] || "Lead Investor",
-    seller: "Founders & Early Investors", 
-    advisors: {
-      financial: "Goldman Sachs",
-      legal: "Kirkland & Ellis",
-      technical: "McKinsey & Company"
+const enrichDealData = (deal: any) => {
+  const formatUsd = (n?: number | null) => {
+    if (n == null) return undefined
+    try {
+      return '$' + Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(Number(n))
+    } catch {
+      return `$${n}`
     }
-  },
+  }
 
-  // Timeline
-  timeline: [
-    { date: "Q1 2024", event: "Initial Due Diligence", status: "completed" },
-    { date: "Q2 2024", event: "Term Sheet Signed", status: "completed" },
-    { date: "Q3 2024", event: "Final Due Diligence", status: "completed" },
-    { date: deal.date, event: "Deal Closed", status: "completed" }
-  ]
-})
+  return {
+    ...deal,
+    keyMetrics: {
+      enterpriseValue: deal.deal_value_formatted || formatUsd(deal.enterprise_value) || deal.amount || '$—',
+      revenue: deal.revenue_ltm ? formatUsd(deal.revenue_ltm) : (deal.totalFundingUSD ? `$${(parseFloat(deal.totalFundingUSD) * 2.2).toFixed(1)}M` : '$12.4M'),
+      ebitda: deal.ebitda_ltm ? formatUsd(deal.ebitda_ltm) : (deal.totalFundingUSD ? `$${(parseFloat(deal.totalFundingUSD) * 0.8).toFixed(1)}M` : '$4.2M'),
+      ebitdaMargin: deal.ebitda_margin ? `${deal.ebitda_margin}%` : '34.2%',
+      revenueGrowth: deal.revenue_growth_yoy ? `${deal.revenue_growth_yoy}%` : (deal.sector === 'Software & Related' ? '127%' : '43%'),
+      customerRetention: deal.sector === 'Software & Related' ? '94%' : '89%',
+      grossMargin: deal.sector === 'Software & Related' ? '82%' : '67%'
+    },
+    highlights: deal.sector === 'Software & Related' ? [
+      'Market-leading AI technology platform with patent portfolio',
+      'Strong recurring SaaS revenue model with 94% customer retention', 
+      'Significant expansion opportunities in enterprise market',
+      'Proven management team with previous successful exits',
+      'Strategic partnerships with major tech companies'
+    ] : deal.sector === 'Healthcare' ? [
+      'Breakthrough drug discovery technology platform',
+      'Strong IP portfolio with 12+ patents pending',
+      'Partnerships with major pharmaceutical companies', 
+      'Experienced leadership team from Big Pharma',
+      'Large addressable market opportunity ($50B+)'
+    ] : deal.sector === 'Food and Ag.' ? [
+      'Premium brand with strong consumer loyalty',
+      'Omnichannel distribution strategy showing rapid growth',
+      'Sustainable and innovative product portfolio', 
+      'Experienced management team with CPG expertise',
+      'Strong unit economics and scalable business model'
+    ] : [
+      'Strong market position with competitive moats',
+      'Proven business model with recurring revenue',
+      'Experienced leadership team with track record',
+      'Significant market opportunity for expansion', 
+      'Strong financial performance and unit economics'
+    ],
+  }
+}
 
 export default function DealDetails() {
   const { id } = useParams()
@@ -129,12 +102,18 @@ export default function DealDetails() {
               id: data.deal_id,
               title: data.deal_name,
               companyName: data.deals_companies?.name || data.deal_name || 'Unknown Company',
-              amount: data.deal_value_formatted || `$${(data.deal_value_usd / 1000000).toFixed(1)}M`,
+              amount: data.deal_value_formatted || (data.deal_value_usd ? ('$' + (Number(data.deal_value_usd) / 1_000_000).toFixed(1) + 'M') : 'Undisclosed'),
               sector: 'Consumer Discretionary',
               stage: data.stage_label || data.deal_status || 'Growth',
-              date: new Date(data.announcement_date).getFullYear().toString(),
+              date: data.announcement_date ? new Date(data.announcement_date).getFullYear().toString() : '—',
               location: `${data.city || ''}, ${data.state_province || ''}, ${data.country || ''}`.replace(/^,\s*|,\s*$/g, ''),
               description: data.description || 'Automotive industry investment opportunity',
+              website: data.deals_companies?.website,
+              enterprise_value: data.enterprise_value,
+              revenue_ltm: data.revenue_ltm,
+              ebitda_ltm: data.ebitda_ltm,
+              ebitda_margin: data.ebitda_margin,
+              revenue_growth_yoy: data.revenue_growth_yoy,
               firms: ['Private Equity Firm'] // Placeholder since we don't have investor data
             }
             setDeal(transformedDeal)
