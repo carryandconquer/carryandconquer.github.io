@@ -306,7 +306,7 @@ export default function DealDetails() {
                 </Card>
               </div>
 
-              <div className="flex flex-wrap gap-6">
+              <div className="flex flex-wrap gap-6 mb-8">
                 <div className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
                   <MapPin className="w-5 h-5 mr-2 text-accent-cyan" />
                   <span>{enrichedDeal.location}</span>
@@ -329,6 +329,30 @@ export default function DealDetails() {
                   </div>
                 )}
               </div>
+
+              {/* Advisory Team in Hero */}
+              <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-6">
+                <CardContent className="p-6">
+                  <div className="text-muted-foreground text-sm mb-4 flex items-center">
+                    <Briefcase className="w-4 h-4 mr-2 text-accent-blue" />
+                    Advisory Team
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Financial:</span>
+                      <div className="text-foreground font-medium">{enrichedDeal.dealStructure.advisors.financial}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Legal:</span>
+                      <div className="text-foreground font-medium">{enrichedDeal.dealStructure.advisors.legal}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Strategic:</span>
+                      <div className="text-foreground font-medium">{enrichedDeal.dealStructure.advisors.technical}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
             
             {/* Enhanced Summary Card */}
@@ -578,64 +602,6 @@ export default function DealDetails() {
               </CardContent>
             </Card>
           </div>
-
-          {/* Investment Thesis */}
-          <Card className="mt-12 bg-gradient-card border-border shadow-card backdrop-blur-sm animate-fade-in">
-            <CardHeader>
-              <CardTitle className="text-foreground flex items-center text-2xl">
-                <Target className="w-6 h-6 mr-3 text-accent-cyan" />
-                Investment Thesis
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                This investment represents a compelling opportunity in the {enrichedDeal.sector} sector, with strong fundamentals and significant growth potential driven by market-leading technology and exceptional management execution.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Deal Structure */}
-      <section className="py-16 bg-background/50">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up">
-            <CardHeader>
-              <CardTitle className="text-foreground flex items-center text-2xl">
-                <Briefcase className="w-6 h-6 mr-3 text-accent-blue" />
-                Deal Structure
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <div className="text-muted-foreground text-sm mb-2">Lead Investor</div>
-                <div className="text-foreground font-medium text-lg">{enrichedDeal.dealStructure.buyer}</div>
-              </div>
-              <Separator className="bg-border" />
-              <div>
-                <div className="text-muted-foreground text-sm mb-2">Selling Parties</div>
-                <div className="text-foreground font-medium">{enrichedDeal.dealStructure.seller}</div>
-              </div>
-              <Separator className="bg-border" />
-              <div>
-                <div className="text-muted-foreground text-sm mb-3">Advisory Team</div>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Financial Advisor:</span>
-                    <span className="text-foreground">{enrichedDeal.dealStructure.advisors.financial}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Legal Counsel:</span>
-                    <span className="text-foreground">{enrichedDeal.dealStructure.advisors.legal}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Strategic Advisor:</span>
-                    <span className="text-foreground">{enrichedDeal.dealStructure.advisors.technical}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </section>
 
