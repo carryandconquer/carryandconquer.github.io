@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Navigation } from "@/components/Navigation"
 import { Footer } from "@/components/Footer"
-import { keyDeals } from "./KeyDeals"
 import { supabase } from "@/integrations/supabase/client"
 import { generateSlug } from "@/lib/slugUtils"
 
@@ -109,46 +108,42 @@ export default function DealDetails() {
       
       setLoading(true)
       try {
-        // First try to find in hardcoded data
-        const hardcodedDeal = keyDeals.find(d => d.id === id)
+        // Fetch from database using deal_id
+        const { data: rawData, error } = await supabase
+          .from('deals')
+          .select('*')
+          .eq('deal_id', id)
+          .eq('published', true)
         
-        if (hardcodedDeal) {
-          setDeal(hardcodedDeal)
-        } else {
-          // Try to fetch from database using deal_id
-          const { data: rawData, error } = await supabase
-            .from('deals')
-            .select('*')
-            .eq('deal_id', id)
-          
-          // Handle potential duplicates by taking the first result
-          const data = Array.isArray(rawData) ? rawData[0] : rawData
-          
-          if (error) {
-            console.error('Error fetching deal:', error)
-            setDeal(null)
-          } else if (data) {
-            // Transform database deal to match expected format
-            const transformedDeal = {
-              id: data.deal_id,
-              title: data.deal_name,
-              companyName: data.company_name || data.deal_name || 'Unknown Company',
-              amount: data.deal_value_formatted || (data.deal_value_usd ? ('$' + (Number(data.deal_value_usd) / 1_000_000).toFixed(1) + 'M') : 'Undisclosed'),
-              sector: data.sector || 'Consumer Discretionary',
-              stage: data.stage_label || data.deal_status || 'Growth',
-              date: data.announcement_date ? new Date(data.announcement_date).getFullYear().toString() : '—',
-              location: `${data.city || ''}, ${data.state_province || ''}, ${data.country || ''}`.replace(/^,\s*|,\s*$/g, ''),
-              description: data.description || 'Investment opportunity',
-              website: data.website,
-              enterprise_value: data.enterprise_value,
-              revenue_ltm: data.revenue_ltm,
-              ebitda_ltm: data.ebitda_ltm,
-              ebitda_margin: data.ebitda_margin,
-              revenue_growth_yoy: data.revenue_growth_yoy,
-              firms: ['Private Equity Firm'] // Placeholder since we don't have investor data
-            }
-            setDeal(transformedDeal)
+        // Handle potential duplicates by taking the first result
+        const data = Array.isArray(rawData) ? rawData[0] : rawData
+        
+        if (error) {
+          console.error('Error fetching deal:', error)
+          setDeal(null)
+        } else if (data) {
+          // Transform database deal to match expected format
+          const transformedDeal = {
+            id: data.deal_id,
+            title: data.deal_name,
+            companyName: data.company_name || data.deal_name || 'Unknown Company',
+            amount: data.deal_value_formatted || (data.deal_value_usd ? ('$' + (Number(data.deal_value_usd) / 1_000_000).toFixed(1) + 'M') : 'Undisclosed'),
+            sector: data.sector || 'Consumer Discretionary',
+            stage: data.stage_label || data.deal_status || 'Growth',
+            date: data.announcement_date ? new Date(data.announcement_date).getFullYear().toString() : '—',
+            location: `${data.city || ''}, ${data.state_province || ''}, ${data.country || ''}`.replace(/^,\s*|,\s*$/g, ''),
+            description: data.description || 'Investment opportunity',
+            website: data.website,
+            enterprise_value: data.enterprise_value,
+            revenue_ltm: data.revenue_ltm,
+            ebitda_ltm: data.ebitda_ltm,
+            ebitda_margin: data.ebitda_margin,
+            revenue_growth_yoy: data.revenue_growth_yoy,
+            firms: ['Private Equity Firm'] // Placeholder since we don't have investor data
           }
+          setDeal(transformedDeal)
+        } else {
+          setDeal(null)
         }
       } catch (error) {
         console.error('Error in fetchDeal:', error)

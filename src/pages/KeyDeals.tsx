@@ -9,95 +9,6 @@ import { useState, useEffect } from "react"
 import { supabase } from "@/integrations/supabase/client"
 import { normalizeTaxonomy } from "@/lib/slugUtils"
 
-export const keyDeals = [
-  {
-    id: "1",
-    title: "ZenScreen AI Platform Investment",
-    companyName: "ZenScreen",
-    amount: "$2.5M",
-    date: "2024",
-    sector: "Software & Related",
-    primaryIndustry: "Software",
-    subIndustries: "Web Applications, Analytics & Performance Software, Mobile Applications",
-    stage: "Add-on",
-    description: "Founded in 2017 and based in California, US, ZenScreen operates as a provider of an AI-based platform that enables users to monitor screen time and control electronic device usage. The platform offers digital-dieting features including App Analytics, App Categories, Smart Mornings, Calm Nights, Zen breaks, Daily Time Limit, Quiet Time, and Screen Sense.",
-    website: "www.zenscreen.ai",
-    location: "San Jose, California, US",
-    region: "North America",
-    status: "Completed",
-    investmentStatus: "Active",
-    firms: ["500 Startups", "Bessemer Venture Partners", "BMW i Ventures", "Bullpen Capital", "DCM", "Duchossois Capital Management", "EchoVC Partners", "Fontinalis Partners", "Hinge Capital", "Kapor Capital", "LaunchCapital Ventures", "Life360, Inc.", "Seraph Group", "Social Leverage Capital"],
-    leadPartners: "",
-    boardReps: "",
-    multiple: "N/A"
-  },
-  {
-    id: "2",
-    title: "Van Leeuwen Artisan Ice Cream Series A",
-    companyName: "Van Leeuwen Artisan Ice Cream",
-    amount: "$18.7M",
-    date: "2024",
-    sector: "Food and Ag.",
-    primaryIndustry: "Food",
-    subIndustries: "Dairy Products",
-    stage: "Series A/Round 1",
-    description: "Founded in 2008 and based in New York, US, Van Leeuwen Artisan Ice Cream operates as a producer of dairy-based and vegan ice cream products. The products are offered through their ice cream trucks and grocery stores.",
-    website: "www.vanleeuwenicecream.com",
-    location: "Brooklyn, New York, US",
-    region: "North America",
-    status: "Completed",
-    investmentStatus: "Active",
-    firms: ["Strand Equity"],
-    leadPartners: "Seth Rodsky",
-    boardReps: "Seth Rodsky",
-    totalFundingUSD: "18.7",
-    totalFundingEUR: "16.99",
-    multiple: "N/A"
-  },
-  {
-    id: "3",
-    title: "Conifer Point Pharmaceuticals Add-on Investment",
-    companyName: "Conifer Point Pharmaceuticals LLC",
-    amount: "$5.0M",
-    date: "2024",
-    sector: "Healthcare",
-    primaryIndustry: "Pharmaceuticals",
-    subIndustries: "Pharmaceutical Development, BioPharmaceuticals, Medical Software, Medical Devices",
-    stage: "Add-on",
-    description: "Founded in 2014 and based in Pennsylvania, US, Conifer Point Pharmaceuticals LLC develops drug discovery technology using computational tools to help drug researchers improve early stage compounds. The company also offers industry-standard computational chemistry services to help small firms solve chemistry research and development problems.",
-    website: "www.coniferpoint.com",
-    location: "Doylestown, Pennsylvania, US",
-    region: "North America",
-    status: "Completed",
-    investmentStatus: "Active",
-    firms: ["180 Degree Capital", "AbbVie Biotech Ventures", "Alexandria Venture Investments", "ARCH Venture Partners", "Bill & Melinda Gates Foundation", "Eli Lilly & Company", "Innovate NY Fund", "Johnson & Johnson", "Lodo Therapeutics Corporation", "Partnership Fund for New York City", "Pfizer Venture Investments", "Watson Group Investments", "WuXi AppTec Group"],
-    leadPartners: "",
-    boardReps: "",
-    multiple: "N/A"
-  },
-  {
-    id: "4",
-    title: "OmniView Sports Seed Investment",
-    companyName: "OmniView Sports Inc.",
-    amount: "$1.2M",
-    date: "2024",
-    sector: "Software & Related",
-    primaryIndustry: "Software",
-    subIndustries: "Conferencing Software, Gaming, Connectivity Software, Web Applications, Mobile Applications, Application Integration Software",
-    stage: "Seed",
-    description: "Founded in 2020 and based in Massachusetts, US, OmniView Sports Inc. operates as sports viewing application that's showing its users a personalized view experience according to the user preference.",
-    website: "www.ovszone.com",
-    location: "Boston, Massachusetts, US",
-    region: "North America",
-    status: "Completed",
-    investmentStatus: "Active",
-    firms: ["Undisclosed Investors"],
-    leadPartners: "",
-    boardReps: "",
-    multiple: "N/A"
-  }
-]
-
 export default function KeyDeals() {
   const [selectedRegion, setSelectedRegion] = useState<string>("all-regions")
   const [selectedCountry, setSelectedCountry] = useState<string>("all-countries")
@@ -361,23 +272,60 @@ export default function KeyDeals() {
           .select('*')
           .eq('published', true)
         
-        // Apply filters using the direct fields we've populated
+        // Apply filters using the new foreign key columns for better performance
         if (selectedRegion !== "all-regions") {
-          query = query.ilike('region', `%${selectedRegion.replace('-', ' ')}%`)
-        }
-        if (selectedCountry !== "all-countries") {
-          query = query.ilike('country', `%${selectedCountry.replace('-', ' ')}%`)
-        }
-        if (selectedSector !== "all-sectors") {
-          const sectorName = selectedSector.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-          query = query.ilike('sector', `%${sectorName}%`)
-        }
-        if (selectedSubSector !== "all-sub-sectors") {
-          const subSectorName = selectedSubSector.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-          query = query.ilike('sub_sector', `%${subSectorName}%`)
+          const regionQuery = supabase
+            .from('snapshot_geographic_regions')
+            .select('id')
+            .ilike('slug', selectedRegion)
+            .single()
+          
+          const { data: regionData } = await regionQuery
+          if (regionData) {
+            query = query.eq('region_id', regionData.id)
+          }
         }
         
-        const { data, error } = await query
+        if (selectedCountry !== "all-countries") {
+          const countryQuery = supabase
+            .from('snapshot_countries')
+            .select('id')
+            .ilike('slug', selectedCountry)
+            .single()
+          
+          const { data: countryData } = await countryQuery
+          if (countryData) {
+            query = query.eq('country_id', countryData.id)
+          }
+        }
+        
+        if (selectedSector !== "all-sectors") {
+          const sectorQuery = supabase
+            .from('snapshot_sectors')
+            .select('id')
+            .ilike('slug', normalizeTaxonomy(selectedSector))
+            .single()
+          
+          const { data: sectorData } = await sectorQuery
+          if (sectorData) {
+            query = query.eq('sector_id', sectorData.id)
+          }
+        }
+        
+        if (selectedSubSector !== "all-sub-sectors") {
+          const subSectorQuery = supabase
+            .from('snapshot_sub_sectors')
+            .select('id')
+            .ilike('slug', normalizeTaxonomy(selectedSubSector))
+            .single()
+          
+          const { data: subSectorData } = await subSectorQuery
+          if (subSectorData) {
+            query = query.eq('sub_sector_id', subSectorData.id)
+          }
+        }
+        
+        const { data, error } = await query.order('announcement_date', { ascending: false })
         
         if (error) throw error
         
@@ -389,13 +337,10 @@ export default function KeyDeals() {
         })
         const filteredDeals = Array.from(uniqueMap.values())
         
-        // Combine database deals with hardcoded keyDeals
-        const allDeals = [...keyDeals, ...filteredDeals]
-        setDeals(allDeals)
+        setDeals(filteredDeals)
       } catch (error) {
         console.error('Error fetching deals:', error)
-        // Show hardcoded deals as fallback
-        setDeals(keyDeals)
+        setDeals([])
       } finally {
         setLoading(false)
       }
@@ -474,13 +419,10 @@ export default function KeyDeals() {
     return [] // Tertiary filter is disabled
   }
 
-  // Filter deals based on selected filters
+  // Filter deals based on selected filters (now purely client-side for region/country text matching)
   const getFilteredDeals = () => {
-    const sectorSelected = selectedSector !== "all-sectors"
-    const subSectorSelected = selectedSubSector !== "all-sub-sectors"
-
     return deals.filter(deal => {
-      // Region filter
+      // Apply additional region/country filtering based on text fields for backward compatibility
       if (selectedRegion !== "all-regions") {
         const regionName = selectedRegion.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
         const dealRegion = (deal.region || '').toString()
@@ -489,7 +431,6 @@ export default function KeyDeals() {
         }
       }
 
-      // Country filter (supports abbreviations like US, UK, UAE)
       if (selectedCountry !== "all-countries") {
         const allCountries = Object.values(regionCountries).flat()
         const entry = allCountries.find(c => c.value === selectedCountry)
@@ -517,30 +458,6 @@ export default function KeyDeals() {
 
         const locationSource = (deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(' ')).toLowerCase()
         if (!synonyms.some(s => locationSource.includes(s))) {
-          return false
-        }
-      }
-
-      // Sector filter (exact normalized match)
-      if (sectorSelected) {
-        const targetSector = normalizeTaxonomy(selectedSector)
-        const dealSector = deal.sector || deal.primaryIndustry || ''
-        if (!dealSector || normalizeTaxonomy(dealSector) !== targetSector) {
-          return false
-        }
-      }
-
-      // Sub-sector filter (exact normalized token match; supports comma- or slash-separated lists)
-      if (subSectorSelected) {
-        const targetSub = normalizeTaxonomy(selectedSubSector)
-        const raw = deal.sub_sector ?? deal.subIndustries ?? deal.sub_industries ?? ''
-        const tokens = Array.isArray(raw)
-          ? raw
-          : typeof raw === 'string'
-            ? raw.split(/[;,/]/).map(s => s.trim()).filter(Boolean)
-            : []
-        const match = tokens.some((t: string) => normalizeTaxonomy(t) === targetSub)
-        if (!match) {
           return false
         }
       }
@@ -727,7 +644,7 @@ export default function KeyDeals() {
                       <div className="text-sm text-white/70 mb-1">Sector</div>
                       <div className="flex items-center">
                         <Building2 className="w-4 h-4 mr-2 text-green-400" />
-                        <span className="font-medium text-white">{selectedSector !== 'all-sectors' ? selectedSector : '—'}</span>
+                        <span className="font-medium text-white">{deal.sector || '—'}</span>
                       </div>
                     </div>
                     <div>
