@@ -838,6 +838,114 @@ const Snapshot = () => {
           </div>
         </section>
 
+        {/* Market Intelligence */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Market Intelligence</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="bg-white/5 border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5" />
+                  Sector Outlook
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Agricultural Technology</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Strong growth momentum with increasing focus on sustainability and supply chain optimization.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Growth Sector</Badge>
+                      <Badge variant="outline" className="text-xs">ESG Focus</Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Fresh Produce</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Increasing demand for organic and locally-sourced produce driving sector expansion.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Organic Growth</Badge>
+                      <Badge variant="outline" className="text-xs">Local Sourcing</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/5 border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  Investment Trends
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Food Tech Focus</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Increased investor appetite for sustainable agriculture and food tech companies.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Food Tech</Badge>
+                      <Badge variant="outline" className="text-xs">Sustainability</Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Supply Chain Innovation</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Growing investment in cold-chain logistics and supply chain optimization.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Logistics</Badge>
+                      <Badge variant="outline" className="text-xs">Cold Chain</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/5 border-white/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Globe className="w-5 h-5" />
+                  Regional Insights
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Asia-Pacific Growth</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Australia leading in agricultural innovation and vertical farming adoption.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Innovation Hub</Badge>
+                      <Badge variant="outline" className="text-xs">APAC</Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-muted/30 rounded-lg">
+                    <h3 className="font-semibold text-sm mb-2">Export Opportunities</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Strong export potential for fresh produce to Asian markets.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">Export Growth</Badge>
+                      <Badge variant="outline" className="text-xs">Trade</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Trending Companies */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Trending Companies</h2>
@@ -985,114 +1093,6 @@ const Snapshot = () => {
                 )}
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Market Intelligence */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Market Intelligence</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5" />
-                  Sector Outlook
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-muted/30 rounded-lg">
-                    <h3 className="font-semibold text-sm mb-2">Agricultural Technology</h3>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Strong growth momentum with increasing focus on sustainability and supply chain optimization.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="text-xs">Growth Sector</Badge>
-                      <Badge variant="outline" className="text-xs">ESG Focus</Badge>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 bg-muted/30 rounded-lg">
-                    <h3 className="font-semibold text-sm mb-2">Fresh Produce</h3>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Increasing demand for organic and locally-sourced produce driving sector expansion.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="text-xs">Organic Growth</Badge>
-                      <Badge variant="outline" className="text-xs">Local Sourcing</Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5" />
-                  Investment Trends
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-muted/30 rounded-lg">
-                    <h3 className="font-semibold text-sm mb-2">Food Tech Focus</h3>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Increased investor appetite for sustainable agriculture and food tech companies.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="text-xs">Food Tech</Badge>
-                      <Badge variant="outline" className="text-xs">Sustainability</Badge>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 bg-muted/30 rounded-lg">
-                    <h3 className="font-semibold text-sm mb-2">Supply Chain Innovation</h3>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Growing investment in cold-chain logistics and supply chain optimization.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="text-xs">Logistics</Badge>
-                      <Badge variant="outline" className="text-xs">Cold Chain</Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Globe className="w-5 h-5" />
-                  Regional Insights
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-muted/30 rounded-lg">
-                    <h3 className="font-semibold text-sm mb-2">Asia-Pacific Growth</h3>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Australia leading in agricultural innovation and vertical farming adoption.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="text-xs">Innovation Hub</Badge>
-                      <Badge variant="outline" className="text-xs">APAC</Badge>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 bg-muted/30 rounded-lg">
-                    <h3 className="font-semibold text-sm mb-2">Export Opportunities</h3>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Strong export potential for fresh produce to Asian markets.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="text-xs">Export Growth</Badge>
-                      <Badge variant="outline" className="text-xs">Trade</Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </section>
 
