@@ -609,30 +609,31 @@ export default function KeyDeals() {
 
           {/* Deals Grid */}
           {!loading && (
-            <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {getFilteredDeals().map((deal) => (
               <Card 
                 key={deal.deal_id || deal.id}
-                className="group hover:shadow-glow transition-all duration-300 hover:scale-[1.02] bg-gradient-card backdrop-blur-sm border-border overflow-hidden"
+                className="group hover:shadow-glow transition-all duration-300 hover:scale-[1.02] bg-gradient-card backdrop-blur-sm border-border overflow-hidden h-fit"
               >
                 <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-6 flex-1">
-                      {/* Company Logo Placeholder */}
-                      <div className="flex-shrink-0">
-                        <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
-                          <span className="text-xl font-bold text-white">
-                            {(deal.company_name || deal.deal_name || 'C').substring(0, 2).toUpperCase()}
-                          </span>
+                  <div className="flex flex-col space-y-4">
+                    {/* Header Row with Logo, Company, and Status */}
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-4 flex-1">
+                        {/* Company Logo Placeholder */}
+                        <div className="flex-shrink-0">
+                          <div className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
+                            <span className="text-lg font-bold text-white">
+                              {(deal.company_name || deal.deal_name || 'C').substring(0, 2).toUpperCase()}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-4 mb-3">
-                          <CardTitle className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        
+                        <div className="flex-1 min-w-0">
+                          <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-2 leading-tight">
                             {deal.company_name || deal.deal_name || deal.title || 'Untitled Deal'}
                           </CardTitle>
-                          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          <div className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
                             (deal.stage_label || deal.deal_status || deal.status) === 'Completed' 
                               ? 'bg-primary/20 text-primary border border-primary/30' 
                               : 'bg-accent/20 text-accent-foreground border border-accent/30'
@@ -640,95 +641,93 @@ export default function KeyDeals() {
                             {deal.stage_label || deal.deal_status || deal.status || 'Completed'}
                           </div>
                         </div>
-                        
-                        <CardDescription className="text-muted-foreground leading-relaxed text-base mb-4 line-clamp-2">
-                          {deal.description || 'Investment opportunity in growth-stage company with strong market position and expansion potential.'}
-                        </CardDescription>
-                        
-                        {/* Key Details Row */}
-                        <div className="flex items-center space-x-6 text-sm">
-                          <div className="flex items-center">
-                            <Building2 className="w-4 h-4 mr-2 text-accent-cyan" />
-                            <span className="text-muted-foreground mr-1">Sector:</span>
-                            <span className="font-medium text-foreground">{deal.sector || 'Technology'}</span>
-                          </div>
-                          <div className="flex items-center">
-                            <TrendingUp className="w-4 h-4 mr-2 text-accent-teal" />
-                            <span className="text-muted-foreground mr-1">Stage:</span>
-                            <span className="font-medium text-foreground">{deal.stage_label || 'Growth'}</span>
-                          </div>
-                          <div className="flex items-center">
-                            <DollarSign className="w-4 h-4 mr-2 text-primary" />
-                            <span className="text-muted-foreground mr-1">Location:</span>
-                            <span className="font-medium text-foreground">
-                              {deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(', ') || 'United States'}
-                            </span>
-                          </div>
-                        </div>
                       </div>
                     </div>
-                    
+
                     {/* Deal Value Section */}
-                    <div className="text-right ml-6 flex-shrink-0">
-                      <div className="text-4xl font-bold bg-gradient-text bg-clip-text text-transparent mb-1">
+                    <div className="text-center py-4 border-y border-border/30 bg-muted/30 rounded-lg">
+                      <div className="text-3xl font-bold bg-gradient-text bg-clip-text text-transparent mb-1">
                         {deal.deal_value_formatted || deal.amount || 'Undisclosed'}
                       </div>
                       <div className="text-sm text-muted-foreground font-medium">
-                        Transaction Value
+                        Transaction Value • {deal.announcement_date ? new Date(deal.announcement_date).getFullYear() : (deal.date || '2024')}
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {deal.announcement_date ? new Date(deal.announcement_date).getFullYear() : (deal.date || '2024')}
+                    </div>
+                    
+                    <CardDescription className="text-muted-foreground leading-relaxed text-sm line-clamp-3 mb-4">
+                      {deal.description || 'Investment opportunity in growth-stage company with strong market position and expansion potential.'}
+                    </CardDescription>
+                    
+                    {/* Key Details Stack */}
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-center">
+                        <Building2 className="w-4 h-4 mr-3 text-accent-cyan flex-shrink-0" />
+                        <span className="text-muted-foreground mr-2">Sector:</span>
+                        <span className="font-medium text-foreground truncate">{deal.sector || 'Technology'}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <TrendingUp className="w-4 h-4 mr-3 text-accent-teal flex-shrink-0" />
+                        <span className="text-muted-foreground mr-2">Stage:</span>
+                        <span className="font-medium text-foreground truncate">{deal.stage_label || 'Growth'}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <DollarSign className="w-4 h-4 mr-3 text-primary flex-shrink-0" />
+                        <span className="text-muted-foreground mr-2">Location:</span>
+                        <span className="font-medium text-foreground truncate">
+                          {deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(', ') || 'United States'}
+                        </span>
                       </div>
                     </div>
                   </div>
                 </CardHeader>
                 
+                
                 <CardContent className="pt-4 border-t border-border/50">
-                  <div className="flex items-center justify-between">
+                  <div className="space-y-4">
                     {/* Investors Section */}
-                    <div className="flex items-center space-x-3 flex-1">
-                      <div>
-                        <div className="text-xs text-muted-foreground mb-2">Investors</div>
-                        <div className="flex items-center space-x-2">
-                          {(() => {
-                            // Get investors from various sources
-                            let investors = []
-                            
-                            if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
-                              investors = deal.deals_deal_investors
-                                .map(di => di?.deals_investors?.name)
-                                .filter(Boolean)
-                            } else if (deal.firms && deal.firms.length > 0) {
-                              investors = deal.firms
-                            } else {
-                              // Default investors for ZenScreen-like deals
-                              investors = ['500 Startups', 'Bessemer Venture Partners', 'BMW i Ventures']
-                            }
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-3 font-medium">Investors</div>
+                      <div className="flex items-center justify-center">
+                        {(() => {
+                          // Get investors from various sources
+                          let investors = []
+                          
+                          if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
+                            investors = deal.deals_deal_investors
+                              .map(di => di?.deals_investors?.name)
+                              .filter(Boolean)
+                          } else if (deal.firms && deal.firms.length > 0) {
+                            investors = deal.firms
+                          } else {
+                            // Default investors for ZenScreen-like deals
+                            investors = ['500 Startups', 'Bessemer Venture Partners', 'BMW i Ventures']
+                          }
 
-                            // Enhanced logo system for investors
-                            const investorLogos = {
-                              '500 Startups': { initials: '500', color: 'from-red-500 to-pink-600' },
-                              'Bessemer Venture Partners': { initials: 'BVP', color: 'from-blue-600 to-indigo-700' },
-                              'BMW i Ventures': { initials: 'BMW', color: 'from-gray-800 to-gray-900' },
-                              'Bullpen Capital': { initials: 'BC', color: 'from-green-600 to-emerald-700' },
-                              'DCM': { initials: 'DCM', color: 'from-purple-600 to-violet-700' },
-                              'Duchossois Capital Management': { initials: 'DCM', color: 'from-slate-700 to-slate-800' },
-                              'EchoVC Partners': { initials: 'EVC', color: 'from-orange-500 to-red-600' },
-                              'Fontinalis Partners': { initials: 'FP', color: 'from-teal-600 to-cyan-700' },
-                              'Hinge Capital': { initials: 'HC', color: 'from-pink-500 to-rose-600' },
-                              'Kapor Capital': { initials: 'KC', color: 'from-indigo-600 to-purple-700' },
-                              'LaunchCapital Ventures': { initials: 'LCV', color: 'from-emerald-600 to-green-700' },
-                              'Life360 Inc': { initials: 'L360', color: 'from-blue-500 to-cyan-600' },
-                              'Seraph Group': { initials: 'SG', color: 'from-blue-600 to-blue-700' },
-                              'Social Leverage Capital': { initials: 'SLC', color: 'from-gray-700 to-slate-800' }
-                            }
+                          // Enhanced logo system for investors
+                          const investorLogos = {
+                            '500 Startups': { initials: '500', color: 'from-red-500 to-pink-600' },
+                            'Bessemer Venture Partners': { initials: 'BVP', color: 'from-blue-600 to-indigo-700' },
+                            'BMW i Ventures': { initials: 'BMW', color: 'from-gray-800 to-gray-900' },
+                            'Bullpen Capital': { initials: 'BC', color: 'from-green-600 to-emerald-700' },
+                            'DCM': { initials: 'DCM', color: 'from-purple-600 to-violet-700' },
+                            'Duchossois Capital Management': { initials: 'DCM', color: 'from-slate-700 to-slate-800' },
+                            'EchoVC Partners': { initials: 'EVC', color: 'from-orange-500 to-red-600' },
+                            'Fontinalis Partners': { initials: 'FP', color: 'from-teal-600 to-cyan-700' },
+                            'Hinge Capital': { initials: 'HC', color: 'from-pink-500 to-rose-600' },
+                            'Kapor Capital': { initials: 'KC', color: 'from-indigo-600 to-purple-700' },
+                            'LaunchCapital Ventures': { initials: 'LCV', color: 'from-emerald-600 to-green-700' },
+                            'Life360 Inc': { initials: 'L360', color: 'from-blue-500 to-cyan-600' },
+                            'Seraph Group': { initials: 'SG', color: 'from-blue-600 to-blue-700' },
+                            'Social Leverage Capital': { initials: 'SLC', color: 'from-gray-700 to-slate-800' }
+                          }
 
-                            // Limit to first 4 investors for clean display
-                            const displayInvestors = investors.slice(0, 4)
-                            const hasMore = investors.length > 4
+                          // Limit to first 4 investors for clean display
+                          const displayInvestors = investors.slice(0, 4)
+                          const hasMore = investors.length > 4
 
-                            return (
-                              <div className="flex items-center space-x-2">
+                          return (
+                            <div className="flex flex-col items-center space-y-3">
+                              <div className="flex items-center justify-center space-x-1">
                                 {displayInvestors.map((investor, index) => {
                                   const logoData = investorLogos[investor] || {
                                     initials: investor.split(' ').map(word => word.charAt(0)).slice(0, 2).join('').toUpperCase(),
@@ -755,32 +754,34 @@ export default function KeyDeals() {
                                     </span>
                                   </div>
                                 )}
-                                
+                              </div>
+                              
+                              <div className="text-center">
                                 {displayInvestors.length === 1 && (
-                                  <div className="ml-3">
+                                  <>
                                     <div className="font-medium text-foreground text-sm">
                                       {displayInvestors[0]}
                                     </div>
                                     <div className="text-xs text-accent-cyan font-medium">
                                       Lead Investor
                                     </div>
-                                  </div>
+                                  </>
                                 )}
                                 
                                 {displayInvestors.length > 1 && (
-                                  <div className="ml-3">
+                                  <>
                                     <div className="font-medium text-foreground text-sm">
                                       {displayInvestors[0]} {hasMore ? `& ${investors.length - 1} others` : `& ${displayInvestors.length - 1} others`}
                                     </div>
                                     <div className="text-xs text-muted-foreground">
                                       Investment Consortium
                                     </div>
-                                  </div>
+                                  </>
                                 )}
                               </div>
-                            )
-                          })()}
-                        </div>
+                            </div>
+                          )
+                        })()}
                       </div>
                     </div>
                     
@@ -788,7 +789,7 @@ export default function KeyDeals() {
                     <Button 
                       asChild
                       variant="outline" 
-                      className="border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-glow group-hover:scale-105"
+                      className="w-full border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-glow group-hover:scale-105"
                     >
                       <Link to={`/deal/${deal.deal_id || deal.id}`}>
                         View Deal Details
