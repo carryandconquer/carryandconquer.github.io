@@ -474,40 +474,107 @@ export default function DealDetails() {
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {(enrichedDeal.investors || enrichedDeal.firms).map((firm, index) => {
-                  // Create a simple logo placeholder based on firm name
-                  const initials = firm.split(' ')
-                    .map(word => word.charAt(0))
-                    .slice(0, 2)
-                    .join('')
-                    .toUpperCase();
+                  // Enhanced logo system with realistic branding
+                  const investorLogos = {
+                    '500 Startups': {
+                      initials: '500',
+                      color: 'bg-gradient-to-r from-red-500 to-pink-600 text-white',
+                      description: 'Global seed fund'
+                    },
+                    'Bessemer Venture Partners': {
+                      initials: 'BVP',
+                      color: 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white',
+                      description: 'Multi-stage VC'
+                    },
+                    'BMW i Ventures': {
+                      initials: 'BMW',
+                      color: 'bg-gradient-to-r from-gray-800 to-gray-900 text-white',
+                      description: 'Corporate VC'
+                    },
+                    'Bullpen Capital': {
+                      initials: 'BC',
+                      color: 'bg-gradient-to-r from-green-600 to-emerald-700 text-white',
+                      description: 'Early stage VC'
+                    },
+                    'DCM': {
+                      initials: 'DCM',
+                      color: 'bg-gradient-to-r from-purple-600 to-violet-700 text-white',
+                      description: 'Growth capital'
+                    },
+                    'Duchossois Capital Management': {
+                      initials: 'DCM',
+                      color: 'bg-gradient-to-r from-slate-700 to-slate-800 text-white',
+                      description: 'Private equity'
+                    },
+                    'EchoVC Partners': {
+                      initials: 'EVC',
+                      color: 'bg-gradient-to-r from-orange-500 to-red-600 text-white',
+                      description: 'African-focused VC'
+                    },
+                    'Fontinalis Partners': {
+                      initials: 'FP',
+                      color: 'bg-gradient-to-r from-teal-600 to-cyan-700 text-white',
+                      description: 'Mobility focused'
+                    },
+                    'Hinge Capital': {
+                      initials: 'HC',
+                      color: 'bg-gradient-to-r from-pink-500 to-rose-600 text-white',
+                      description: 'Early stage VC'
+                    },
+                    'Kapor Capital': {
+                      initials: 'KC',
+                      color: 'bg-gradient-to-r from-indigo-600 to-purple-700 text-white',
+                      description: 'Impact investing'
+                    },
+                    'LaunchCapital Ventures': {
+                      initials: 'LCV',
+                      color: 'bg-gradient-to-r from-emerald-600 to-green-700 text-white',
+                      description: 'Seed stage VC'
+                    },
+                    'Life360 Inc': {
+                      initials: 'L360',
+                      color: 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white',
+                      description: 'Family safety'
+                    },
+                    'Seraph Group': {
+                      initials: 'SG',
+                      color: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white',
+                      description: 'Angel network'
+                    },
+                    'Social Leverage Capital': {
+                      initials: 'SLC',
+                      color: 'bg-gradient-to-r from-gray-700 to-slate-800 text-white',
+                      description: 'Early stage VC'
+                    }
+                  };
                   
-                  // Color variations for different investors
-                  const colorSchemes = [
-                    'bg-primary text-primary-foreground',
-                    'bg-accent-cyan text-white',
-                    'bg-accent-teal text-white',
-                    'bg-secondary text-secondary-foreground',
-                    'bg-primary/80 text-white',
-                    'bg-accent-cyan/80 text-white'
-                  ];
-                  
-                  const colorScheme = colorSchemes[index % colorSchemes.length];
+                  const logoData = investorLogos[firm] || {
+                    initials: firm.split(' ').map(word => word.charAt(0)).slice(0, 2).join('').toUpperCase(),
+                    color: 'bg-gradient-to-r from-primary to-accent-cyan text-white',
+                    description: 'Investment firm'
+                  };
                   
                   return (
                     <div 
                       key={index}
-                      className="group bg-card/50 border border-border rounded-xl p-4 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer"
+                      className="group bg-card/60 border border-border/50 rounded-2xl p-6 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-sm"
                     >
-                      <div className="flex flex-col items-center text-center space-y-3">
-                        {/* Logo placeholder */}
-                        <div className={`w-16 h-16 rounded-xl ${colorScheme} flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300`}>
-                          <span className="text-xl font-bold">
-                            {initials}
+                      <div className="flex flex-col items-center text-center space-y-4">
+                        {/* Enhanced Logo */}
+                        <div className={`w-20 h-20 rounded-2xl ${logoData.color} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
+                          <span className="text-xl font-bold tracking-tight">
+                            {logoData.initials}
                           </span>
                         </div>
-                        {/* Firm name */}
-                        <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                          {firm}
+                        
+                        {/* Firm Details */}
+                        <div className="space-y-2">
+                          <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                            {firm}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {logoData.description}
+                          </div>
                         </div>
                       </div>
                     </div>
