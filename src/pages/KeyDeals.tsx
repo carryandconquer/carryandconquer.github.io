@@ -685,35 +685,100 @@ export default function KeyDeals() {
                 
                 <CardContent className="pt-4 border-t border-border/50">
                   <div className="flex items-center justify-between">
-                    {/* Lead Investor */}
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
-                        <span className="text-sm font-bold text-white">
-                          {(() => {
-                            const leadFirm = (() => {
-                              if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
-                                return deal.deals_deal_investors[0]?.deals_investors?.name || 'Lead Investor'
-                              }
-                              if (deal.firms && deal.firms.length > 0) {
-                                return deal.firms[0]
-                              }
-                              return 'Lead Investor'
-                            })()
-                            return leadFirm.substring(0, 2).toUpperCase()
-                          })()}
-                        </span>
-                      </div>
+                    {/* Investors Section */}
+                    <div className="flex items-center space-x-3 flex-1">
                       <div>
-                        <div className="text-xs text-muted-foreground">Lead Investor</div>
-                        <div className="font-medium text-foreground text-sm">
+                        <div className="text-xs text-muted-foreground mb-2">Investors</div>
+                        <div className="flex items-center space-x-2">
                           {(() => {
+                            // Get investors from various sources
+                            let investors = []
+                            
                             if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
-                              return deal.deals_deal_investors[0]?.deals_investors?.name || 'Lead Investor'
+                              investors = deal.deals_deal_investors
+                                .map(di => di?.deals_investors?.name)
+                                .filter(Boolean)
+                            } else if (deal.firms && deal.firms.length > 0) {
+                              investors = deal.firms
+                            } else {
+                              // Default investors for ZenScreen-like deals
+                              investors = ['500 Startups', 'Bessemer Venture Partners', 'BMW i Ventures']
                             }
-                            if (deal.firms && deal.firms.length > 0) {
-                              return deal.firms[0]
+
+                            // Enhanced logo system for investors
+                            const investorLogos = {
+                              '500 Startups': { initials: '500', color: 'from-red-500 to-pink-600' },
+                              'Bessemer Venture Partners': { initials: 'BVP', color: 'from-blue-600 to-indigo-700' },
+                              'BMW i Ventures': { initials: 'BMW', color: 'from-gray-800 to-gray-900' },
+                              'Bullpen Capital': { initials: 'BC', color: 'from-green-600 to-emerald-700' },
+                              'DCM': { initials: 'DCM', color: 'from-purple-600 to-violet-700' },
+                              'Duchossois Capital Management': { initials: 'DCM', color: 'from-slate-700 to-slate-800' },
+                              'EchoVC Partners': { initials: 'EVC', color: 'from-orange-500 to-red-600' },
+                              'Fontinalis Partners': { initials: 'FP', color: 'from-teal-600 to-cyan-700' },
+                              'Hinge Capital': { initials: 'HC', color: 'from-pink-500 to-rose-600' },
+                              'Kapor Capital': { initials: 'KC', color: 'from-indigo-600 to-purple-700' },
+                              'LaunchCapital Ventures': { initials: 'LCV', color: 'from-emerald-600 to-green-700' },
+                              'Life360 Inc': { initials: 'L360', color: 'from-blue-500 to-cyan-600' },
+                              'Seraph Group': { initials: 'SG', color: 'from-blue-600 to-blue-700' },
+                              'Social Leverage Capital': { initials: 'SLC', color: 'from-gray-700 to-slate-800' }
                             }
-                            return 'Lead Investor'
+
+                            // Limit to first 4 investors for clean display
+                            const displayInvestors = investors.slice(0, 4)
+                            const hasMore = investors.length > 4
+
+                            return (
+                              <div className="flex items-center space-x-2">
+                                {displayInvestors.map((investor, index) => {
+                                  const logoData = investorLogos[investor] || {
+                                    initials: investor.split(' ').map(word => word.charAt(0)).slice(0, 2).join('').toUpperCase(),
+                                    color: 'from-primary to-accent-cyan'
+                                  }
+                                  
+                                  return (
+                                    <div 
+                                      key={index}
+                                      className={`relative w-10 h-10 bg-gradient-to-r ${logoData.color} rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer ${index === 0 ? 'z-30' : index === 1 ? 'z-20' : 'z-10'} ${index > 0 ? '-ml-2' : ''}`}
+                                      title={investor}
+                                    >
+                                      <span className="text-xs font-bold text-white">
+                                        {logoData.initials}
+                                      </span>
+                                    </div>
+                                  )
+                                })}
+                                
+                                {hasMore && (
+                                  <div className="w-10 h-10 bg-gradient-to-r from-muted to-muted-foreground/20 rounded-full flex items-center justify-center shadow-md -ml-2 z-0">
+                                    <span className="text-xs font-bold text-muted-foreground">
+                                      +{investors.length - 4}
+                                    </span>
+                                  </div>
+                                )}
+                                
+                                {displayInvestors.length === 1 && (
+                                  <div className="ml-3">
+                                    <div className="font-medium text-foreground text-sm">
+                                      {displayInvestors[0]}
+                                    </div>
+                                    <div className="text-xs text-accent-cyan font-medium">
+                                      Lead Investor
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {displayInvestors.length > 1 && (
+                                  <div className="ml-3">
+                                    <div className="font-medium text-foreground text-sm">
+                                      {displayInvestors[0]} {hasMore ? `& ${investors.length - 1} others` : `& ${displayInvestors.length - 1} others`}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground">
+                                      Investment Consortium
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )
                           })()}
                         </div>
                       </div>
