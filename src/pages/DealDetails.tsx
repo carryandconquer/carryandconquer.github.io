@@ -281,9 +281,9 @@ export default function DealDetails() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-primary text-sm font-medium mb-2">Revenue Growth</p>
+                        <p className="text-primary text-sm font-medium mb-2">Revenue</p>
                         <p className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
-                          +{enrichedDeal.keyMetrics.revenueGrowth}
+                          {enrichedDeal.keyMetrics.revenue}
                         </p>
                       </div>
                       <TrendingUp className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
@@ -381,72 +381,6 @@ export default function DealDetails() {
                 </CardContent>
               </Card>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Enhanced Financial Metrics Section */}
-      <section className="py-16 bg-background/50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-foreground mb-12 text-center animate-fade-in">Financial Performance</h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 animate-slide-up">
-            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-foreground flex items-center text-lg">
-                  <LineChart className="w-5 h-5 mr-2 text-accent-cyan group-hover:scale-110 transition-transform" />
-                  Revenue (LTM)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.revenue}</div>
-                <div className="text-primary text-sm flex items-center">
-                  <TrendingUp className="w-4 h-4 mr-1" />
-                  +{enrichedDeal.keyMetrics.revenueGrowth} YoY
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-foreground flex items-center text-lg">
-                  <Activity className="w-5 h-5 mr-2 text-primary group-hover:scale-110 transition-transform" />
-                  EBITDA (LTM)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.ebitda}</div>
-                <div className="text-muted-foreground text-sm">
-                  {enrichedDeal.keyMetrics.ebitdaMargin} margin
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-foreground flex items-center text-lg">
-                  <BarChart3 className="w-5 h-5 mr-2 text-accent-teal group-hover:scale-110 transition-transform" />
-                  Gross Margin
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.grossMargin}</div>
-                <div className="text-muted-foreground text-sm">Strong profitability</div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-foreground flex items-center text-lg">
-                  <Shield className="w-5 h-5 mr-2 text-accent-blue group-hover:scale-110 transition-transform" />
-                  Retention Rate
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.customerRetention}</div>
-                <div className="text-muted-foreground text-sm">Customer loyalty</div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
