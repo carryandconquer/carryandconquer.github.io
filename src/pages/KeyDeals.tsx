@@ -249,14 +249,18 @@ export default function KeyDeals() {
     "Energy": ["Energy Equipment & Services", "Oil, Gas & Consumable Fuels"],
     "Materials": ["Chemicals", "Construction Materials", "Containers & Packaging", "Metals & Mining", "Paper & Forest Products"],
     "Industrials": ["Capital Goods", "Commercial & Professional Services", "Transportation"],
-    "Consumer Discretionary": ["Automobiles & Components", "Consumer Durables & Apparel", "Consumer Services", "Retailing"],
+    "Consumer Discretionary": ["Automobiles & Components", "Consumer Durables & Apparel", "Hotels, Restaurants & Leisure", "Retailing"],
     "Consumer Staples": ["Food & Staples Retailing", "Food, Beverage & Tobacco", "Household & Personal Products"],
-    "Health Care": ["Health Care Equipment & Services", "Pharmaceuticals", "Biotechnology & Life Sciences"],
-    "Financials": ["Banks", "Diversified Financials", "Insurance"],
+    "Health Care": ["Health Care Equipment & Services", "Pharmaceuticals, Biotechnology & Life Sciences"],
+    "Financials": ["Banks", "Diversified Financials", "Insurance", "Real Estate"],
     "Information Technology": ["Software & Services", "Technology Hardware & Equipment", "Semiconductors & Semiconductor Equipment"],
-    "Communication Services": ["Telecommunication Services", "Media", "Entertainment"],
-    "Utilities": ["Electric Utilities", "Gas Utilities", "Multi-Utilities", "Water Utilities", "Independent Power and Renewable Electricity Producers"],
-    "Real Estate": ["Real Estate Management & Development", "Real Estate Investment Trusts (REITs)"]
+    "Communication Services": ["Telecommunication Services", "Media & Entertainment"],
+    "Utilities": ["Electric Utilities", "Gas Utilities", "Multi-Utilities", "Water Utilities"],
+    "Real Estate": ["Real Estate Investment Trusts (REITs)", "Real Estate Management & Development"]
+  };
+
+  const subSectorSlugAliases: Record<string, string> = {
+    'real-estate': 'real-estate-financials'
   };
 
   // Tertiary sector mapping (non-functional, kept for UI consistency)
@@ -313,10 +317,12 @@ export default function KeyDeals() {
         }
         
         if (selectedSubSector !== "all-sub-sectors") {
+          const normalized = normalizeTaxonomy(selectedSubSector)
+          const targetSlug = subSectorSlugAliases[normalized] ?? normalized
           const subSectorQuery = supabase
             .from('snapshot_sub_sectors')
             .select('id')
-            .ilike('slug', normalizeTaxonomy(selectedSubSector))
+            .ilike('slug', targetSlug)
             .single()
           
           const { data: subSectorData } = await subSectorQuery
