@@ -7,6 +7,7 @@ import { TrendingUp, Building2, DollarSign, ArrowRight, ExternalLink, Crown } fr
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { supabase } from "@/integrations/supabase/client"
+import { normalizeTaxonomy } from "@/lib/slugUtils"
 
 export const keyDeals = [
   {
@@ -475,11 +476,15 @@ export default function KeyDeals() {
 
   // Filter deals based on selected filters
   const getFilteredDeals = () => {
+    const sectorSelected = selectedSector !== "all-sectors"
+    const subSectorSelected = selectedSubSector !== "all-sub-sectors"
+
     return deals.filter(deal => {
       // Region filter
       if (selectedRegion !== "all-regions") {
         const regionName = selectedRegion.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-        if (!deal.region.toLowerCase().includes(regionName.toLowerCase())) {
+        const dealRegion = (deal.region || '').toString()
+        if (!dealRegion.toLowerCase().includes(regionName.toLowerCase())) {
           return false
         }
       }
@@ -516,9 +521,29 @@ export default function KeyDeals() {
         }
       }
 
-      // Sector and Sub-sector filters are applied upstream in fetchDeals to avoid double-filtering
-      // Keeping DB deals intact here ensures we don't inadvertently narrow results.
+      // Sector filter (exact normalized match)
+      if (sectorSelected) {
+        const targetSector = normalizeTaxonomy(selectedSector)
+        const dealSector = deal.sector || deal.primaryIndustry || ''
+        if (!dealSector || normalizeTaxonomy(dealSector) !== targetSector) {
+          return false
+        }
+      }
 
+      // Sub-sector filter (exact normalized token match; supports comma- or slash-separated lists)
+      if (subSectorSelected) {
+        const targetSub = normalizeTaxonomy(selectedSubSector)
+        const raw = deal.sub_sector ?? deal.subIndustries ?? deal.sub_industries ?? ''
+        const tokens = Array.isArray(raw)
+          ? raw
+          : typeof raw === 'string'
+            ? raw.split(/[;,/]/).map(s => s.trim()).filter(Boolean)
+            : []
+        const match = tokens.some((t: string) => normalizeTaxonomy(t) === targetSub)
+        if (!match) {
+          return false
+        }
+      }
 
       return true
     })
