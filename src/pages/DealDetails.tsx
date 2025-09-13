@@ -474,6 +474,9 @@ export default function DealDetails() {
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {(enrichedDeal.investors || enrichedDeal.firms).map((firm, index) => {
+                  // Check if this is the lead investor (500 Startups, first in list)
+                  const isLead = index === 0 && firm === '500 Startups';
+                  
                   // Enhanced logo system with realistic branding
                   const investorLogos = {
                     '500 Startups': {
@@ -557,23 +560,34 @@ export default function DealDetails() {
                   return (
                     <div 
                       key={index}
-                      className="group bg-card/60 border border-border/50 rounded-2xl p-6 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-sm"
+                      className={`group relative rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-sm ${
+                        isLead 
+                          ? 'bg-gradient-to-br from-primary/20 to-accent-cyan/20 border-2 border-primary/50 shadow-glow ring-2 ring-primary/20' 
+                          : 'bg-card/60 border border-border/50 hover:shadow-glow hover:bg-card/80'
+                      }`}
                     >
+                      {/* Lead Investor Badge */}
+                      {isLead && (
+                        <div className="absolute -top-2 -right-2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                          LEAD
+                        </div>
+                      )}
+                      
                       <div className="flex flex-col items-center text-center space-y-4">
                         {/* Enhanced Logo */}
-                        <div className={`w-20 h-20 rounded-2xl ${logoData.color} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
-                          <span className="text-xl font-bold tracking-tight">
+                        <div className={`${isLead ? 'w-24 h-24' : 'w-20 h-20'} rounded-2xl ${logoData.color} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110 ${isLead ? 'ring-2 ring-primary/30' : ''}`}>
+                          <span className={`${isLead ? 'text-2xl' : 'text-xl'} font-bold tracking-tight`}>
                             {logoData.initials}
                           </span>
                         </div>
                         
                         {/* Firm Details */}
                         <div className="space-y-2">
-                          <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                          <div className={`${isLead ? 'text-base' : 'text-sm'} font-semibold ${isLead ? 'text-primary' : 'text-foreground group-hover:text-primary'} transition-colors leading-tight`}>
                             {firm}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {logoData.description}
+                            {isLead ? 'Lead Investor • ' : ''}{logoData.description}
                           </div>
                         </div>
                       </div>
