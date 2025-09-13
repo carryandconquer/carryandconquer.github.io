@@ -455,6 +455,67 @@ export default function DealDetails() {
         </div>
       </section>
 
+      {/* Participating Investors Section */}
+      <section className="py-16 bg-background/50">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-foreground flex items-center text-2xl mb-2">
+                <Users className="w-6 h-6 mr-3 text-accent-teal" />
+                Participating Investors
+              </CardTitle>
+              <CardDescription className="text-muted-foreground text-lg">
+                {(enrichedDeal.investors || enrichedDeal.firms).length} investment firms and organizations involved in this deal
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {(enrichedDeal.investors || enrichedDeal.firms).map((firm, index) => {
+                  // Create a simple logo placeholder based on firm name
+                  const initials = firm.split(' ')
+                    .map(word => word.charAt(0))
+                    .slice(0, 2)
+                    .join('')
+                    .toUpperCase();
+                  
+                  // Color variations for different investors
+                  const colorSchemes = [
+                    'bg-primary text-primary-foreground',
+                    'bg-accent-cyan text-white',
+                    'bg-accent-teal text-white',
+                    'bg-secondary text-secondary-foreground',
+                    'bg-primary/80 text-white',
+                    'bg-accent-cyan/80 text-white'
+                  ];
+                  
+                  const colorScheme = colorSchemes[index % colorSchemes.length];
+                  
+                  return (
+                    <div 
+                      key={index}
+                      className="group bg-card/50 border border-border rounded-xl p-4 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer"
+                    >
+                      <div className="flex flex-col items-center text-center space-y-3">
+                        {/* Logo placeholder */}
+                        <div className={`w-16 h-16 rounded-xl ${colorScheme} flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300`}>
+                          <span className="text-xl font-bold">
+                            {initials}
+                          </span>
+                        </div>
+                        {/* Firm name */}
+                        <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                          {firm}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Investment Highlights & Risks */}
       <section className="py-16 bg-muted/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -596,67 +657,6 @@ export default function DealDetails() {
               </CardContent>
             </Card>
           </div>
-        </div>
-      </section>
-
-      {/* Enhanced Investors Section */}
-      <section className="py-16 bg-muted/20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-fade-in">
-            <CardHeader>
-              <CardTitle className="text-foreground flex items-center text-2xl mb-2">
-                <Users className="w-6 h-6 mr-3 text-accent-teal" />
-                Participating Investors
-              </CardTitle>
-              <CardDescription className="text-muted-foreground text-lg">
-                {(enrichedDeal.investors || enrichedDeal.firms).length} investment firms and organizations involved in this deal
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {(enrichedDeal.investors || enrichedDeal.firms).map((firm, index) => {
-                  // Create a simple logo placeholder based on firm name
-                  const initials = firm.split(' ')
-                    .map(word => word.charAt(0))
-                    .slice(0, 2)
-                    .join('')
-                    .toUpperCase();
-                  
-                  // Color variations for different investors
-                  const colorSchemes = [
-                    'bg-primary text-primary-foreground',
-                    'bg-accent-cyan text-white',
-                    'bg-accent-teal text-white',
-                    'bg-secondary text-secondary-foreground',
-                    'bg-primary/80 text-white',
-                    'bg-accent-cyan/80 text-white'
-                  ];
-                  
-                  const colorScheme = colorSchemes[index % colorSchemes.length];
-                  
-                  return (
-                    <div 
-                      key={index}
-                      className="group bg-card/50 border border-border rounded-xl p-4 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer"
-                    >
-                      <div className="flex flex-col items-center text-center space-y-3">
-                        {/* Logo placeholder */}
-                        <div className={`w-16 h-16 rounded-xl ${colorScheme} flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300`}>
-                          <span className="text-xl font-bold">
-                            {initials}
-                          </span>
-                        </div>
-                        {/* Firm name */}
-                        <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                          {firm}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </section>
 
