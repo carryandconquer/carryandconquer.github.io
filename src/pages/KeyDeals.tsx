@@ -609,85 +609,127 @@ export default function KeyDeals() {
 
           {/* Deals Grid */}
           {!loading && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               {getFilteredDeals().map((deal) => (
               <Card 
                 key={deal.deal_id || deal.id}
-                className="group hover:shadow-lift transition-all duration-300 hover:-translate-y-1 bg-gray-900/50 backdrop-blur-sm border-gray-800"
+                className="group hover:shadow-glow transition-all duration-300 hover:scale-[1.02] bg-gradient-card backdrop-blur-sm border-border overflow-hidden"
               >
-                <CardHeader>
+                <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-4 mb-3">
-                        <CardTitle className="text-2xl font-bold text-white">
-                          {deal.deal_name || deal.title || 'Untitled Deal'}
-                        </CardTitle>
-                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          (deal.stage_label || deal.deal_status || deal.status) === 'Completed' 
-                            ? 'bg-green-500/10 text-green-400' 
-                            : 'bg-yellow-500/10 text-yellow-400'
-                        }`}>
-                          {deal.stage_label || deal.deal_status || deal.status || 'Completed'}
+                    <div className="flex items-start space-x-6 flex-1">
+                      {/* Company Logo Placeholder */}
+                      <div className="flex-shrink-0">
+                        <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
+                          <span className="text-xl font-bold text-white">
+                            {(deal.company_name || deal.deal_name || 'C').substring(0, 2).toUpperCase()}
+                          </span>
                         </div>
                       </div>
-                      <CardDescription className="text-white/70 leading-relaxed mb-4">
-                        {deal.description}
-                      </CardDescription>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-4 mb-3">
+                          <CardTitle className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+                            {deal.company_name || deal.deal_name || deal.title || 'Untitled Deal'}
+                          </CardTitle>
+                          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            (deal.stage_label || deal.deal_status || deal.status) === 'Completed' 
+                              ? 'bg-primary/20 text-primary border border-primary/30' 
+                              : 'bg-accent/20 text-accent-foreground border border-accent/30'
+                          }`}>
+                            {deal.stage_label || deal.deal_status || deal.status || 'Completed'}
+                          </div>
+                        </div>
+                        
+                        <CardDescription className="text-muted-foreground leading-relaxed text-base mb-4 line-clamp-2">
+                          {deal.description || 'Investment opportunity in growth-stage company with strong market position and expansion potential.'}
+                        </CardDescription>
+                        
+                        {/* Key Details Row */}
+                        <div className="flex items-center space-x-6 text-sm">
+                          <div className="flex items-center">
+                            <Building2 className="w-4 h-4 mr-2 text-accent-cyan" />
+                            <span className="text-muted-foreground mr-1">Sector:</span>
+                            <span className="font-medium text-foreground">{deal.sector || 'Technology'}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <TrendingUp className="w-4 h-4 mr-2 text-accent-teal" />
+                            <span className="text-muted-foreground mr-1">Stage:</span>
+                            <span className="font-medium text-foreground">{deal.stage_label || 'Growth'}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <DollarSign className="w-4 h-4 mr-2 text-primary" />
+                            <span className="text-muted-foreground mr-1">Location:</span>
+                            <span className="font-medium text-foreground">
+                              {deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(', ') || 'United States'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-right ml-6">
-                      <div className="text-3xl font-bold text-white">
+                    
+                    {/* Deal Value Section */}
+                    <div className="text-right ml-6 flex-shrink-0">
+                      <div className="text-4xl font-bold bg-gradient-text bg-clip-text text-transparent mb-1">
                         {deal.deal_value_formatted || deal.amount || 'Undisclosed'}
                       </div>
-                      <div className="text-sm text-white/70">
-                        {deal.announcement_date ? new Date(deal.announcement_date).getFullYear() : (deal.date || '—')}
+                      <div className="text-sm text-muted-foreground font-medium">
+                        Transaction Value
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {deal.announcement_date ? new Date(deal.announcement_date).getFullYear() : (deal.date || '2024')}
                       </div>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-4 gap-6 items-center">
-                    <div>
-                      <div className="text-sm text-white/70 mb-1">Sector</div>
-                      <div className="flex items-center">
-                        <Building2 className="w-4 h-4 mr-2 text-green-400" />
-                        <span className="font-medium text-white">{deal.sector || '—'}</span>
+                
+                <CardContent className="pt-4 border-t border-border/50">
+                  <div className="flex items-center justify-between">
+                    {/* Lead Investor */}
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
+                        <span className="text-sm font-bold text-white">
+                          {(() => {
+                            const leadFirm = (() => {
+                              if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
+                                return deal.deals_deal_investors[0]?.deals_investors?.name || 'Lead Investor'
+                              }
+                              if (deal.firms && deal.firms.length > 0) {
+                                return deal.firms[0]
+                              }
+                              return 'Lead Investor'
+                            })()
+                            return leadFirm.substring(0, 2).toUpperCase()
+                          })()}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="text-xs text-muted-foreground">Lead Investor</div>
+                        <div className="font-medium text-foreground text-sm">
+                          {(() => {
+                            if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
+                              return deal.deals_deal_investors[0]?.deals_investors?.name || 'Lead Investor'
+                            }
+                            if (deal.firms && deal.firms.length > 0) {
+                              return deal.firms[0]
+                            }
+                            return 'Lead Investor'
+                          })()}
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <div className="text-sm text-white/70 mb-1">Location</div>
-                      <div className="flex items-center">
-                        <DollarSign className="w-4 h-4 mr-2 text-teal-400" />
-                        <span className="font-medium text-white">{deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(', ')}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm text-white/70 mb-1">Lead Firm</div>
-                      <div className="font-medium text-white">
-                        {(() => {
-                          // Try to get investor name from database structure
-                          if (deal.deals_deal_investors && deal.deals_deal_investors.length > 0) {
-                            return deal.deals_deal_investors[0]?.deals_investors?.name || '—'
-                          }
-                          // Try to get investor from firms array (hardcoded data)
-                          if (deal.firms && deal.firms.length > 0) {
-                            return deal.firms[0]
-                          }
-                          return '—'
-                        })()}
-                      </div>
-                    </div>
-                    <div className="flex justify-end">
-                      <Button 
-                        asChild
-                        variant="outline" 
-                        className="border-gray-700 bg-gray-800 hover:bg-gray-700 text-white transition-all duration-300"
-                      >
-                        <Link to={`/deal/${deal.deal_id || deal.id}`}>
-                          View Details
-                          <ExternalLink className="ml-2 w-4 h-4" />
-                        </Link>
-                      </Button>
-                    </div>
+                    
+                    {/* Action Button */}
+                    <Button 
+                      asChild
+                      variant="outline" 
+                      className="border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-glow group-hover:scale-105"
+                    >
+                      <Link to={`/deal/${deal.deal_id || deal.id}`}>
+                        View Deal Details
+                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
