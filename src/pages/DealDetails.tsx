@@ -9,6 +9,7 @@ import { Navigation } from "@/components/Navigation"
 import { Footer } from "@/components/Footer"
 import { supabase } from "@/integrations/supabase/client"
 import { generateSlug } from "@/lib/slugUtils"
+import zenscreenLogo from "@/assets/zenscreen-logo.png"
 
 // Enhanced deal data with placeholders for missing information
 const enrichDealData = (deal: any) => {
@@ -236,10 +237,12 @@ export default function DealDetails() {
                 <div className="flex items-center gap-6 mb-6">
                   {/* Company Logo */}
                   <div className="flex-shrink-0">
-                    <div className="w-20 h-20 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow hover:scale-105 transition-transform duration-300">
-                      <span className="text-2xl font-bold text-white">
-                        {enrichedDeal.companyName.substring(0, 2).toUpperCase()}
-                      </span>
+                    <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-glow hover:scale-105 transition-transform duration-300 p-3">
+                      <img 
+                        src={zenscreenLogo} 
+                        alt="ZenScreen Logo" 
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                   </div>
                   
