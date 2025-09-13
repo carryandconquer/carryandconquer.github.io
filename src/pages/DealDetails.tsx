@@ -197,107 +197,113 @@ export default function DealDetails() {
   const enrichedDeal = enrichDealData(deal)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-950 to-black">
+    <div className="min-h-screen bg-gradient-hero">
       <Navigation />
       
-      {/* Enhanced Header with Gradient */}
-      <section className="pt-24 pb-12 bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
+      {/* Enhanced Header with Design System */}
+      <section className="pt-24 pb-12 bg-gradient-hero relative overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-green-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-teal/20 rounded-full blur-3xl animate-float"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" style={{animationDelay: '1.5s'}}></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 animate-fade-in">
           <Button 
             onClick={() => navigate(-1)}
-            variant="ghost"
-            className="mb-8 text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300"
+            variant="outline"
+            className="mb-8 border-border/50 hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Key Deals
           </Button>
           
           <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <div className="mb-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent hover:from-blue-400 hover:to-purple-400 transition-all duration-300 cursor-pointer"
+            <div className="lg:col-span-2 animate-slide-up">
+              <div className="mb-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <h1 className="text-4xl lg:text-6xl font-bold leading-tight bg-gradient-text bg-clip-text text-transparent hover:scale-105 transition-transform duration-300 cursor-pointer"
                       onClick={() => navigate(`/company/${generateSlug(enrichedDeal.companyName)}`)}>
                     {enrichedDeal.companyName}
                   </h1>
                   <Badge 
-                    className={`px-4 py-2 text-lg font-medium ${
+                    className={`px-4 py-2 text-lg font-medium shadow-glow ${
                       enrichedDeal.status === 'Completed' 
-                        ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' 
-                        : 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'bg-accent text-accent-foreground'
                     }`}
                   >
                     {enrichedDeal.status}
                   </Badge>
                 </div>
-                <p className="text-2xl font-semibold text-gray-300 mb-4">{enrichedDeal.stage} Investment</p>
-                <p className="text-lg text-gray-400 leading-relaxed mb-6 max-w-3xl">
+                <p className="text-2xl font-semibold text-muted-foreground mb-4">{enrichedDeal.stage} Investment</p>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-3xl">
                   {enrichedDeal.description}
                 </p>
               </div>
 
               {/* Key Metrics Dashboard */}
-              <div className="grid md:grid-cols-3 gap-4 mb-8">
-                <Card className="bg-gradient-to-br from-blue-900/50 to-blue-800/30 border-blue-700/50 backdrop-blur-sm">
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-glow transition-all duration-300 group">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-blue-300 text-sm font-medium">Enterprise Value</p>
-                        <p className="text-2xl font-bold text-white">{enrichedDeal.keyMetrics.enterpriseValue}</p>
+                        <p className="text-accent-cyan text-sm font-medium mb-2">Enterprise Value</p>
+                        <p className="text-2xl font-bold text-foreground group-hover:text-accent-cyan transition-colors">
+                          {enrichedDeal.keyMetrics.enterpriseValue}
+                        </p>
                       </div>
-                      <BarChart3 className="w-8 h-8 text-blue-400" />
+                      <BarChart3 className="w-8 h-8 text-accent-cyan group-hover:scale-110 transition-transform" />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-green-900/50 to-green-800/30 border-green-700/50 backdrop-blur-sm">
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-glow transition-all duration-300 group">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-green-300 text-sm font-medium">Revenue Growth</p>
-                        <p className="text-2xl font-bold text-white">+{enrichedDeal.keyMetrics.revenueGrowth}</p>
+                        <p className="text-primary text-sm font-medium mb-2">Revenue Growth</p>
+                        <p className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+                          +{enrichedDeal.keyMetrics.revenueGrowth}
+                        </p>
                       </div>
-                      <TrendingUp className="w-8 h-8 text-green-400" />
+                      <TrendingUp className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-purple-900/50 to-purple-800/30 border-purple-700/50 backdrop-blur-sm">
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-glow transition-all duration-300 group">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-purple-300 text-sm font-medium">EBITDA Margin</p>
-                        <p className="text-2xl font-bold text-white">{enrichedDeal.keyMetrics.ebitdaMargin}</p>
+                        <p className="text-accent-teal text-sm font-medium mb-2">EBITDA Margin</p>
+                        <p className="text-2xl font-bold text-foreground group-hover:text-accent-teal transition-colors">
+                          {enrichedDeal.keyMetrics.ebitdaMargin}
+                        </p>
                       </div>
-                      <PieChart className="w-8 h-8 text-purple-400" />
+                      <PieChart className="w-8 h-8 text-accent-teal group-hover:scale-110 transition-transform" />
                     </div>
                   </CardContent>
                 </Card>
               </div>
 
               <div className="flex flex-wrap gap-6">
-                <div className="flex items-center text-gray-300">
-                  <MapPin className="w-5 h-5 mr-2 text-blue-400" />
+                <div className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
+                  <MapPin className="w-5 h-5 mr-2 text-accent-cyan" />
                   <span>{enrichedDeal.location}</span>
                 </div>
-                <div className="flex items-center text-gray-300">
-                  <Calendar className="w-5 h-5 mr-2 text-green-400" />
-                  <span>Founded {enrichedDeal.foundingYear}</span>
+                <div className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
+                  <Calendar className="w-5 h-5 mr-2 text-primary" />
+                  <span>Closed {enrichedDeal.date}</span>
                 </div>
                 {enrichedDeal.website && (
-                  <div className="flex items-center text-gray-300">
-                    <Globe className="w-5 h-5 mr-2 text-purple-400" />
+                  <div className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
+                    <Globe className="w-5 h-5 mr-2 text-accent-teal" />
                     <a 
                       href={`https://${enrichedDeal.website}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="hover:text-white transition-colors hover:underline"
+                      className="hover:text-primary transition-colors hover:underline"
                     >
                       {enrichedDeal.website}
                     </a>
@@ -307,48 +313,50 @@ export default function DealDetails() {
             </div>
             
             {/* Enhanced Summary Card */}
-            <div className="lg:col-span-1">
-              <Card className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-gray-700 sticky top-8">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-white text-center text-lg">Deal Summary</CardTitle>
+            <div className="lg:col-span-1 animate-slide-up" style={{animationDelay: '0.3s'}}>
+              <Card className="bg-gradient-card backdrop-blur-sm border-border shadow-card sticky top-8 hover:shadow-glow transition-all duration-300">
+                <CardHeader className="pb-4 border-b border-border/50">
+                  <CardTitle className="text-foreground text-center text-xl font-bold">Deal Summary</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="text-center pb-4 border-b border-gray-700">
-                    <div className="text-5xl font-bold text-white mb-2">{enrichedDeal.amount}</div>
-                    <div className="text-gray-400 font-medium">Transaction Value</div>
+                <CardContent className="space-y-6 pt-6">
+                  <div className="text-center pb-6 border-b border-border/50">
+                    <div className="text-6xl font-bold bg-gradient-text bg-clip-text text-transparent mb-3">
+                      {enrichedDeal.amount}
+                    </div>
+                    <div className="text-muted-foreground font-medium">Transaction Value</div>
                   </div>
                   
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-400 text-sm">Sector</span>
-                      <Badge variant="outline" className="text-white border-gray-600">
+                      <span className="text-muted-foreground text-sm">Sector</span>
+                      <Badge variant="outline" className="border-primary/50 text-primary">
                         {enrichedDeal.sector}
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-400 text-sm">Stage</span>
-                      <span className="text-white font-medium">{enrichedDeal.stage}</span>
+                      <span className="text-muted-foreground text-sm">Stage</span>
+                      <span className="text-foreground font-medium">{enrichedDeal.stage}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-400 text-sm">Region</span>
-                      <span className="text-white font-medium">{enrichedDeal.region}</span>
+                      <span className="text-muted-foreground text-sm">Region</span>
+                      <span className="text-foreground font-medium">{enrichedDeal.region}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-400 text-sm">Multiple</span>
-                      <span className="text-white font-medium">{enrichedDeal.multiple}</span>
+                      <span className="text-muted-foreground text-sm">Multiple</span>
+                      <span className="text-foreground font-medium">{enrichedDeal.multiple}</span>
                     </div>
                     {enrichedDeal.totalFundingUSD && (
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-sm">Total Funding</span>
-                        <span className="text-green-400 font-medium">${enrichedDeal.totalFundingUSD}M</span>
+                        <span className="text-muted-foreground text-sm">Total Funding</span>
+                        <span className="text-primary font-medium">${enrichedDeal.totalFundingUSD}M</span>
                       </div>
                     )}
                   </div>
 
                   {enrichedDeal.leadPartners && (
-                    <div className="pt-4 border-t border-gray-700">
-                      <div className="text-gray-400 text-sm mb-2">Lead Partners</div>
-                      <div className="text-white font-medium">{enrichedDeal.leadPartners}</div>
+                    <div className="pt-4 border-t border-border/50">
+                      <div className="text-muted-foreground text-sm mb-2">Lead Partners</div>
+                      <div className="text-foreground font-medium">{enrichedDeal.leadPartners}</div>
                     </div>
                   )}
                 </CardContent>
@@ -359,65 +367,65 @@ export default function DealDetails() {
       </section>
 
       {/* Enhanced Financial Metrics Section */}
-      <section className="py-16 bg-black/50">
+      <section className="py-16 bg-background/50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Financial Performance</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-12 text-center animate-fade-in">Financial Performance</h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 hover:shadow-2xl transition-all duration-300">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 animate-slide-up">
+            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
               <CardHeader className="pb-3">
-                <CardTitle className="text-white flex items-center text-lg">
-                  <LineChart className="w-5 h-5 mr-2 text-blue-400" />
+                <CardTitle className="text-foreground flex items-center text-lg">
+                  <LineChart className="w-5 h-5 mr-2 text-accent-cyan group-hover:scale-110 transition-transform" />
                   Revenue (LTM)
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white mb-1">{enrichedDeal.keyMetrics.revenue}</div>
-                <div className="text-green-400 text-sm flex items-center">
+                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.revenue}</div>
+                <div className="text-primary text-sm flex items-center">
                   <TrendingUp className="w-4 h-4 mr-1" />
                   +{enrichedDeal.keyMetrics.revenueGrowth} YoY
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 hover:shadow-2xl transition-all duration-300">
+            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
               <CardHeader className="pb-3">
-                <CardTitle className="text-white flex items-center text-lg">
-                  <Activity className="w-5 h-5 mr-2 text-green-400" />
+                <CardTitle className="text-foreground flex items-center text-lg">
+                  <Activity className="w-5 h-5 mr-2 text-primary group-hover:scale-110 transition-transform" />
                   EBITDA (LTM)
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white mb-1">{enrichedDeal.keyMetrics.ebitda}</div>
-                <div className="text-gray-400 text-sm">
+                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.ebitda}</div>
+                <div className="text-muted-foreground text-sm">
                   {enrichedDeal.keyMetrics.ebitdaMargin} margin
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 hover:shadow-2xl transition-all duration-300">
+            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
               <CardHeader className="pb-3">
-                <CardTitle className="text-white flex items-center text-lg">
-                  <BarChart3 className="w-5 h-5 mr-2 text-purple-400" />
+                <CardTitle className="text-foreground flex items-center text-lg">
+                  <BarChart3 className="w-5 h-5 mr-2 text-accent-teal group-hover:scale-110 transition-transform" />
                   Gross Margin
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white mb-1">{enrichedDeal.keyMetrics.grossMargin}</div>
-                <div className="text-gray-400 text-sm">Strong profitability</div>
+                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.grossMargin}</div>
+                <div className="text-muted-foreground text-sm">Strong profitability</div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 hover:shadow-2xl transition-all duration-300">
+            <Card className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 group">
               <CardHeader className="pb-3">
-                <CardTitle className="text-white flex items-center text-lg">
-                  <Shield className="w-5 h-5 mr-2 text-teal-400" />
+                <CardTitle className="text-foreground flex items-center text-lg">
+                  <Shield className="w-5 h-5 mr-2 text-accent-blue group-hover:scale-110 transition-transform" />
                   Retention Rate
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white mb-1">{enrichedDeal.keyMetrics.customerRetention}</div>
-                <div className="text-gray-400 text-sm">Customer loyalty</div>
+                <div className="text-3xl font-bold text-foreground mb-1">{enrichedDeal.keyMetrics.customerRetention}</div>
+                <div className="text-muted-foreground text-sm">Customer loyalty</div>
               </CardContent>
             </Card>
           </div>
@@ -425,18 +433,18 @@ export default function DealDetails() {
       </section>
 
       {/* Investment Highlights & Risks */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 to-black">
+      <section className="py-16 bg-muted/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             
             {/* Investment Highlights */}
-            <Card className="bg-gradient-to-br from-green-900/20 to-emerald-800/20 border-green-700/50 backdrop-blur-sm">
+            <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up">
               <CardHeader>
-                <CardTitle className="text-white flex items-center text-2xl">
-                  <Award className="w-6 h-6 mr-3 text-green-400" />
+                <CardTitle className="text-foreground flex items-center text-2xl">
+                  <Award className="w-6 h-6 mr-3 text-primary" />
                   Investment Highlights
                 </CardTitle>
-                <CardDescription className="text-gray-300 text-lg">
+                <CardDescription className="text-muted-foreground text-lg">
                   Key value drivers and strategic advantages
                 </CardDescription>
               </CardHeader>
@@ -444,8 +452,8 @@ export default function DealDetails() {
                 <div className="space-y-4">
                   {enrichedDeal.highlights.map((highlight, index) => (
                     <div key={index} className="flex items-start space-x-4 group">
-                      <div className="w-3 h-3 bg-green-400 rounded-full mt-2 flex-shrink-0 group-hover:scale-110 transition-transform duration-200"></div>
-                      <span className="text-gray-200 leading-relaxed">{highlight}</span>
+                      <div className="w-3 h-3 bg-primary rounded-full mt-2 flex-shrink-0 group-hover:scale-110 transition-transform duration-200"></div>
+                      <span className="text-foreground leading-relaxed">{highlight}</span>
                     </div>
                   ))}
                 </div>
@@ -453,13 +461,13 @@ export default function DealDetails() {
             </Card>
 
             {/* Key Risks */}
-            <Card className="bg-gradient-to-br from-orange-900/20 to-red-800/20 border-orange-700/50 backdrop-blur-sm">
+            <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up" style={{animationDelay: '0.2s'}}>
               <CardHeader>
-                <CardTitle className="text-white flex items-center text-2xl">
-                  <Shield className="w-6 h-6 mr-3 text-orange-400" />
+                <CardTitle className="text-foreground flex items-center text-2xl">
+                  <Shield className="w-6 h-6 mr-3 text-accent-teal" />
                   Key Risk Factors
                 </CardTitle>
-                <CardDescription className="text-gray-300 text-lg">
+                <CardDescription className="text-muted-foreground text-lg">
                   Important considerations and mitigation strategies
                 </CardDescription>
               </CardHeader>
@@ -467,8 +475,8 @@ export default function DealDetails() {
                 <div className="space-y-4">
                   {enrichedDeal.risks.map((risk, index) => (
                     <div key={index} className="flex items-start space-x-4 group">
-                      <div className="w-3 h-3 bg-orange-400 rounded-full mt-2 flex-shrink-0 group-hover:scale-110 transition-transform duration-200"></div>
-                      <span className="text-gray-200 leading-relaxed">{risk}</span>
+                      <div className="w-3 h-3 bg-accent-teal rounded-full mt-2 flex-shrink-0 group-hover:scale-110 transition-transform duration-200"></div>
+                      <span className="text-foreground leading-relaxed">{risk}</span>
                     </div>
                   ))}
                 </div>
@@ -477,16 +485,16 @@ export default function DealDetails() {
           </div>
 
           {/* Investment Thesis */}
-          <Card className="mt-12 bg-gradient-to-br from-blue-900/20 to-indigo-800/20 border-blue-700/50 backdrop-blur-sm">
+          <Card className="mt-12 bg-gradient-card border-border shadow-card backdrop-blur-sm animate-fade-in">
             <CardHeader>
-              <CardTitle className="text-white flex items-center text-2xl">
-                <Target className="w-6 h-6 mr-3 text-blue-400" />
+              <CardTitle className="text-foreground flex items-center text-2xl">
+                <Target className="w-6 h-6 mr-3 text-accent-cyan" />
                 Investment Thesis
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-200 text-lg leading-relaxed">
-                {enrichedDeal.investmentThesis}
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                This investment represents a compelling opportunity in the {enrichedDeal.sector} sector, with strong fundamentals and significant growth potential driven by market-leading technology and exceptional management execution.
               </p>
             </CardContent>
           </Card>
@@ -494,15 +502,15 @@ export default function DealDetails() {
       </section>
 
       {/* Deal Timeline & Structure */}
-      <section className="py-16 bg-black/50">
+      <section className="py-16 bg-background/50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             
             {/* Deal Timeline */}
-            <Card className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-gray-700 backdrop-blur-sm">
+            <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up">
               <CardHeader>
-                <CardTitle className="text-white flex items-center text-2xl">
-                  <Calendar className="w-6 h-6 mr-3 text-purple-400" />
+                <CardTitle className="text-foreground flex items-center text-2xl">
+                  <Calendar className="w-6 h-6 mr-3 text-accent-cyan" />
                   Deal Timeline
                 </CardTitle>
               </CardHeader>
@@ -511,14 +519,14 @@ export default function DealDetails() {
                   {enrichedDeal.timeline.map((event, index) => (
                     <div key={index} className="flex items-center space-x-4">
                       <div className={`w-4 h-4 rounded-full ${
-                        event.status === 'completed' ? 'bg-green-400' : 'bg-gray-500'
+                        event.status === 'completed' ? 'bg-primary' : 'bg-muted'
                       }`}></div>
                       <div className="flex-1">
-                        <div className="text-white font-medium">{event.event}</div>
-                        <div className="text-gray-400 text-sm">{event.date}</div>
+                        <div className="text-foreground font-medium">{event.event}</div>
+                        <div className="text-muted-foreground text-sm">{event.date}</div>
                       </div>
                       {index < enrichedDeal.timeline.length - 1 && (
-                        <ChevronRight className="w-4 h-4 text-gray-600" />
+                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
                       )}
                     </div>
                   ))}
@@ -527,38 +535,38 @@ export default function DealDetails() {
             </Card>
 
             {/* Deal Structure */}
-            <Card className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-gray-700 backdrop-blur-sm">
+            <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up" style={{animationDelay: '0.2s'}}>
               <CardHeader>
-                <CardTitle className="text-white flex items-center text-2xl">
-                  <Briefcase className="w-6 h-6 mr-3 text-teal-400" />
+                <CardTitle className="text-foreground flex items-center text-2xl">
+                  <Briefcase className="w-6 h-6 mr-3 text-accent-blue" />
                   Deal Structure
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <div className="text-gray-400 text-sm mb-2">Lead Investor</div>
-                  <div className="text-white font-medium text-lg">{enrichedDeal.dealStructure.buyer}</div>
+                  <div className="text-muted-foreground text-sm mb-2">Lead Investor</div>
+                  <div className="text-foreground font-medium text-lg">{enrichedDeal.dealStructure.buyer}</div>
                 </div>
-                <Separator className="bg-gray-700" />
+                <Separator className="bg-border" />
                 <div>
-                  <div className="text-gray-400 text-sm mb-2">Selling Parties</div>
-                  <div className="text-white font-medium">{enrichedDeal.dealStructure.seller}</div>
+                  <div className="text-muted-foreground text-sm mb-2">Selling Parties</div>
+                  <div className="text-foreground font-medium">{enrichedDeal.dealStructure.seller}</div>
                 </div>
-                <Separator className="bg-gray-700" />
+                <Separator className="bg-border" />
                 <div>
-                  <div className="text-gray-400 text-sm mb-3">Advisory Team</div>
+                  <div className="text-muted-foreground text-sm mb-3">Advisory Team</div>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-gray-300">Financial Advisor:</span>
-                      <span className="text-white">{enrichedDeal.dealStructure.advisors.financial}</span>
+                      <span className="text-muted-foreground">Financial Advisor:</span>
+                      <span className="text-foreground">{enrichedDeal.dealStructure.advisors.financial}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-300">Legal Counsel:</span>
-                      <span className="text-white">{enrichedDeal.dealStructure.advisors.legal}</span>
+                      <span className="text-muted-foreground">Legal Counsel:</span>
+                      <span className="text-foreground">{enrichedDeal.dealStructure.advisors.legal}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-300">Strategic Advisor:</span>
-                      <span className="text-white">{enrichedDeal.dealStructure.advisors.technical}</span>
+                      <span className="text-muted-foreground">Strategic Advisor:</span>
+                      <span className="text-foreground">{enrichedDeal.dealStructure.advisors.technical}</span>
                     </div>
                   </div>
                 </div>
@@ -569,15 +577,15 @@ export default function DealDetails() {
       </section>
 
       {/* Enhanced Investors Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 to-black">
+      <section className="py-16 bg-muted/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Card className="bg-gradient-to-br from-purple-900/20 to-indigo-800/20 border-purple-700/50 backdrop-blur-sm">
+          <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-fade-in">
             <CardHeader>
-              <CardTitle className="text-white flex items-center text-2xl mb-2">
-                <Users className="w-6 h-6 mr-3 text-purple-400" />
+              <CardTitle className="text-foreground flex items-center text-2xl mb-2">
+                <Users className="w-6 h-6 mr-3 text-accent-teal" />
                 Participating Investors
               </CardTitle>
-              <CardDescription className="text-gray-300 text-lg">
+              <CardDescription className="text-muted-foreground text-lg">
                 {enrichedDeal.firms.length} investment firms and organizations involved in this deal
               </CardDescription>
             </CardHeader>
@@ -587,7 +595,7 @@ export default function DealDetails() {
                   <Badge 
                     key={index} 
                     variant="outline" 
-                    className="text-white border-purple-600/50 bg-purple-900/20 hover:bg-purple-800/30 transition-all duration-300 p-3 text-center justify-center hover:scale-105"
+                    className="border-primary/50 bg-primary/10 hover:bg-primary/20 transition-all duration-300 p-3 text-center justify-center hover:scale-105 text-foreground"
                   >
                     {firm}
                   </Badge>
