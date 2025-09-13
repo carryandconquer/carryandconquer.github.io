@@ -433,40 +433,6 @@ const Snapshot = () => {
 
   const marketMetrics = getMarketMetrics()
 
-  const investmentMetrics = [
-    {
-      icon: Globe,
-      value: "12.8%",
-      label: "Average IRR",
-      sublabel: "Weighted by fund size",
-      change: "+1.2%",
-      isPositive: true
-    },
-    {
-      icon: Briefcase,
-      value: "3.2%",
-      label: "Management Fee",
-      sublabel: "Standard across funds",
-      change: "-0.1%",
-      isPositive: false
-    },
-    {
-      icon: Zap,
-      value: "$892B",
-      label: "Dry Powder",
-      sublabel: "Available capital deployment",
-      change: "+22.4%",
-      isPositive: true
-    },
-    {
-      icon: Users,
-      value: "67.5%",
-      label: "Deployment Rate",
-      sublabel: "Capital deployed vs committed",
-      change: "+15.8%",
-      isPositive: true
-    }
-  ]
 
   const additionalMetrics = [
     { value: "8.5%", label: "Fund Carry Rate", sublabel: "Standard carried interest" },
@@ -1135,32 +1101,6 @@ const Snapshot = () => {
           </div>
         </section>
 
-        {/* Investment Metrics */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Investment Metrics</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {investmentMetrics.map((metric, index) => (
-              <Card key={index} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <metric.icon className="w-6 h-6 text-accent-green" />
-                    <div className={`flex items-center gap-1 text-sm ${
-                      metric.isPositive ? 'text-green-400' : 'text-red-400'
-                    }`}>
-                      {metric.isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                      {metric.change}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-3xl font-bold">{metric.value}</div>
-                    <div className="text-lg font-semibold text-white">{metric.label}</div>
-                    <div className="text-sm text-white/60">{metric.sublabel}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
 
         {/* Additional Metrics */}
         <section className="mb-12">
