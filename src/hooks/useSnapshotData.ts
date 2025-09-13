@@ -222,6 +222,14 @@ export function useSnapshotData(filters: SnapshotFilters) {
         query = query.ilike('country', `%${filters.country}%`);
       }
 
+      if (filters.sector) {
+        query = query.ilike('sector', `%${filters.sector}%`);
+      }
+
+      if (filters.subSector) {
+        query = query.ilike('sub_sector', `%${filters.subSector}%`);
+      }
+
       const { data, error } = await query;
       if (error) throw error;
       return data as Deal[];

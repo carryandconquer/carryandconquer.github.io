@@ -118,10 +118,7 @@ export default function DealDetails() {
           // Try to fetch from database using deal_id
           const { data: rawData, error } = await supabase
             .from('deals')
-            .select(`
-              *,
-              deals_companies!deals_company_id_fkey(name, description, website, country, region)
-            `)
+            .select('*')
             .eq('deal_id', id)
           
           // Handle potential duplicates by taking the first result
@@ -135,14 +132,14 @@ export default function DealDetails() {
             const transformedDeal = {
               id: data.deal_id,
               title: data.deal_name,
-              companyName: data.deals_companies?.name || data.deal_name || 'Unknown Company',
+              companyName: data.company_name || data.deal_name || 'Unknown Company',
               amount: data.deal_value_formatted || (data.deal_value_usd ? ('$' + (Number(data.deal_value_usd) / 1_000_000).toFixed(1) + 'M') : 'Undisclosed'),
-              sector: 'Consumer Discretionary',
+              sector: data.sector || 'Consumer Discretionary',
               stage: data.stage_label || data.deal_status || 'Growth',
               date: data.announcement_date ? new Date(data.announcement_date).getFullYear().toString() : '—',
               location: `${data.city || ''}, ${data.state_province || ''}, ${data.country || ''}`.replace(/^,\s*|,\s*$/g, ''),
-              description: data.description || 'Automotive industry investment opportunity',
-              website: data.deals_companies?.website,
+              description: data.description || 'Investment opportunity',
+              website: data.website,
               enterprise_value: data.enterprise_value,
               revenue_ltm: data.revenue_ltm,
               ebitda_ltm: data.ebitda_ltm,

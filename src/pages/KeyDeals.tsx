@@ -357,28 +357,23 @@ export default function KeyDeals() {
       try {
         let query = supabase
           .from('deals')
-          .select(`
-            *,
-            deals_companies!deals_company_id_fkey(
-              name, 
-              description, 
-              website, 
-              country, 
-              region,
-              deals_company_industries(
-                deals_industries(name, slug),
-                deals_sub_industries(name, slug)
-              )
-            )
-          `)
+          .select('*')
           .eq('published', true)
         
-        // Apply filters
+        // Apply filters using the direct fields we've populated
         if (selectedRegion !== "all-regions") {
           query = query.ilike('region', `%${selectedRegion.replace('-', ' ')}%`)
         }
         if (selectedCountry !== "all-countries") {
           query = query.ilike('country', `%${selectedCountry.replace('-', ' ')}%`)
+        }
+        if (selectedSector !== "all-sectors") {
+          const sectorName = selectedSector.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+          query = query.ilike('sector', `%${sectorName}%`)
+        }
+        if (selectedSubSector !== "all-sub-sectors") {
+          const subSectorName = selectedSubSector.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+          query = query.ilike('sub_sector', `%${subSectorName}%`)
         }
         
         const { data, error } = await query
@@ -391,41 +386,15 @@ export default function KeyDeals() {
           const key = d.deal_id || d.id
           if (key && !uniqueMap.has(key)) uniqueMap.set(key, d)
         })
-        let filteredDeals = Array.from(uniqueMap.values())
+        const filteredDeals = Array.from(uniqueMap.values())
         
-        // Apply sector and sub-sector filtering
-        const wantsSector = selectedSector !== "all-sectors"
-        const wantsSub = selectedSubSector !== "all-sub-sectors"
-        
-        if (wantsSector || wantsSub) {
-          const isConsumerDisc = (ci: any) => ci?.deals_industries?.slug === 'consumer-discretionary'
-          const isAutoComponents = (ci: any) => ci?.deals_sub_industries?.slug === 'automobiles-components'
-          const keywordAuto = (name?: string) => {
-            const s = (name || '').toLowerCase()
-            return /(^|\b)(auto|automotive|vehicle|ev|tire|tires|parts|part|component|components|truck|realtruck|race|racing|ride|rides|wash|car wash|repair|clarience|bestop|fenix|nivel|sun auto|teijin|car)(\b|$)/.test(s)
-          }
-          
-          filteredDeals = filteredDeals.filter((deal: any) => {
-            const cis = deal?.deals_companies?.deals_company_industries || []
-            const hasRels = Array.isArray(cis) && cis.length > 0
-            
-            const sectorOk = !wantsSector || (
-              cis.some(isConsumerDisc) || keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name)
-            )
-            
-            const subOk = !wantsSub || (
-              cis.some(isAutoComponents) || keywordAuto(deal.deal_name) || keywordAuto(deal.deals_companies?.name)
-            )
-            
-            return sectorOk && subOk
-          })
-        }
-        
-        setDeals(filteredDeals)
+        // Combine database deals with hardcoded keyDeals
+        const allDeals = [...keyDeals, ...filteredDeals]
+        setDeals(allDeals)
       } catch (error) {
         console.error('Error fetching deals:', error)
-        // Show empty array instead of fallback to avoid confusion
-        setDeals([])
+        // Show hardcoded deals as fallback
+        setDeals(keyDeals)
       } finally {
         setLoading(false)
       }
