@@ -613,76 +613,67 @@ export default function KeyDeals() {
               {getFilteredDeals().map((deal) => (
               <Card 
                 key={deal.deal_id || deal.id}
-                className="group relative overflow-hidden border-0 bg-gradient-to-br from-card via-card/95 to-muted/30 backdrop-blur-xl shadow-2xl hover:shadow-glow transition-all duration-500 hover:scale-[1.03] hover:-translate-y-2 rounded-3xl"
+                className="group hover:shadow-glow transition-all duration-300 hover:scale-[1.02] bg-gradient-card backdrop-blur-sm border-border overflow-hidden h-fit"
               >
-                {/* Decorative Background Elements */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-60" />
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-2xl" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-accent/10 to-transparent rounded-full blur-xl" />
-                
-                <CardHeader className="pb-6 relative z-10">
-                  <div className="flex flex-col space-y-5">
+                <CardHeader className="pb-4">
+                  <div className="flex flex-col space-y-4">
                     {/* Header Row with Logo, Company, and Status */}
                     <div className="flex items-start justify-between">
                       <div className="flex items-start space-x-4 flex-1">
-                        {/* Enhanced Company Logo */}
+                        {/* Company Logo Placeholder */}
                         <div className="flex-shrink-0">
-                          <div className="relative w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-accent rounded-2xl flex items-center justify-center shadow-2xl border border-white/10 group-hover:shadow-primary/25 transition-all duration-500 group-hover:scale-110">
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
-                            <span className="text-xl font-bold text-white relative z-10">
+                          <div className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
+                            <span className="text-lg font-bold text-white">
                               {(deal.company_name || deal.deal_name || 'C').substring(0, 2).toUpperCase()}
                             </span>
                           </div>
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <CardTitle className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent group-hover:from-primary group-hover:to-accent transition-all duration-500 mb-3 leading-tight">
+                          <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-2 leading-tight">
                             {deal.company_name || deal.deal_name || deal.title || 'Untitled Deal'}
                           </CardTitle>
-                          <div className={`inline-flex px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-sm border transition-all duration-300 group-hover:scale-105 ${
+                          <div className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
                             (deal.stage_label || deal.deal_status || deal.status) === 'Completed' 
-                              ? 'bg-primary/20 text-primary border-primary/30 shadow-primary/10' 
-                              : 'bg-accent/20 text-accent-foreground border-accent/30 shadow-accent/10'
-                          } shadow-lg`}>
+                              ? 'bg-primary/20 text-primary border border-primary/30' 
+                              : 'bg-accent/20 text-accent-foreground border border-accent/30'
+                          }`}>
                             {deal.stage_label || deal.deal_status || deal.status || 'Completed'}
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Enhanced Deal Value Section */}
-                    <div className="text-center py-6 border border-border/30 bg-gradient-to-r from-muted/40 via-muted/60 to-muted/40 backdrop-blur-sm rounded-2xl shadow-inner relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
-                      <div className="relative z-10">
-                        <div className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/90 to-accent bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
-                          {deal.deal_value_formatted || deal.amount || 'Undisclosed'}
-                        </div>
-                        <div className="text-sm text-muted-foreground font-medium">
-                          Transaction Value • {deal.announcement_date ? new Date(deal.announcement_date).getFullYear() : (deal.date || '2024')}
-                        </div>
+                    {/* Deal Value Section */}
+                    <div className="text-center py-4 border-y border-border/30 bg-muted/30 rounded-lg">
+                      <div className="text-3xl font-bold bg-gradient-text bg-clip-text text-transparent mb-1">
+                        {deal.deal_value_formatted || deal.amount || 'Undisclosed'}
+                      </div>
+                      <div className="text-sm text-muted-foreground font-medium">
+                        Transaction Value • {deal.announcement_date ? new Date(deal.announcement_date).getFullYear() : (deal.date || '2024')}
                       </div>
                     </div>
                     
-                    <CardDescription className="text-muted-foreground leading-relaxed text-sm line-clamp-3 mb-4 group-hover:text-muted-foreground/90 transition-colors duration-300">
+                    <CardDescription className="text-muted-foreground leading-relaxed text-sm line-clamp-3 mb-4">
                       {deal.description || 'Investment opportunity in growth-stage company with strong market position and expansion potential.'}
                     </CardDescription>
                     
-                    {/* Enhanced Key Details Stack */}
-                    <div className="space-y-4 text-sm">
-                      <div className="flex items-center p-3 rounded-xl bg-gradient-to-r from-muted/30 to-muted/20 backdrop-blur-sm border border-border/20 hover:border-border/40 transition-all duration-300">
-                        <Building2 className="w-5 h-5 mr-4 text-accent-cyan flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                        <span className="text-muted-foreground mr-2 font-medium">Sector:</span>
-                        <span className="font-semibold text-foreground truncate">{deal.sector || 'Technology'}</span>
+                    {/* Key Details Stack */}
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-center">
+                        <Building2 className="w-4 h-4 mr-3 text-accent-cyan flex-shrink-0" />
+                        <span className="text-muted-foreground mr-2">Sector:</span>
+                        <span className="font-medium text-foreground truncate">{deal.sector || 'Technology'}</span>
                       </div>
-                      <div className="flex items-center p-3 rounded-xl bg-gradient-to-r from-muted/30 to-muted/20 backdrop-blur-sm border border-border/20 hover:border-border/40 transition-all duration-300">
-                        <TrendingUp className="w-5 h-5 mr-4 text-accent-teal flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                        <span className="text-muted-foreground mr-2 font-medium">Stage:</span>
-                        <span className="font-semibold text-foreground truncate">{deal.stage_label || 'Growth'}</span>
+                      <div className="flex items-center">
+                        <TrendingUp className="w-4 h-4 mr-3 text-accent-teal flex-shrink-0" />
+                        <span className="text-muted-foreground mr-2">Stage:</span>
+                        <span className="font-medium text-foreground truncate">{deal.stage_label || 'Growth'}</span>
                       </div>
-                      <div className="flex items-center p-3 rounded-xl bg-gradient-to-r from-muted/30 to-muted/20 backdrop-blur-sm border border-border/20 hover:border-border/40 transition-all duration-300">
-                        <DollarSign className="w-5 h-5 mr-4 text-primary flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                        <span className="text-muted-foreground mr-2 font-medium">Location:</span>
-                        <span className="font-semibold text-foreground truncate">
+                      <div className="flex items-center">
+                        <DollarSign className="w-4 h-4 mr-3 text-primary flex-shrink-0" />
+                        <span className="text-muted-foreground mr-2">Location:</span>
+                        <span className="font-medium text-foreground truncate">
                           {deal.location || [deal.city, deal.state_province, deal.country].filter(Boolean).join(', ') || 'United States'}
                         </span>
                       </div>
@@ -691,14 +682,11 @@ export default function KeyDeals() {
                 </CardHeader>
                 
                 
-                
-                <CardContent className="pt-6 border-t-0 relative z-10">
-                  <div className="space-y-6">
-                    {/* Enhanced Investors Section */}
-                    <div className="p-6 rounded-2xl bg-gradient-to-br from-muted/40 via-muted/30 to-background/50 backdrop-blur-sm border border-border/20 shadow-inner">
-                      <div className="text-xs text-muted-foreground mb-4 font-semibold tracking-wider uppercase text-center">
-                        Investment Partners
-                      </div>
+                <CardContent className="pt-4 border-t border-border/50">
+                  <div className="space-y-4">
+                    {/* Investors Section */}
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-3 font-medium">Investors</div>
                       <div className="flex items-center justify-center">
                         {(() => {
                           // Get investors from various sources
@@ -715,22 +703,22 @@ export default function KeyDeals() {
                             investors = ['500 Startups', 'Bessemer Venture Partners', 'BMW i Ventures']
                           }
 
-                          // Enhanced logo system for investors with prettier gradients
+                          // Enhanced logo system for investors
                           const investorLogos = {
-                            '500 Startups': { initials: '500', color: 'from-red-500 via-red-400 to-pink-500' },
-                            'Bessemer Venture Partners': { initials: 'BVP', color: 'from-blue-600 via-blue-500 to-indigo-600' },
-                            'BMW i Ventures': { initials: 'BMW', color: 'from-gray-800 via-gray-700 to-slate-800' },
-                            'Bullpen Capital': { initials: 'BC', color: 'from-green-600 via-green-500 to-emerald-600' },
-                            'DCM': { initials: 'DCM', color: 'from-purple-600 via-purple-500 to-violet-600' },
-                            'Duchossois Capital Management': { initials: 'DCM', color: 'from-slate-700 via-slate-600 to-gray-700' },
-                            'EchoVC Partners': { initials: 'EVC', color: 'from-orange-500 via-orange-400 to-red-500' },
-                            'Fontinalis Partners': { initials: 'FP', color: 'from-teal-600 via-teal-500 to-cyan-600' },
-                            'Hinge Capital': { initials: 'HC', color: 'from-pink-500 via-pink-400 to-rose-500' },
-                            'Kapor Capital': { initials: 'KC', color: 'from-indigo-600 via-indigo-500 to-purple-600' },
-                            'LaunchCapital Ventures': { initials: 'LCV', color: 'from-emerald-600 via-emerald-500 to-green-600' },
-                            'Life360 Inc': { initials: 'L360', color: 'from-blue-500 via-blue-400 to-cyan-500' },
-                            'Seraph Group': { initials: 'SG', color: 'from-blue-600 via-blue-500 to-blue-700' },
-                            'Social Leverage Capital': { initials: 'SLC', color: 'from-gray-700 via-gray-600 to-slate-700' }
+                            '500 Startups': { initials: '500', color: 'from-red-500 to-pink-600' },
+                            'Bessemer Venture Partners': { initials: 'BVP', color: 'from-blue-600 to-indigo-700' },
+                            'BMW i Ventures': { initials: 'BMW', color: 'from-gray-800 to-gray-900' },
+                            'Bullpen Capital': { initials: 'BC', color: 'from-green-600 to-emerald-700' },
+                            'DCM': { initials: 'DCM', color: 'from-purple-600 to-violet-700' },
+                            'Duchossois Capital Management': { initials: 'DCM', color: 'from-slate-700 to-slate-800' },
+                            'EchoVC Partners': { initials: 'EVC', color: 'from-orange-500 to-red-600' },
+                            'Fontinalis Partners': { initials: 'FP', color: 'from-teal-600 to-cyan-700' },
+                            'Hinge Capital': { initials: 'HC', color: 'from-pink-500 to-rose-600' },
+                            'Kapor Capital': { initials: 'KC', color: 'from-indigo-600 to-purple-700' },
+                            'LaunchCapital Ventures': { initials: 'LCV', color: 'from-emerald-600 to-green-700' },
+                            'Life360 Inc': { initials: 'L360', color: 'from-blue-500 to-cyan-600' },
+                            'Seraph Group': { initials: 'SG', color: 'from-blue-600 to-blue-700' },
+                            'Social Leverage Capital': { initials: 'SLC', color: 'from-gray-700 to-slate-800' }
                           }
 
                           // Limit to first 4 investors for clean display
@@ -738,25 +726,21 @@ export default function KeyDeals() {
                           const hasMore = investors.length > 4
 
                           return (
-                            <div className="flex flex-col items-center space-y-4">
+                            <div className="flex flex-col items-center space-y-3">
                               <div className="flex items-center justify-center space-x-1">
                                 {displayInvestors.map((investor, index) => {
                                   const logoData = investorLogos[investor] || {
                                     initials: investor.split(' ').map(word => word.charAt(0)).slice(0, 2).join('').toUpperCase(),
-                                    color: 'from-primary via-primary/90 to-accent'
+                                    color: 'from-primary to-accent-cyan'
                                   }
                                   
                                   return (
                                     <div 
                                       key={index}
-                                      className={`relative w-12 h-12 bg-gradient-to-br ${logoData.color} rounded-full flex items-center justify-center shadow-2xl hover:shadow-lg transition-all duration-300 hover:scale-125 cursor-pointer border-2 border-white/20 backdrop-blur-sm ${index === 0 ? 'z-30' : index === 1 ? 'z-20' : 'z-10'} ${index > 0 ? '-ml-3' : ''} group-hover:-translate-y-1`}
+                                      className={`relative w-10 h-10 bg-gradient-to-r ${logoData.color} rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer ${index === 0 ? 'z-30' : index === 1 ? 'z-20' : 'z-10'} ${index > 0 ? '-ml-2' : ''}`}
                                       title={investor}
-                                      style={{
-                                        animationDelay: `${index * 100}ms`
-                                      }}
                                     >
-                                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-full" />
-                                      <span className="text-xs font-bold text-white relative z-10">
+                                      <span className="text-xs font-bold text-white">
                                         {logoData.initials}
                                       </span>
                                     </div>
@@ -764,7 +748,7 @@ export default function KeyDeals() {
                                 })}
                                 
                                 {hasMore && (
-                                  <div className="w-12 h-12 bg-gradient-to-br from-muted via-muted-foreground/20 to-muted/80 rounded-full flex items-center justify-center shadow-lg -ml-3 z-0 border-2 border-white/10 backdrop-blur-sm group-hover:-translate-y-1 transition-all duration-300">
+                                  <div className="w-10 h-10 bg-gradient-to-r from-muted to-muted-foreground/20 rounded-full flex items-center justify-center shadow-md -ml-2 z-0">
                                     <span className="text-xs font-bold text-muted-foreground">
                                       +{investors.length - 4}
                                     </span>
@@ -775,7 +759,7 @@ export default function KeyDeals() {
                               <div className="text-center">
                                 {displayInvestors.length === 1 && (
                                   <>
-                                    <div className="font-semibold text-foreground text-sm">
+                                    <div className="font-medium text-foreground text-sm">
                                       {displayInvestors[0]}
                                     </div>
                                     <div className="text-xs text-accent-cyan font-medium">
@@ -786,7 +770,7 @@ export default function KeyDeals() {
                                 
                                 {displayInvestors.length > 1 && (
                                   <>
-                                    <div className="font-semibold text-foreground text-sm">
+                                    <div className="font-medium text-foreground text-sm">
                                       {displayInvestors[0]} {hasMore ? `& ${investors.length - 1} others` : `& ${displayInvestors.length - 1} others`}
                                     </div>
                                     <div className="text-xs text-muted-foreground">
@@ -801,16 +785,15 @@ export default function KeyDeals() {
                       </div>
                     </div>
                     
-                    {/* Enhanced Action Button */}
+                    {/* Action Button */}
                     <Button 
                       asChild
                       variant="outline" 
-                      className="w-full h-14 border-0 bg-gradient-to-r from-primary/20 via-primary/15 to-accent/20 hover:from-primary/30 hover:via-primary/25 hover:to-accent/30 text-primary hover:text-primary-foreground transition-all duration-500 hover:shadow-2xl hover:shadow-primary/25 group-hover:scale-105 rounded-2xl font-semibold text-base backdrop-blur-sm relative overflow-hidden"
+                      className="w-full border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-glow group-hover:scale-105"
                     >
-                      <Link to={`/deal/${deal.deal_id || deal.id}`} className="flex items-center justify-center space-x-3">
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        <span className="relative z-10">View Deal Details</span>
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+                      <Link to={`/deal/${deal.deal_id || deal.id}`}>
+                        View Deal Details
+                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
                   </div>
