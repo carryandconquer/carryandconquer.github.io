@@ -434,11 +434,6 @@ const Snapshot = () => {
   const marketMetrics = getMarketMetrics()
 
 
-  const additionalMetrics = [
-    { value: "8.5%", label: "Fund Carry Rate", sublabel: "Standard carried interest" },
-    { value: "78%", label: "% Deals Leveraged", sublabel: "Share of leveraged transactions" },
-    { value: "425 bps", label: "Credit Spread", sublabel: "vs 10-year treasury" }
-  ]
 
   // Convert database trending people to display format  
   const getTrendingPeople = () => {
@@ -1102,22 +1097,6 @@ const Snapshot = () => {
         </section>
 
 
-        {/* Additional Metrics */}
-        <section className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {additionalMetrics.map((metric, index) => (
-              <Card key={index} className="bg-white/5 border-white/10">
-                <CardContent className="p-6">
-                  <div className="space-y-2">
-                    <div className="text-2xl font-bold">{metric.value}</div>
-                    <div className="text-lg font-semibold text-white">{metric.label}</div>
-                    <div className="text-sm text-white/60">{metric.sublabel}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
       </div>
     </div>
   )
