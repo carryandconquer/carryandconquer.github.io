@@ -189,6 +189,7 @@ export type Database = {
           competitive_dynamics: string | null
           confidence_score: number | null
           country: string | null
+          country_id: string | null
           created_at: string
           data_quality_score: number | null
           deal_currency: string | null
@@ -227,9 +228,11 @@ export type Database = {
           published: boolean | null
           recent_deal: boolean | null
           region: string | null
+          region_id: string | null
           revenue_growth_yoy: number | null
           revenue_ltm: number | null
           sector: string | null
+          sector_id: string | null
           seller: string | null
           source: string | null
           specific_funds: Json | null
@@ -237,6 +240,7 @@ export type Database = {
           state_province: string | null
           strategic_significance: string | null
           sub_sector: string | null
+          sub_sector_id: string | null
           transaction_type: string
           trending_deal: boolean | null
           updated_at: string
@@ -254,6 +258,7 @@ export type Database = {
           competitive_dynamics?: string | null
           confidence_score?: number | null
           country?: string | null
+          country_id?: string | null
           created_at?: string
           data_quality_score?: number | null
           deal_currency?: string | null
@@ -292,9 +297,11 @@ export type Database = {
           published?: boolean | null
           recent_deal?: boolean | null
           region?: string | null
+          region_id?: string | null
           revenue_growth_yoy?: number | null
           revenue_ltm?: number | null
           sector?: string | null
+          sector_id?: string | null
           seller?: string | null
           source?: string | null
           specific_funds?: Json | null
@@ -302,6 +309,7 @@ export type Database = {
           state_province?: string | null
           strategic_significance?: string | null
           sub_sector?: string | null
+          sub_sector_id?: string | null
           transaction_type: string
           trending_deal?: boolean | null
           updated_at?: string
@@ -319,6 +327,7 @@ export type Database = {
           competitive_dynamics?: string | null
           confidence_score?: number | null
           country?: string | null
+          country_id?: string | null
           created_at?: string
           data_quality_score?: number | null
           deal_currency?: string | null
@@ -357,9 +366,11 @@ export type Database = {
           published?: boolean | null
           recent_deal?: boolean | null
           region?: string | null
+          region_id?: string | null
           revenue_growth_yoy?: number | null
           revenue_ltm?: number | null
           sector?: string | null
+          sector_id?: string | null
           seller?: string | null
           source?: string | null
           specific_funds?: Json | null
@@ -367,12 +378,42 @@ export type Database = {
           state_province?: string | null
           strategic_significance?: string | null
           sub_sector?: string | null
+          sub_sector_id?: string | null
           transaction_type?: string
           trending_deal?: boolean | null
           updated_at?: string
           website?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "deals_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_geographic_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_sub_sector_id_fkey"
+            columns: ["sub_sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sub_sectors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       deals_companies: {
         Row: {
