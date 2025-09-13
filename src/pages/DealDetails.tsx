@@ -306,7 +306,7 @@ export default function DealDetails() {
                 </Card>
               </div>
 
-              <div className="flex flex-wrap gap-6 mb-8">
+              <div className="flex flex-wrap gap-6">
                 <div className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
                   <MapPin className="w-5 h-5 mr-2 text-accent-cyan" />
                   <span>{enrichedDeal.location}</span>
@@ -329,30 +329,6 @@ export default function DealDetails() {
                   </div>
                 )}
               </div>
-
-              {/* Advisory Team in Hero */}
-              <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-6">
-                <CardContent className="p-6">
-                  <div className="text-muted-foreground text-sm mb-4 flex items-center">
-                    <Briefcase className="w-4 h-4 mr-2 text-accent-blue" />
-                    Advisory Team
-                  </div>
-                  <div className="grid md:grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <span className="text-muted-foreground">Financial:</span>
-                      <div className="text-foreground font-medium">{enrichedDeal.dealStructure.advisors.financial}</div>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Legal:</span>
-                      <div className="text-foreground font-medium">{enrichedDeal.dealStructure.advisors.legal}</div>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Strategic:</span>
-                      <div className="text-foreground font-medium">{enrichedDeal.dealStructure.advisors.technical}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
             
             {/* Enhanced Summary Card */}
@@ -545,6 +521,77 @@ export default function DealDetails() {
                     </div>
                   );
                 })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Advisory Team Section */}
+      <section className="py-16 bg-muted/20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-foreground flex items-center text-2xl mb-2">
+                <Briefcase className="w-6 h-6 mr-3 text-accent-blue" />
+                Advisory Team
+              </CardTitle>
+              <CardDescription className="text-muted-foreground text-lg">
+                Leading advisory firms supporting this transaction
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-8">
+                {/* Financial Advisor */}
+                <div className="group bg-card/60 border border-border/50 rounded-2xl p-6 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-sm">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 text-white flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                      <span className="text-xl font-bold tracking-tight">GS</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                        {enrichedDeal.dealStructure.advisors.financial}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Financial Advisor
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Legal Counsel */}
+                <div className="group bg-card/60 border border-border/50 rounded-2xl p-6 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-sm">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-r from-gray-700 to-gray-900 text-white flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                      <span className="text-xl font-bold tracking-tight">K&E</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                        {enrichedDeal.dealStructure.advisors.legal}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Legal Counsel
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Strategic Advisor */}
+                <div className="group bg-card/60 border border-border/50 rounded-2xl p-6 hover:shadow-glow hover:bg-card/80 transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-sm">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                      <span className="text-xl font-bold tracking-tight">McK</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                        {enrichedDeal.dealStructure.advisors.technical}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Strategic Advisor
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
