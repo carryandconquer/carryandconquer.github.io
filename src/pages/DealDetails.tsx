@@ -66,13 +66,6 @@ const enrichDealData = (deal: any) => {
       'Technology disruption and obsolescence risk',
       'Regulatory and compliance challenges'
     ],
-    // Timeline
-    timeline: deal.timeline || [
-      { date: 'Q1 2024', event: 'Initial Due Diligence', status: 'completed' },
-      { date: 'Q2 2024', event: 'Term Sheet Signed', status: 'completed' },
-      { date: 'Q3 2024', event: 'Final Due Diligence', status: 'completed' },
-      { date: deal.date || '2024', event: 'Deal Closed', status: 'completed' }
-    ],
             // Firms/Investors  
             firms: deal.firms || deal.investors || ['500 Startups', 'Bessemer Venture Partners', 'BMW i Ventures', 'Bullpen Capital'],
             investors: deal.investors || deal.firms || [
@@ -669,78 +662,46 @@ export default function DealDetails() {
         </div>
       </section>
 
-      {/* Deal Timeline & Structure */}
+      {/* Deal Structure */}
       <section className="py-16 bg-background/50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            
-            {/* Deal Timeline */}
-            <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up">
-              <CardHeader>
-                <CardTitle className="text-foreground flex items-center text-2xl">
-                  <Calendar className="w-6 h-6 mr-3 text-accent-cyan" />
-                  Deal Timeline
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {enrichedDeal.timeline.map((event, index) => (
-                    <div key={index} className="flex items-center space-x-4">
-                      <div className={`w-4 h-4 rounded-full ${
-                        event.status === 'completed' ? 'bg-primary' : 'bg-muted'
-                      }`}></div>
-                      <div className="flex-1">
-                        <div className="text-foreground font-medium">{event.event}</div>
-                        <div className="text-muted-foreground text-sm">{event.date}</div>
-                      </div>
-                      {index < enrichedDeal.timeline.length - 1 && (
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Deal Structure */}
-            <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up" style={{animationDelay: '0.2s'}}>
-              <CardHeader>
-                <CardTitle className="text-foreground flex items-center text-2xl">
-                  <Briefcase className="w-6 h-6 mr-3 text-accent-blue" />
-                  Deal Structure
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <div className="text-muted-foreground text-sm mb-2">Lead Investor</div>
-                  <div className="text-foreground font-medium text-lg">{enrichedDeal.dealStructure.buyer}</div>
-                </div>
-                <Separator className="bg-border" />
-                <div>
-                  <div className="text-muted-foreground text-sm mb-2">Selling Parties</div>
-                  <div className="text-foreground font-medium">{enrichedDeal.dealStructure.seller}</div>
-                </div>
-                <Separator className="bg-border" />
-                <div>
-                  <div className="text-muted-foreground text-sm mb-3">Advisory Team</div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Financial Advisor:</span>
-                      <span className="text-foreground">{enrichedDeal.dealStructure.advisors.financial}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Legal Counsel:</span>
-                      <span className="text-foreground">{enrichedDeal.dealStructure.advisors.legal}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Strategic Advisor:</span>
-                      <span className="text-foreground">{enrichedDeal.dealStructure.advisors.technical}</span>
-                    </div>
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          <Card className="bg-gradient-card border-border shadow-card backdrop-blur-sm animate-slide-up">
+            <CardHeader>
+              <CardTitle className="text-foreground flex items-center text-2xl">
+                <Briefcase className="w-6 h-6 mr-3 text-accent-blue" />
+                Deal Structure
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <div className="text-muted-foreground text-sm mb-2">Lead Investor</div>
+                <div className="text-foreground font-medium text-lg">{enrichedDeal.dealStructure.buyer}</div>
+              </div>
+              <Separator className="bg-border" />
+              <div>
+                <div className="text-muted-foreground text-sm mb-2">Selling Parties</div>
+                <div className="text-foreground font-medium">{enrichedDeal.dealStructure.seller}</div>
+              </div>
+              <Separator className="bg-border" />
+              <div>
+                <div className="text-muted-foreground text-sm mb-3">Advisory Team</div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Financial Advisor:</span>
+                    <span className="text-foreground">{enrichedDeal.dealStructure.advisors.financial}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Legal Counsel:</span>
+                    <span className="text-foreground">{enrichedDeal.dealStructure.advisors.legal}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Strategic Advisor:</span>
+                    <span className="text-foreground">{enrichedDeal.dealStructure.advisors.technical}</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
