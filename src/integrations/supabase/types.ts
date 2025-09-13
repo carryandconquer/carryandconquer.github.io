@@ -179,13 +179,14 @@ export type Database = {
       deals: {
         Row: {
           announcement_date: string | null
-          broker: string | null
+          board_representatives: Json | null
           buyer: string | null
-          buyer_type: string | null
-          cap_rate: number | null
+          cash_on_cash_multiple: number | null
           city: string | null
           closing_date: string | null
+          company_description: string | null
           company_id: string | null
+          company_name: string | null
           competitive_dynamics: string | null
           confidence_score: number | null
           country: string | null
@@ -204,53 +205,56 @@ export type Database = {
           ebitda_ltm: number | null
           ebitda_margin: number | null
           enterprise_value: number | null
+          entry_multiple: number | null
+          exit_date: string | null
+          exit_multiple: number | null
           featured_deal: boolean | null
           full_address: string | null
           fx_rate: number | null
+          hold_period_months: number | null
           id: string
           image_url: string | null
+          investment_date: string | null
           investment_status_label: string | null
           investment_strategy: string | null
+          investors: Json | null
+          irr_percentage: number | null
           last_updated: string | null
-          latitude: number | null
-          lender: string | null
-          longitude: number | null
+          lead_partners: Json | null
           market_intelligence: string | null
           multiple_label: string | null
-          occupancy_rate: number | null
           pipeline_deal: boolean | null
           postal_code: string | null
-          price_per_sf: number | null
-          property_name: string | null
-          property_subtype: string | null
-          property_type: string | null
           published: boolean | null
           recent_deal: boolean | null
           region: string | null
           revenue_growth_yoy: number | null
           revenue_ltm: number | null
+          sector: string | null
           seller: string | null
-          seller_type: string | null
           source: string | null
-          square_footage: number | null
+          specific_funds: Json | null
+          stage: string | null
           stage_label: string | null
           state_province: string | null
           strategic_significance: string | null
           street_address: string | null
+          sub_sector: string | null
           transaction_type: string
           trending_deal: boolean | null
           updated_at: string
-          year_built: number | null
+          website: string | null
         }
         Insert: {
           announcement_date?: string | null
-          broker?: string | null
+          board_representatives?: Json | null
           buyer?: string | null
-          buyer_type?: string | null
-          cap_rate?: number | null
+          cash_on_cash_multiple?: number | null
           city?: string | null
           closing_date?: string | null
+          company_description?: string | null
           company_id?: string | null
+          company_name?: string | null
           competitive_dynamics?: string | null
           confidence_score?: number | null
           country?: string | null
@@ -269,53 +273,56 @@ export type Database = {
           ebitda_ltm?: number | null
           ebitda_margin?: number | null
           enterprise_value?: number | null
+          entry_multiple?: number | null
+          exit_date?: string | null
+          exit_multiple?: number | null
           featured_deal?: boolean | null
           full_address?: string | null
           fx_rate?: number | null
+          hold_period_months?: number | null
           id?: string
           image_url?: string | null
+          investment_date?: string | null
           investment_status_label?: string | null
           investment_strategy?: string | null
+          investors?: Json | null
+          irr_percentage?: number | null
           last_updated?: string | null
-          latitude?: number | null
-          lender?: string | null
-          longitude?: number | null
+          lead_partners?: Json | null
           market_intelligence?: string | null
           multiple_label?: string | null
-          occupancy_rate?: number | null
           pipeline_deal?: boolean | null
           postal_code?: string | null
-          price_per_sf?: number | null
-          property_name?: string | null
-          property_subtype?: string | null
-          property_type?: string | null
           published?: boolean | null
           recent_deal?: boolean | null
           region?: string | null
           revenue_growth_yoy?: number | null
           revenue_ltm?: number | null
+          sector?: string | null
           seller?: string | null
-          seller_type?: string | null
           source?: string | null
-          square_footage?: number | null
+          specific_funds?: Json | null
+          stage?: string | null
           stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
           street_address?: string | null
+          sub_sector?: string | null
           transaction_type: string
           trending_deal?: boolean | null
           updated_at?: string
-          year_built?: number | null
+          website?: string | null
         }
         Update: {
           announcement_date?: string | null
-          broker?: string | null
+          board_representatives?: Json | null
           buyer?: string | null
-          buyer_type?: string | null
-          cap_rate?: number | null
+          cash_on_cash_multiple?: number | null
           city?: string | null
           closing_date?: string | null
+          company_description?: string | null
           company_id?: string | null
+          company_name?: string | null
           competitive_dynamics?: string | null
           confidence_score?: number | null
           country?: string | null
@@ -334,43 +341,45 @@ export type Database = {
           ebitda_ltm?: number | null
           ebitda_margin?: number | null
           enterprise_value?: number | null
+          entry_multiple?: number | null
+          exit_date?: string | null
+          exit_multiple?: number | null
           featured_deal?: boolean | null
           full_address?: string | null
           fx_rate?: number | null
+          hold_period_months?: number | null
           id?: string
           image_url?: string | null
+          investment_date?: string | null
           investment_status_label?: string | null
           investment_strategy?: string | null
+          investors?: Json | null
+          irr_percentage?: number | null
           last_updated?: string | null
-          latitude?: number | null
-          lender?: string | null
-          longitude?: number | null
+          lead_partners?: Json | null
           market_intelligence?: string | null
           multiple_label?: string | null
-          occupancy_rate?: number | null
           pipeline_deal?: boolean | null
           postal_code?: string | null
-          price_per_sf?: number | null
-          property_name?: string | null
-          property_subtype?: string | null
-          property_type?: string | null
           published?: boolean | null
           recent_deal?: boolean | null
           region?: string | null
           revenue_growth_yoy?: number | null
           revenue_ltm?: number | null
+          sector?: string | null
           seller?: string | null
-          seller_type?: string | null
           source?: string | null
-          square_footage?: number | null
+          specific_funds?: Json | null
+          stage?: string | null
           stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
           street_address?: string | null
+          sub_sector?: string | null
           transaction_type?: string
           trending_deal?: boolean | null
           updated_at?: string
-          year_built?: number | null
+          website?: string | null
         }
         Relationships: [
           {
