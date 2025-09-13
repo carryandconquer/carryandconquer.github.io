@@ -28,8 +28,8 @@ export function formatDisplayName(name: string): string {
 export function normalizeTaxonomy(value: string): string {
   return value
     .toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/\band\b/g, 'and')
+    .replace(/&/g, '') // Remove & completely to match database slugs
+    .replace(/\band\b/g, '') // Remove standalone "and" words
     .replace(/[^a-z0-9]+/g, '-') // collapse to hyphen-separated
     .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '')
