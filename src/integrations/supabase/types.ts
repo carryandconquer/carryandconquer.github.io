@@ -236,7 +236,6 @@ export type Database = {
           stage_label: string | null
           state_province: string | null
           strategic_significance: string | null
-          street_address: string | null
           sub_sector: string | null
           transaction_type: string
           trending_deal: boolean | null
@@ -302,7 +301,6 @@ export type Database = {
           stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
-          street_address?: string | null
           sub_sector?: string | null
           transaction_type: string
           trending_deal?: boolean | null
@@ -368,22 +366,13 @@ export type Database = {
           stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
-          street_address?: string | null
           sub_sector?: string | null
           transaction_type?: string
           trending_deal?: boolean | null
           updated_at?: string
           website?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "deals_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "deals_companies"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       deals_companies: {
         Row: {
