@@ -184,7 +184,6 @@ export type Database = {
           cash_on_cash_multiple: number | null
           city: string | null
           closing_date: string | null
-          company_description: string | null
           company_id: string | null
           company_name: string | null
           competitive_dynamics: string | null
@@ -234,7 +233,6 @@ export type Database = {
           seller: string | null
           source: string | null
           specific_funds: Json | null
-          stage: string | null
           stage_label: string | null
           state_province: string | null
           strategic_significance: string | null
@@ -252,7 +250,6 @@ export type Database = {
           cash_on_cash_multiple?: number | null
           city?: string | null
           closing_date?: string | null
-          company_description?: string | null
           company_id?: string | null
           company_name?: string | null
           competitive_dynamics?: string | null
@@ -302,7 +299,6 @@ export type Database = {
           seller?: string | null
           source?: string | null
           specific_funds?: Json | null
-          stage?: string | null
           stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
@@ -320,7 +316,6 @@ export type Database = {
           cash_on_cash_multiple?: number | null
           city?: string | null
           closing_date?: string | null
-          company_description?: string | null
           company_id?: string | null
           company_name?: string | null
           competitive_dynamics?: string | null
@@ -370,7 +365,6 @@ export type Database = {
           seller?: string | null
           source?: string | null
           specific_funds?: Json | null
-          stage?: string | null
           stage_label?: string | null
           state_province?: string | null
           strategic_significance?: string | null
